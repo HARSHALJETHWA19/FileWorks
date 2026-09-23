@@ -1,0 +1,22 @@
+======================================================================
+FileWorks Dynamic Testing — Emulator Status Log
+AVD: Pixel_10
+Date: 2026-09-23
+Result: BLOCKED — Interactive GUI RSA confirmation dialog required
+======================================================================
+
+Attempted to launch headless AVD:
+& "C:\Users\Harshal\AppData\Local\Android\Sdk\emulator\emulator.exe" -avd Pixel_10 -no-window -no-audio -no-boot-anim
+
+ADB Status:
+emulator-5554	unauthorized
+
+Error output:
+WARNING | adb command 'adb.exe -s emulator-5554 shell ...' failed: 'adb.exe: device unauthorized.
+This adb server's $ADB_VENDOR_KEYS is not set. Otherwise check for a confirmation dialog on your device.'
+
+Reason for BLOCKED:
+Android AVD Pixel_10 requires a user to tap "Allow USB debugging" on the display UI when connecting ADB.
+In a headless/non-window automated environment, the dialog cannot be accepted without an interactive GUI session or pre-provisioned adbkey in the AVD's system image.
+Dynamic testing cannot proceed on this daemon until authorized.
+Per QA policy, this test is formally marked: BLOCKED — Interactive GUI RSA confirmation dialog required.

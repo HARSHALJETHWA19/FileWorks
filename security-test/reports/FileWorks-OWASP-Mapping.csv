@@ -1,0 +1,14 @@
+MASVS_Category,Control_ID,Requirement,FileWorks_Implementation,Status,Evidence
+MASVS-STORAGE,MASVS-STORAGE-1,System credential storage and app data directory,All processed documents saved to scoped app sandbox and Documents/FileWorks,COMPLIANT,lib/core/utils/file_utils.dart
+MASVS-STORAGE,MASVS-STORAGE-2,No sensitive data leaked to logs,Debug print statements sanitized; no document content in logs,COMPLIANT,lib/
+MASVS-STORAGE,MASVS-STORAGE-3,Secure backup configuration,android:allowBackup="false" enforced in AndroidManifest.xml,COMPLIANT,android/app/src/main/AndroidManifest.xml
+MASVS-CRYPTO,MASVS-CRYPTO-1,Industry standard cryptography,N/A - App performs local document transformations without proprietary ciphers,COMPLIANT,pubspec.yaml
+MASVS-AUTH,MASVS-AUTH-1,Authentication architecture,N/A - 100% offline local utility with zero remote user accounts,COMPLIANT,lib/features/
+MASVS-NETWORK,MASVS-NETWORK-1,Zero unauthorized network exfiltration,pubspec.yaml has 0 HTTP/cloud client packages; document processing is local,COMPLIANT,test/privacy_test.dart
+MASVS-NETWORK,MASVS-NETWORK-2,Secure TLS communication for 3rd party ads,AdMob SDK enforces secure HTTPS via Google Play Services TLS endpoints,COMPLIANT,security-test/reverse-engineering/extracted_urls.txt
+MASVS-PLATFORM,MASVS-PLATFORM-1,Least privilege permissions,Only INTERNET (AdMob) and READ_MEDIA_IMAGES requested; no dangerous storage perms,COMPLIANT,android/app/src/main/AndroidManifest.xml
+MASVS-PLATFORM,MASVS-PLATFORM-2,Minimal exported attack surface,MainActivity launcher exported; internal WorkManager receivers secured by system,COMPLIANT,security-test/reverse-engineering/unpacked/AndroidManifest.xml
+MASVS-PLATFORM,MASVS-PLATFORM-3,Strict input validation and traversal defense,Zip-Slip defense strips slashes, rejects drives, enforces p.isWithin destination,COMPLIANT,test/security_test.dart
+MASVS-CODE,MASVS-CODE-1,Production build security and non-debuggable binary,android:debuggable is false/omitted; compiled with Flutter AOT release mode,COMPLIANT,security-test/reverse-engineering/unpacked/AndroidManifest.xml
+MASVS-CODE,MASVS-CODE-2,APK signature integrity,Signed using APK Signature Scheme v2 (apksigner verified),COMPLIANT,security-test/logs/apk_signature.txt
+MASVS-CODE,MASVS-CODE-4,Zero hardcoded credentials or secrets,Automated ripgrep scan of source and DEX found 0 secrets or private keys,COMPLIANT,security-test/reverse-engineering/secret_scan_results.txt
