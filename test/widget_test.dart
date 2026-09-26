@@ -133,11 +133,11 @@ void main() {
   });
 
   group('AdConfig Tests', () {
-    test('Uses Google official test AdMob IDs during development', () {
-      expect(AdConfig.isProduction, isFalse);
-      // In development mode, banner ID must be the official Google Test Ad ID
-      expect(AdConfig.bannerAdUnitId, 'ca-app-pub-3940256099942544/6300978111');
-      expect(AdConfig.interstitialAdUnitId, 'ca-app-pub-3940256099942544/1033173712');
+    test('Uses configured production AdMob IDs', () {
+      expect(AdConfig.appIdAndroid, 'ca-app-pub-7044469500687742~3562545834');
+      expect(AdConfig.bannerAdUnitId, 'ca-app-pub-7044469500687742/3758910393');
+      expect(AdConfig.interstitialAdUnitId, 'ca-app-pub-7044469500687742/4859229910');
+      expect(AdConfig.rewardedAdUnitId, 'ca-app-pub-7044469500687742/9709066069');
       expect(AdConfig.interstitialOperationThreshold, 3);
     });
   });

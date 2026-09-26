@@ -20,22 +20,19 @@ class AdConfig {
   /// Prevents ad spamming on rapid successive operations.
   static const Duration interstitialCooldown = Duration(seconds: 60);
 
-  /// Official Google Mobile Ads Sample Ad Unit IDs for Android:
-  /// https://developers.google.com/admob/android/test-ads
-  static const String _testBannerIdAndroid = 'ca-app-pub-3940256099942544/6300978111';
-  static const String _testInterstitialIdAndroid = 'ca-app-pub-3940256099942544/1033173712';
-  static const String _testRewardedIdAndroid = 'ca-app-pub-3940256099942544/5224354917';
+  /// Production AdMob Application ID for Android:
+  static const String appIdAndroid = 'ca-app-pub-7044469500687742~3562545834';
+
+  /// Production AdMob Ad Unit IDs for Android:
+  static const String _bannerIdAndroid = 'ca-app-pub-7044469500687742/3758910393';
+  static const String _interstitialIdAndroid = 'ca-app-pub-7044469500687742/4859229910';
+  static const String _rewardedIdAndroid = 'ca-app-pub-7044469500687742/9709066069';
 
   /// Official Google Mobile Ads Sample Ad Unit IDs for iOS:
   /// https://developers.google.com/admob/ios/test-ads
   static const String _testBannerIdIOS = 'ca-app-pub-3940256099942544/2934735716';
   static const String _testInterstitialIdIOS = 'ca-app-pub-3940256099942544/4411468910';
   static const String _testRewardedIdIOS = 'ca-app-pub-3940256099942544/1712485313';
-
-  /// Production Ad Unit IDs (To be populated from your AdMob Console before launch)
-  static const String _prodBannerIdAndroid = 'ca-app-pub-XXXXXXXXXXXXXXXX/YYYYYYYYYY';
-  static const String _prodInterstitialIdAndroid = 'ca-app-pub-XXXXXXXXXXXXXXXX/ZZZZZZZZZZ';
-  static const String _prodRewardedIdAndroid = 'ca-app-pub-XXXXXXXXXXXXXXXX/WWWWWWWWWW';
 
   static const String _prodBannerIdIOS = 'ca-app-pub-XXXXXXXXXXXXXXXX/YYYYYYYYYY';
   static const String _prodInterstitialIdIOS = 'ca-app-pub-XXXXXXXXXXXXXXXX/ZZZZZZZZZZ';
@@ -45,20 +42,20 @@ class AdConfig {
     if (Platform.isIOS) {
       return isProduction ? _prodBannerIdIOS : _testBannerIdIOS;
     }
-    return isProduction ? _prodBannerIdAndroid : _testBannerIdAndroid;
+    return _bannerIdAndroid;
   }
 
   static String get interstitialAdUnitId {
     if (Platform.isIOS) {
       return isProduction ? _prodInterstitialIdIOS : _testInterstitialIdIOS;
     }
-    return isProduction ? _prodInterstitialIdAndroid : _testInterstitialIdAndroid;
+    return _interstitialIdAndroid;
   }
 
   static String get rewardedAdUnitId {
     if (Platform.isIOS) {
       return isProduction ? _prodRewardedIdIOS : _testRewardedIdIOS;
     }
-    return isProduction ? _prodRewardedIdAndroid : _testRewardedIdAndroid;
+    return _rewardedIdAndroid;
   }
 }

@@ -15,10 +15,10 @@
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules">
-        <!-- Google AdMob Application ID (Test ID for development) -->
+        <!-- Google AdMob Application ID (Production ID) -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:value="ca-app-pub-7044469500687742~3562545834"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
