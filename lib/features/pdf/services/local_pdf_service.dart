@@ -38,6 +38,27 @@ class LocalPdfService implements PdfService {
     );
   }
 
+  /// Copies a source PDF page to target document while strictly preserving:
+  /// - exact physical page dimensions (width & height)
+  /// - orientation (portrait vs landscape)
+  /// - page rotation
+  /// - zero margins (eliminates 40pt default inset coordinate shift and edge cropping)
+  static void _copyPagePreservingGeometry(PdfDocument targetDoc, PdfPage sourcePage) {
+    final section = targetDoc.sections!.add();
+    section.pageSettings.margins.all = 0;
+    section.pageSettings.size = sourcePage.size;
+    if (sourcePage.size.width > sourcePage.size.height) {
+      section.pageSettings.orientation = PdfPageOrientation.landscape;
+    } else {
+      section.pageSettings.orientation = PdfPageOrientation.portrait;
+    }
+    section.pageSettings.rotate = sourcePage.rotation;
+
+    final newPage = section.pages.add();
+    final template = sourcePage.createTemplate();
+    newPage.graphics.drawPdfTemplate(template, const ui.Offset(0, 0));
+  }
+
   static File _mergePdfsIsolate(_MergePdfParams params) {
     try {
       final outputDoc = PdfDocument();
@@ -48,9 +69,7 @@ class LocalPdfService implements PdfService {
 
         for (int i = 0; i < loadedDoc.pages.count; i++) {
           final page = loadedDoc.pages[i];
-          final template = page.createTemplate();
-          final newPage = outputDoc.pages.add();
-          newPage.graphics.drawPdfTemplate(template, const ui.Offset(0, 0));
+          _copyPagePreservingGeometry(outputDoc, page);
         }
         loadedDoc.dispose();
       }
@@ -100,9 +119,7 @@ class LocalPdfService implements PdfService {
 
         final singlePageDoc = PdfDocument();
         final page = loadedDoc.pages[pageIndex];
-        final template = page.createTemplate();
-        final newPage = singlePageDoc.pages.add();
-        newPage.graphics.drawPdfTemplate(template, const ui.Offset(0, 0));
+        _copyPagePreservingGeometry(singlePageDoc, page);
 
         final targetName = '${params.baseName}_page_$pageNum.pdf';
         final targetPath = p.join(params.outputDir, targetName);
@@ -212,9 +229,7 @@ class LocalPdfService implements PdfService {
         final pageIndex = pageNum - 1;
         if (pageIndex >= 0 && pageIndex < loadedDoc.pages.count) {
           final page = loadedDoc.pages[pageIndex];
-          final template = page.createTemplate();
-          final newPage = outputDoc.pages.add();
-          newPage.graphics.drawPdfTemplate(template, const ui.Offset(0, 0));
+          _copyPagePreservingGeometry(outputDoc, page);
         }
       }
 
@@ -308,14 +323,15 @@ class LocalPdfService implements PdfService {
           pageSize = ui.Size(pageSize.height, pageSize.width);
         }
 
-        document.pageSettings.size = pageSize;
-        document.pageSettings.margins.all = params.options.margin == ImageToPdfMargin.none
+        final section = document.sections!.add();
+        section.pageSettings.size = pageSize;
+        section.pageSettings.margins.all = params.options.margin == ImageToPdfMargin.none
             ? 0
             : params.options.margin == ImageToPdfMargin.small
                 ? 16
                 : 32;
 
-        final page = document.pages.add();
+        final page = section.pages.add();
 
         // Fit image within page bounds while preserving aspect ratio
         final availableWidth = page.getClientSize().width;

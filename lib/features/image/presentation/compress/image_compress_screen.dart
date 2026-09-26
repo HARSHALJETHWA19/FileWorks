@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:path/path.dart' as p;
 import '../../../../core/constants/route_constants.dart';
 import '../../../../core/utils/file_utils.dart';
@@ -8,7 +9,6 @@ import '../../../../core/widgets/app_scaffold.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../../shared/models/processing_result.dart';
 import '../../../../shared/presentation/processing_screen.dart';
-import '../../../../shared/presentation/result_screen.dart';
 import '../../../../shared/widgets/file_picker_helper.dart';
 import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
@@ -172,19 +172,16 @@ class _ImageCompressScreenState extends ConsumerState<ImageCompressScreen> {
           message = 'Reduced file size by ${savings.toStringAsFixed(1)}% locally.';
         }
 
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (_) => ResultScreen(
-              result: ProcessingResult(
-                success: true,
-                title: 'Image Compression Complete',
-                message: message,
-                outputFiles: outputFiles,
-                originalTotalBytes: originalTotalBytes,
-                outputTotalBytes: outputTotalBytes,
-                repeatRoute: RouteConstants.imageCompress,
-              ),
-            ),
+        context.pushReplacement(
+          RouteConstants.result,
+          extra: ProcessingResult(
+            success: true,
+            title: 'Image Compression Complete',
+            message: message,
+            outputFiles: outputFiles,
+            originalTotalBytes: originalTotalBytes,
+            outputTotalBytes: outputTotalBytes,
+            repeatRoute: RouteConstants.imageCompress,
           ),
         );
       }
