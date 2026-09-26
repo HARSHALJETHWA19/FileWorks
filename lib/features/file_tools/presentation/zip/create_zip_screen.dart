@@ -12,6 +12,9 @@ import '../../../../shared/presentation/result_screen.dart';
 import '../../../../shared/widgets/file_picker_helper.dart';
 import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
+import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/providers/monetization_provider.dart';
+import '../../../monetization/services/free_limit_helper.dart';
 import '../../providers/file_tools_providers.dart';
 
 class CreateZipScreen extends ConsumerStatefulWidget {
@@ -38,6 +41,14 @@ class _CreateZipScreenState extends ConsumerState<CreateZipScreen> {
 
   Future<void> _processZip() async {
     if (_selectedFiles.isEmpty) return;
+
+    final allowed = await FreeLimitHelper.checkAndEnforce(
+      context: context,
+      ref: ref,
+      feature: ToolFeature.createZip,
+      requestedAmount: _selectedFiles.length,
+    );
+    if (!allowed) return;
 
     setState(() => _isProcessing = true);
 
@@ -67,6 +78,8 @@ class _CreateZipScreenState extends ConsumerState<CreateZipScreen> {
         timestamp: DateTime.now(),
       );
       await ref.read(historyProvider.notifier).addHistoryItem(historyItem);
+      ref.read(freeUsageManagerProvider).consumeReward(ToolFeature.createZip);
+      ref.read(freeUsageManagerProvider).recordFeatureUsage(ToolFeature.createZip);
 
       if (mounted) {
         setState(() => _isProcessing = false);

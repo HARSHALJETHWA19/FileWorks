@@ -20,4 +20,5 @@ class AppConstants {
   static const String keyHistoryItems = 'history_items_cache';
   static const String keyRecentTools = 'recent_tools_list';
   static const String keyIsProUser = 'user_entitlement_pro';
+  static const String keyFeatureUsagePrefix = 'feature_usage_count_';
 }

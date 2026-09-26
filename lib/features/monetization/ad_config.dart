@@ -6,6 +6,7 @@ class AdConfig {
   /// Global master toggles for ad formats
   static const bool bannerEnabled = true;
   static const bool interstitialEnabled = true;
+  static const bool rewardedEnabled = true;
 
   /// Number of completed operations before showing an interstitial ad.
   /// Ensures ads never interrupt workflow and do not annoy users.

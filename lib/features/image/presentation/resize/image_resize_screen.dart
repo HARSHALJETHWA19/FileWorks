@@ -11,6 +11,9 @@ import '../../../../shared/presentation/result_screen.dart';
 import '../../../../shared/widgets/file_picker_helper.dart';
 import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
+import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/providers/monetization_provider.dart';
+import '../../../monetization/services/free_limit_helper.dart';
 import '../../models/image_models.dart';
 import '../../providers/image_providers.dart';
 
@@ -80,6 +83,23 @@ class _ImageResizeScreenState extends ConsumerState<ImageResizeScreen> {
       return;
     }
 
+    int maxFileSizeBytes = 0;
+    for (final img in _selectedImages) {
+      if (await img.exists()) {
+        final len = await img.length();
+        if (len > maxFileSizeBytes) maxFileSizeBytes = len;
+      }
+    }
+    if (!mounted) return;
+
+    final allowed = await FreeLimitHelper.checkAndEnforce(
+      context: context,
+      ref: ref,
+      feature: ToolFeature.imageResize,
+      requestedAmount: maxFileSizeBytes,
+    );
+    if (!allowed) return;
+
     setState(() {
       _isProcessing = true;
       _progress = 0.0;
@@ -135,6 +155,8 @@ class _ImageResizeScreenState extends ConsumerState<ImageResizeScreen> {
         timestamp: DateTime.now(),
       );
       await ref.read(historyProvider.notifier).addHistoryItem(historyItem);
+      ref.read(freeUsageManagerProvider).consumeReward(ToolFeature.imageResize);
+      ref.read(freeUsageManagerProvider).recordFeatureUsage(ToolFeature.imageResize);
 
       if (mounted) {
         setState(() => _isProcessing = false);

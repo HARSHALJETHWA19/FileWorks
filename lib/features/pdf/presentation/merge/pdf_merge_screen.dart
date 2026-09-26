@@ -12,6 +12,9 @@ import '../../../../shared/presentation/result_screen.dart';
 import '../../../../shared/widgets/file_picker_helper.dart';
 import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
+import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/providers/monetization_provider.dart';
+import '../../../monetization/services/free_limit_helper.dart';
 import '../../providers/pdf_providers.dart';
 
 class PdfMergeScreen extends ConsumerStatefulWidget {
@@ -44,6 +47,14 @@ class _PdfMergeScreenState extends ConsumerState<PdfMergeScreen> {
       return;
     }
 
+    final allowed = await FreeLimitHelper.checkAndEnforce(
+      context: context,
+      ref: ref,
+      feature: ToolFeature.pdfMerge,
+      requestedAmount: _selectedFiles.length,
+    );
+    if (!allowed) return;
+
     setState(() => _isProcessing = true);
 
     try {
@@ -74,6 +85,8 @@ class _PdfMergeScreenState extends ConsumerState<PdfMergeScreen> {
         timestamp: DateTime.now(),
       );
       await ref.read(historyProvider.notifier).addHistoryItem(historyItem);
+      ref.read(freeUsageManagerProvider).consumeReward(ToolFeature.pdfMerge);
+      ref.read(freeUsageManagerProvider).recordFeatureUsage(ToolFeature.pdfMerge);
 
       if (mounted) {
         setState(() => _isProcessing = false);

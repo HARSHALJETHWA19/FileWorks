@@ -42,6 +42,22 @@ class ZipService {
     }
   }
 
+  /// Returns the number of files inside the ZIP archive.
+  Future<int> getZipEntryCount(File zipFile) async {
+    return IsolateHelper.run<String, int>(_getZipEntryCountIsolate, zipFile.path);
+  }
+
+  static int _getZipEntryCountIsolate(String zipPath) {
+    try {
+      final zipBytes = File(zipPath).readAsBytesSync();
+      if (zipBytes.isEmpty) return 0;
+      final archive = ZipDecoder().decodeBytes(zipBytes);
+      return archive.where((e) => e.isFile).length;
+    } catch (_) {
+      return 0;
+    }
+  }
+
   /// Extracts a ZIP archive safely with STRICT Zip Slip (path traversal) protection.
   /// Any entry trying to escape the destination directory will trigger a SecurityException.
   Future<List<File>> extractZip(File zipFile, {String? customDestDirName}) async {

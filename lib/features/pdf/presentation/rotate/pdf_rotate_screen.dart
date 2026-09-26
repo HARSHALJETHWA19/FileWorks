@@ -12,6 +12,9 @@ import '../../../../shared/presentation/result_screen.dart';
 import '../../../../shared/widgets/file_picker_helper.dart';
 import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
+import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/providers/monetization_provider.dart';
+import '../../../monetization/services/free_limit_helper.dart';
 import '../../providers/pdf_providers.dart';
 
 class PdfRotateScreen extends ConsumerStatefulWidget {
@@ -86,6 +89,14 @@ class _PdfRotateScreenState extends ConsumerState<PdfRotateScreen> {
       return;
     }
 
+    final allowed = await FreeLimitHelper.checkAndEnforce(
+      context: context,
+      ref: ref,
+      feature: ToolFeature.pdfRotate,
+      requestedAmount: rotations.length,
+    );
+    if (!allowed) return;
+
     setState(() => _isProcessing = true);
 
     try {
@@ -114,6 +125,8 @@ class _PdfRotateScreenState extends ConsumerState<PdfRotateScreen> {
         timestamp: DateTime.now(),
       );
       await ref.read(historyProvider.notifier).addHistoryItem(historyItem);
+      ref.read(freeUsageManagerProvider).consumeReward(ToolFeature.pdfRotate);
+      ref.read(freeUsageManagerProvider).recordFeatureUsage(ToolFeature.pdfRotate);
 
       if (mounted) {
         setState(() => _isProcessing = false);

@@ -12,6 +12,9 @@ import '../../../../shared/presentation/result_screen.dart';
 import '../../../../shared/widgets/file_picker_helper.dart';
 import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
+import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/providers/monetization_provider.dart';
+import '../../../monetization/services/free_limit_helper.dart';
 import '../../providers/file_tools_providers.dart';
 
 class ExtractZipScreen extends ConsumerStatefulWidget {
@@ -40,10 +43,21 @@ class _ExtractZipScreenState extends ConsumerState<ExtractZipScreen> {
   Future<void> _processExtract() async {
     if (_selectedZip == null) return;
 
+    final zipService = ref.read(zipServiceProvider);
+    final count = await zipService.getZipEntryCount(_selectedZip!);
+    if (!mounted) return;
+
+    final allowed = await FreeLimitHelper.checkAndEnforce(
+      context: context,
+      ref: ref,
+      feature: ToolFeature.extractZip,
+      requestedAmount: count,
+    );
+    if (!allowed) return;
+
     setState(() => _isProcessing = true);
 
     try {
-      final zipService = ref.read(zipServiceProvider);
       final destFolder = _folderController.text.trim();
       final originalBytes = await _selectedZip!.length();
 
@@ -71,6 +85,8 @@ class _ExtractZipScreenState extends ConsumerState<ExtractZipScreen> {
         timestamp: DateTime.now(),
       );
       await ref.read(historyProvider.notifier).addHistoryItem(historyItem);
+      ref.read(freeUsageManagerProvider).consumeReward(ToolFeature.extractZip);
+      ref.read(freeUsageManagerProvider).recordFeatureUsage(ToolFeature.extractZip);
 
       if (mounted) {
         setState(() => _isProcessing = false);

@@ -5,9 +5,15 @@ import '../ad_service.dart';
 import '../admob_service.dart';
 import '../billing_constants.dart';
 import '../services/billing_service.dart';
+import '../services/free_usage_manager.dart';
 
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError('SharedPreferences must be initialized in main');
+});
+
+final freeUsageManagerProvider = Provider<FreeUsageManager>((ref) {
+  final prefs = ref.watch(sharedPreferencesProvider);
+  return FreeUsageManager(prefs);
 });
 
 final billingServiceProvider = Provider<BillingService>((ref) {

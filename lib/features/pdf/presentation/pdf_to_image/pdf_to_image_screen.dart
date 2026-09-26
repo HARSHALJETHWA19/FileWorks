@@ -12,6 +12,9 @@ import '../../../../shared/presentation/result_screen.dart';
 import '../../../../shared/widgets/file_picker_helper.dart';
 import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
+import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/providers/monetization_provider.dart';
+import '../../../monetization/services/free_limit_helper.dart';
 import '../../providers/pdf_providers.dart';
 
 class PdfToImageScreen extends ConsumerStatefulWidget {
@@ -75,6 +78,14 @@ class _PdfToImageScreenState extends ConsumerState<PdfToImageScreen> {
       }
     }
 
+    final allowed = await FreeLimitHelper.checkAndEnforce(
+      context: context,
+      ref: ref,
+      feature: ToolFeature.pdfToImage,
+      requestedAmount: pagesToConvert.length,
+    );
+    if (!allowed) return;
+
     setState(() {
       _isProcessing = true;
       _progress = 0.0;
@@ -121,6 +132,8 @@ class _PdfToImageScreenState extends ConsumerState<PdfToImageScreen> {
         timestamp: DateTime.now(),
       );
       await ref.read(historyProvider.notifier).addHistoryItem(historyItem);
+      ref.read(freeUsageManagerProvider).consumeReward(ToolFeature.pdfToImage);
+      ref.read(freeUsageManagerProvider).recordFeatureUsage(ToolFeature.pdfToImage);
 
       if (mounted) {
         setState(() => _isProcessing = false);

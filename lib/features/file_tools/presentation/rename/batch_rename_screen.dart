@@ -10,6 +10,9 @@ import '../../../../shared/presentation/result_screen.dart';
 import '../../../../shared/widgets/file_picker_helper.dart';
 import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
+import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/providers/monetization_provider.dart';
+import '../../../monetization/services/free_limit_helper.dart';
 import '../../providers/file_tools_providers.dart';
 import '../../services/rename_service.dart';
 
@@ -58,6 +61,14 @@ class _BatchRenameScreenState extends ConsumerState<BatchRenameScreen> {
   Future<void> _processRename() async {
     if (_previewItems.isEmpty) return;
 
+    final allowed = await FreeLimitHelper.checkAndEnforce(
+      context: context,
+      ref: ref,
+      feature: ToolFeature.batchRename,
+      requestedAmount: _previewItems.length,
+    );
+    if (!allowed) return;
+
     setState(() => _isProcessing = true);
 
     try {
@@ -81,6 +92,8 @@ class _BatchRenameScreenState extends ConsumerState<BatchRenameScreen> {
         timestamp: DateTime.now(),
       );
       await ref.read(historyProvider.notifier).addHistoryItem(historyItem);
+      ref.read(freeUsageManagerProvider).consumeReward(ToolFeature.batchRename);
+      ref.read(freeUsageManagerProvider).recordFeatureUsage(ToolFeature.batchRename);
 
       if (mounted) {
         setState(() => _isProcessing = false);

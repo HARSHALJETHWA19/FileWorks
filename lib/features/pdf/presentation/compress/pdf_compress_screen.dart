@@ -12,6 +12,9 @@ import '../../../../shared/presentation/result_screen.dart';
 import '../../../../shared/widgets/file_picker_helper.dart';
 import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
+import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/providers/monetization_provider.dart';
+import '../../../monetization/services/free_limit_helper.dart';
 import '../../models/pdf_models.dart';
 import '../../providers/pdf_providers.dart';
 
@@ -65,6 +68,14 @@ class _PdfCompressScreenState extends ConsumerState<PdfCompressScreen> {
   Future<void> _processCompress() async {
     if (_selectedFile == null) return;
 
+    final allowed = await FreeLimitHelper.checkAndEnforce(
+      context: context,
+      ref: ref,
+      feature: ToolFeature.pdfCompress,
+      requestedAmount: _originalSize,
+    );
+    if (!allowed) return;
+
     setState(() => _isProcessing = true);
 
     try {
@@ -107,6 +118,8 @@ class _PdfCompressScreenState extends ConsumerState<PdfCompressScreen> {
         timestamp: DateTime.now(),
       );
       await ref.read(historyProvider.notifier).addHistoryItem(historyItem);
+      ref.read(freeUsageManagerProvider).consumeReward(ToolFeature.pdfCompress);
+      ref.read(freeUsageManagerProvider).recordFeatureUsage(ToolFeature.pdfCompress);
 
       if (mounted) {
         setState(() => _isProcessing = false);

@@ -7,4 +7,7 @@ abstract class AdService {
   Future<void> recordOperationCompleted();
   int get operationCount;
   void updateProStatus(bool isPro);
+  Future<bool> showRewardedAd() async => false;
+  bool get isRewardedAdAvailable => false;
+  Future<void> preloadRewardedAd() async {}
 }

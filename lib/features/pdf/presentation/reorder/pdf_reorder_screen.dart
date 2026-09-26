@@ -11,6 +11,9 @@ import '../../../../shared/presentation/result_screen.dart';
 import '../../../../shared/widgets/file_picker_helper.dart';
 import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
+import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/providers/monetization_provider.dart';
+import '../../../monetization/services/free_limit_helper.dart';
 import '../../providers/pdf_providers.dart';
 
 class PdfReorderScreen extends ConsumerStatefulWidget {
@@ -55,6 +58,14 @@ class _PdfReorderScreenState extends ConsumerState<PdfReorderScreen> {
   Future<void> _processReorder() async {
     if (_selectedFile == null || _pageOrder.isEmpty) return;
 
+    final allowed = await FreeLimitHelper.checkAndEnforce(
+      context: context,
+      ref: ref,
+      feature: ToolFeature.pdfReorder,
+      requestedAmount: _pageOrder.length,
+    );
+    if (!allowed) return;
+
     setState(() => _isProcessing = true);
 
     try {
@@ -83,6 +94,8 @@ class _PdfReorderScreenState extends ConsumerState<PdfReorderScreen> {
         timestamp: DateTime.now(),
       );
       await ref.read(historyProvider.notifier).addHistoryItem(historyItem);
+      ref.read(freeUsageManagerProvider).consumeReward(ToolFeature.pdfReorder);
+      ref.read(freeUsageManagerProvider).recordFeatureUsage(ToolFeature.pdfReorder);
 
       if (mounted) {
         setState(() => _isProcessing = false);
