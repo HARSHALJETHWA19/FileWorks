@@ -10,6 +10,10 @@ class AppConstants {
 
   static const String playStoreUrl =
       'https://play.google.com/store/apps/details?id=com.fileworks.app';
+  static const String privacyPolicyUrl =
+      'https://harshaljethwa19.github.io/FileWorks/privacy-policy.html';
+  static const String manageSubscriptionsUrl =
+      'https://play.google.com/store/account/subscriptions?package=com.fileworks.app';
   static const String contactEmail = 'support@fileworks.app';
 
   // Local storage keys

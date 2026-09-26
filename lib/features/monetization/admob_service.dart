@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants/app_constants.dart';
@@ -56,6 +56,38 @@ class AdmobService implements AdService {
       return;
     }
     try {
+      final params = ConsentRequestParameters();
+      ConsentInformation.instance.requestConsentInfoUpdate(
+        params,
+        () async {
+          ConsentForm.loadAndShowConsentFormIfRequired(
+            (FormError? formError) async {
+              if (formError != null) {
+                debugPrint('Consent form error: ${formError.message}');
+              }
+              if (await ConsentInformation.instance.canRequestAds()) {
+                await _initializeMobileAds();
+              }
+            },
+          );
+        },
+        (FormError error) async {
+          debugPrint('Consent info update error: ${error.message}');
+          // If update failed (e.g. offline), initialize if consent status allows
+          if (await ConsentInformation.instance.canRequestAds()) {
+            await _initializeMobileAds();
+          }
+        },
+      );
+    } catch (e) {
+      debugPrint('AdMob UMP initialization skipped or failed: $e');
+      await _initializeMobileAds();
+    }
+  }
+
+  Future<void> _initializeMobileAds() async {
+    if (_initialized) return;
+    try {
       await MobileAds.instance.initialize();
       _initialized = true;
       if (!_isPro) {
@@ -67,7 +99,41 @@ class AdmobService implements AdService {
         }
       }
     } catch (e) {
-      debugPrint('AdMob initialization skipped or failed: $e');
+      debugPrint('MobileAds initialization skipped or failed: $e');
+    }
+  }
+
+  /// Presents the Google UMP Privacy Options Form if available.
+  static Future<void> showPrivacyOptionsForm(BuildContext context) async {
+    if (!Platform.isAndroid && !Platform.isIOS) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Privacy choices are available on mobile devices.'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+    try {
+      ConsentForm.showPrivacyOptionsForm((FormError? formError) {
+        if (formError != null) {
+          debugPrint('Privacy options form error: ${formError.message}');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Privacy choices: ${formError.message}'),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
+      });
+    } catch (e) {
+      debugPrint('Error invoking privacy options form: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Could not open privacy choices: $e'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 

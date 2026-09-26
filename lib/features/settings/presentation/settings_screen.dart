@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:open_filex/open_filex.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/route_constants.dart';
 import '../../../core/widgets/app_scaffold.dart';
+import '../../monetization/admob_service.dart';
 import '../../monetization/presentation/banner_ad_widget.dart';
 import '../../monetization/presentation/pro_upgrade_sheet.dart';
 import '../../monetization/providers/monetization_provider.dart';
@@ -142,6 +144,22 @@ class SettingsScreen extends ConsumerWidget {
                         subtitle: const Text('Read our complete data handling terms'),
                         trailing: const Icon(Icons.chevron_right_rounded),
                         onTap: () => context.push(RouteConstants.privacyPolicy),
+                      ),
+                      const Divider(height: 1),
+                      ListTile(
+                        leading: const Icon(Icons.tune_rounded),
+                        title: const Text('Ad & Privacy Choices'),
+                        subtitle: const Text('Review European (EEA/UK) consent preferences'),
+                        trailing: const Icon(Icons.chevron_right_rounded),
+                        onTap: () => AdmobService.showPrivacyOptionsForm(context),
+                      ),
+                      const Divider(height: 1),
+                      ListTile(
+                        leading: const Icon(Icons.subscriptions_outlined),
+                        title: const Text('Manage Subscriptions'),
+                        subtitle: const Text('View or cancel plans in Google Play'),
+                        trailing: const Icon(Icons.open_in_new_rounded),
+                        onTap: () => OpenFilex.open(AppConstants.manageSubscriptionsUrl),
                       ),
                     ],
                   ),

@@ -1,8 +1,14 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:filekit/core/constants/app_constants.dart';
 import 'package:filekit/features/monetization/ad_config.dart';
 import 'package:filekit/features/monetization/admob_service.dart';
+import 'package:filekit/features/monetization/providers/monetization_provider.dart';
+import 'package:filekit/features/settings/presentation/privacy_policy_screen.dart';
+import 'package:filekit/features/settings/presentation/settings_screen.dart';
 
 void main() {
   group('Privacy & Zero-Exfiltration Audit Tests', () {
@@ -81,6 +87,75 @@ void main() {
       await admobService.recordOperationCompleted();
       expect(admobService.operationCount, equals(3));
       // Ready for ad display after exactly 3 operations, not before
+    });
+
+    test('PRIVACY-005: Privacy Policy URL is public HTTPS URL without localhost or file schemes', () {
+      expect(AppConstants.privacyPolicyUrl, startsWith('https://'));
+      expect(AppConstants.privacyPolicyUrl, contains('privacy-policy.html'));
+      expect(AppConstants.manageSubscriptionsUrl, startsWith('https://play.google.com/store/account/subscriptions'));
+      expect(AppConstants.contactEmail, contains('@fileworks.app'));
+    });
+
+    test('PRIVACY-006: Standalone HTML Privacy Policy exists and contains required disclosures', () {
+      final htmlFile = File('docs/privacy-policy.html');
+      expect(htmlFile.existsSync(), isTrue);
+
+      final content = htmlFile.readAsStringSync();
+      expect(content, contains('On-Device Local File Processing'));
+      expect(content, contains('Google Mobile Ads SDK'));
+      expect(content, contains('Google Play Billing and Subscriptions'));
+      expect(content, contains('support@fileworks.app'));
+      expect(content, contains('fileworks_premium_6m'));
+      expect(content, contains('fileworks_premium_1y'));
+    });
+
+    testWidgets('PRIVACY-007: PrivacyPolicyScreen renders all required policy sections', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: PrivacyPolicyScreen(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Privacy Policy'), findsOneWidget);
+      expect(find.text('1. On-Device Local File Processing'), findsOneWidget);
+      expect(find.text('2. Temporary Files and Local Storage'), findsOneWidget);
+      expect(find.text('3. Advertising and Google Mobile Ads SDK'), findsOneWidget);
+      expect(find.text('4. Voluntary Rewarded Advertisements'), findsOneWidget);
+      expect(find.text('5. Google Play Billing and Subscriptions'), findsOneWidget);
+      expect(find.text('6. Permissions Used'), findsOneWidget);
+      expect(find.text('7. Third-Party Service Providers'), findsOneWidget);
+      expect(find.text('8. Contact & Data Inquiries'), findsOneWidget);
+      expect(find.text('View Official Web Privacy Policy'), findsOneWidget);
+    });
+
+    testWidgets('PRIVACY-008: SettingsScreen exposes Privacy Policy, Ad & Privacy Choices, and Manage Subscriptions', (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+          ],
+          child: const MaterialApp(
+            home: SettingsScreen(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Local-First Processing'), findsOneWidget);
+      expect(find.text('Privacy Policy'), findsOneWidget);
+      expect(find.text('Ad & Privacy Choices'), findsOneWidget);
+      expect(find.text('Manage Subscriptions'), findsOneWidget);
     });
   });
 }

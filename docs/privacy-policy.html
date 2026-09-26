@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — FileWorks</title>
+  <meta name="description" content="FileWorks Privacy Policy. Learn how FileWorks processes files locally on your device with complete privacy.">
+  <style>
+    :root {
+      --primary: #1976D2;
+      --primary-dark: #0D47A1;
+      --bg: #F8FAFC;
+      --surface: #FFFFFF;
+      --text: #0F172A;
+      --text-muted: #475569;
+      --border: #E2E8F0;
+      --accent: #10B981;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0F172A;
+        --surface: #1E293B;
+        --text: #F8FAFC;
+        --text-muted: #94A3B8;
+        --border: #334155;
+      }
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 24px 16px;
+    }
+    .container {
+      max-width: 780px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px 32px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--accent);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .meta {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-top: 32px;
+      margin-bottom: 12px;
+    }
+    p {
+      margin-bottom: 14px;
+      color: var(--text);
+    }
+    ul {
+      margin-left: 20px;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    .highlight-box {
+      background: rgba(25, 118, 210, 0.06);
+      border-left: 4px solid var(--primary);
+      padding: 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 20px 0;
+    }
+    .highlight-box p {
+      margin: 0;
+      font-weight: 500;
+    }
+    a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="badge">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+      </svg>
+      On-Device Processing • Local-First Privacy
+    </div>
+    <h1>Privacy Policy</h1>
+    <div class="meta">
+      <strong>FileWorks</strong> for Android &bull; Effective Date: September 26, 2026 &bull; Package: <code>com.fileworks.app</code>
+    </div>
+
+    <div class="highlight-box">
+      <p><strong>Core Privacy Principle:</strong> FileWorks processes supported documents, images, and archives locally on your physical device. FileWorks does not operate any file-upload servers, cloud storage buckets, or remote processing backends.</p>
+    </div>
+
+    <h2>1. Overview and Scope</h2>
+    <p>This Privacy Policy explains how FileWorks ("we", "our", or "the app") handles your data. FileWorks is designed from the ground up as a private, local-first utility suite offering PDF manipulation, image conversion, image compression, archive creation/extraction, and batch file renaming on Android devices.</p>
+
+    <h2>2. On-Device Local File Processing</h2>
+    <p>When you select a document, image, or archive in FileWorks:</p>
+    <ul>
+      <li>All file transformations, conversions, and extractions are performed strictly on your local device hardware using background Dart isolates and on-device native libraries.</li>
+      <li>FileWorks does <strong>not</strong> transmit, copy, or upload your file content, text, images, or metadata to any FileWorks-owned server, external cloud platform, or remote API.</li>
+      <li>FileWorks does <strong>not</strong> operate AWS S3 buckets, Firebase Storage, Google Cloud Storage, or private backends for processing user files.</li>
+      <li>FileWorks does <strong>not</strong> require user registration, account creation, or login.</li>
+      <li>Your files remain in your device storage and cannot leave your device unless you explicitly initiate an Android system share action or save action.</li>
+    </ul>
+
+    <h2>3. Temporary Working Files and Local Storage</h2>
+    <p>To safely complete complex operations (such as PDF splitting, image format conversion, or ZIP extraction), FileWorks temporarily generates working files in the application's isolated cache sandbox directory (<code>getTemporaryDirectory()</code>).</p>
+    <ul>
+      <li>These temporary files are private to the app sandbox and are automatically deleted after task completion or during periodic cache cleanups.</li>
+      <li>Local configuration and preferences are stored exclusively on your device via Android <code>SharedPreferences</code>. This includes theme mode (Light/Dark/System), haptic feedback preference, local operation history (which you can clear at any time in the History tab), tool free-usage counters, and cached subscription entitlement status.</li>
+      <li>In accordance with Android security best practices, FileWorks disables automated cloud backups (<code>android:allowBackup="false"</code>) and excludes all app storage from device-to-device transfers.</li>
+    </ul>
+
+    <h2>4. Advertising and the Google Mobile Ads SDK</h2>
+    <p>To provide all core utility features to free users without charge, FileWorks integrates the official <strong>Google Mobile Ads SDK</strong> (Google AdMob).</p>
+    <p>The Google Mobile Ads SDK may automatically collect and transmit certain pseudonymous technical information directly to Google in accordance with Google's Privacy Policy, including:</p>
+    <ul>
+      <li><strong>Device and Advertising Identifiers:</strong> Google Advertising ID (GAID) and hardware identifiers for ad attribution and frequency capping.</li>
+      <li><strong>App Performance and Diagnostics:</strong> Crash logs, initialization latency, and SDK error diagnostics.</li>
+      <li><strong>Ad Engagement Telemetry:</strong> Ad clicks, impression timestamps, and viewability signals for fraud detection.</li>
+      <li><strong>Coarse Location:</strong> Approximate geographical region derived from device IP address.</li>
+    </ul>
+    <p>FileWorks itself never receives, stores, or links your personal files or document contents with advertising identifiers.</p>
+
+    <h2>5. European (EEA / UK / Switzerland) User Consent (Google UMP)</h2>
+    <p>For users located in the European Economic Area, the United Kingdom, or Switzerland, FileWorks integrates Google's certified <strong>User Messaging Platform (UMP)</strong>. When required by applicable data protection laws (such as GDPR), a consent dialogue is presented upon launch to allow you to make informed privacy choices regarding personalized or non-personalized advertising. You can review or revoke your consent preferences at any time within the app under <strong>Settings &gt; Ad &amp; Privacy Choices</strong>.</p>
+
+    <h2>6. Voluntary Rewarded Advertisements</h2>
+    <p>Free users who reach a per-tool free limit may voluntarily choose to watch a rewarded advertisement ("Watch Ad &amp; Continue") to temporarily grant additional processing capacity for the active operation. Watching rewarded ads is entirely optional, is strictly user-initiated, and provides an extension that is operation-scoped. Rewarded ads do not permanently change your free tier status.</p>
+
+    <h2>7. Google Play Billing and Subscriptions</h2>
+    <p>FileWorks offers optional auto-renewing Premium subscriptions (6-Month Plan: <code>fileworks_premium_6m</code>, 12-Month Plan: <code>fileworks_premium_1y</code>) that remove all advertisements and provide unlimited processing capacity.</p>
+    <ul>
+      <li>All subscription transactions, renewals, payments, and cancellations are handled directly and securely through <strong>Google Play In-App Billing</strong>.</li>
+      <li>FileWorks never collects, stores, or processes your credit card numbers, bank account information, or billing address.</li>
+      <li>Subscriptions automatically renew until cancelled by the user. You can manage, pause, or cancel your subscription at any time by visiting the Google Play Store Subscriptions center or via the in-app "Manage Subscriptions" shortcut.</li>
+    </ul>
+
+    <h2>8. Android Permissions</h2>
+    <p>FileWorks requests only the permissions strictly required to perform its functions:</p>
+    <ul>
+      <li><code>READ_MEDIA_IMAGES</code> (Android 13+): Requested solely to allow you to select image files for conversion and compression via the system picker.</li>
+      <li><code>READ_EXTERNAL_STORAGE</code> (maxSdkVersion 32): Used solely as a backward-compatibility fallback on Android 10–12 devices.</li>
+      <li><code>INTERNET</code> &amp; <code>ACCESS_NETWORK_STATE</code>: Used solely by Google Mobile Ads and Google Play Billing to deliver ads and verify subscription status.</li>
+    </ul>
+    <p>FileWorks does <strong>not</strong> request or use <code>MANAGE_EXTERNAL_STORAGE</code>, camera, microphone, background location, contacts, or phone permissions.</p>
+
+    <h2>9. Third-Party Service Providers</h2>
+    <p>The only third-party SDKs integrated into FileWorks are:</p>
+    <ul>
+      <li><strong>Google Mobile Ads (AdMob):</strong> <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google Ads Privacy Policy</a></li>
+      <li><strong>Google Play Billing:</strong> <a href="https://play.google.com/about/play-terms/" target="_blank" rel="noopener">Google Play Terms of Service</a></li>
+    </ul>
+    <p>No social network trackers (e.g. Facebook SDK), analytics brokers (e.g. Firebase Analytics, Amplitude), or third-party telemetry frameworks are installed.</p>
+
+    <h2>10. Children's Privacy</h2>
+    <p>FileWorks is a general-purpose productivity and file management utility designed for a general audience (ages 18 and older, or teenagers 13 and older). We do not knowingly collect personal information from children under 13 years of age.</p>
+
+    <h2>11. Contact Us</h2>
+    <p>If you have any questions or suggestions regarding this Privacy Policy or our local-first privacy practices, please contact us at:</p>
+    <p><strong>Email:</strong> <a href="mailto:support@fileworks.app">support@fileworks.app</a><br>
+    <strong>Website:</strong> <a href="https://harshaljethwa19.github.io/FileWorks/privacy-policy.html">https://harshaljethwa19.github.io/FileWorks/privacy-policy.html</a></p>
+
+    <footer>
+      &copy; 2026 FileWorks. All rights reserved. &bull; Version 1.0.0
+    </footer>
+  </div>
+</body>
+</html>
