@@ -165,4 +165,47 @@ class FreeUsageConfig {
     }
     return '$amount ${getUnit(feature)}';
   }
+
+  /// Returns clear limit description for the feature.
+  static String getFeatureLimitDescription(ToolFeature feature) {
+    final free = getFreeLimit(feature);
+    final unit = getUnit(feature);
+    switch (feature) {
+      case ToolFeature.pdfMerge:
+        return 'You can merge up to $free $unit for free.';
+      case ToolFeature.pdfSplit:
+        return 'You can split up to $free $unit for free.';
+      case ToolFeature.pdfRotate:
+        return 'You can rotate up to $free $unit for free.';
+      case ToolFeature.pdfReorder:
+        return 'You can reorder up to $free $unit for free.';
+      case ToolFeature.pdfToImage:
+        return 'You can convert up to $free $unit for free.';
+      case ToolFeature.imageToPdf:
+        return 'You can convert up to $free $unit for free.';
+      case ToolFeature.pdfCompress:
+        return 'You can compress up to ${formatAmount(feature, free)} for free.';
+      case ToolFeature.imageCompress:
+        return 'You can compress up to ${formatAmount(feature, free)} for free.';
+      case ToolFeature.imageResize:
+        return 'You can resize up to ${formatAmount(feature, free)} for free.';
+      case ToolFeature.imageConvert:
+        return 'You can convert up to ${formatAmount(feature, free)} for free.';
+      case ToolFeature.createZip:
+        return 'You can compress up to $free $unit for free.';
+      case ToolFeature.extractZip:
+        return 'You can extract up to $free $unit for free.';
+      case ToolFeature.batchRename:
+        return 'You can rename up to $free $unit for free.';
+    }
+  }
+
+  /// Returns clear rewarded capacity description for the feature.
+  static String getRewardedDescription(ToolFeature feature) {
+    final rewarded = getRewardedLimit(feature);
+    if (isByteLimit(feature)) {
+      return 'Watch an ad to temporarily process up to ${formatAmount(feature, rewarded)} in this operation.';
+    }
+    return 'Watch an ad to temporarily process up to $rewarded ${getUnit(feature)} in this operation.';
+  }
 }

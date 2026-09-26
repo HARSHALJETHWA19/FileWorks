@@ -1,4 +1,5 @@
 import 'dart:io';
+import '../../features/monetization/free_usage_config.dart';
 
 class ProcessingResult {
   final bool success;
@@ -9,6 +10,7 @@ class ProcessingResult {
   final int outputTotalBytes;
   final Map<String, dynamic>? extraStats;
   final String? repeatRoute;
+  final ToolFeature? feature;
 
   const ProcessingResult({
     required this.success,
@@ -19,10 +21,12 @@ class ProcessingResult {
     this.outputTotalBytes = 0,
     this.extraStats,
     this.repeatRoute,
+    this.feature,
   });
 
   bool get hasFiles => outputFiles.isNotEmpty;
   File? get primaryFile => outputFiles.isNotEmpty ? outputFiles.first : null;
+  bool get isExtractZip => feature == ToolFeature.extractZip;
 
   int get totalFilesCount => outputFiles.length;
 

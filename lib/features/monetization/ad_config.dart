@@ -11,12 +11,14 @@ class AdConfig {
   static const bool rewardedEnabled = true;
 
   /// Number of completed operations before showing an interstitial ad.
-  /// Ensures ads never interrupt workflow and do not annoy users.
   static const int interstitialOperationThreshold = 3;
 
-  /// Minimum cooldown interval between two interstitial ads.
+  /// Centralized maximum transition actions between interstitials
+  static const int maxActionsBetweenInterstitials = 2;
+
+  /// Centralized cooldown interval between two interstitial ads.
   /// Prevents ad spamming on rapid successive operations.
-  static const Duration interstitialCooldown = Duration(seconds: 45);
+  static const Duration interstitialCooldown = Duration(seconds: 60);
 
   /// Official Google Mobile Ads Sample Ad Unit IDs for Android:
   /// https://developers.google.com/admob/android/test-ads

@@ -123,4 +123,82 @@ class FileSaveService {
       );
     }
   }
+
+  /// Saves multiple files individually to device storage using Android SAF.
+  /// Preserves each file's original name and extension, handles cancellation gracefully,
+  /// safely handles duplicate names, and reports partial successes or failures.
+  static Future<BatchSaveResult> saveAllFilesIndividually({
+    required List<File> files,
+  }) async {
+    final validFiles = files.where((f) => f.existsSync()).toList();
+    if (validFiles.isEmpty) {
+      return const BatchSaveResult(
+        totalFiles: 0,
+        savedCount: 0,
+        cancelledCount: 0,
+        failedCount: 0,
+        errorMessage: 'No valid files available to save.',
+      );
+    }
+
+    int saved = 0;
+    int cancelled = 0;
+    int failed = 0;
+    final failedNames = <String>[];
+
+    for (int i = 0; i < validFiles.length; i++) {
+      final file = validFiles[i];
+      final fileName = p.basename(file.path);
+      final res = await saveFileToDevice(
+        file: file,
+        dialogTitle: 'Save "$fileName" (${i + 1}/${validFiles.length})',
+        suggestedName: fileName,
+      );
+
+      if (res.status == FileSaveStatus.success) {
+        saved++;
+      } else if (res.status == FileSaveStatus.cancelled) {
+        cancelled++;
+        // If the user cancelled a save dialog, break cleanly to avoid
+        // repetitive dialogs while preserving previously saved files.
+        break;
+      } else {
+        failed++;
+        failedNames.add(fileName);
+      }
+    }
+
+    return BatchSaveResult(
+      totalFiles: validFiles.length,
+      savedCount: saved,
+      cancelledCount: cancelled,
+      failedCount: failed,
+      failedFileNames: failedNames,
+    );
+  }
+}
+
+class BatchSaveResult {
+  final int totalFiles;
+  final int savedCount;
+  final int cancelledCount;
+  final int failedCount;
+  final List<String> failedFileNames;
+  final String? errorMessage;
+
+  const BatchSaveResult({
+    required this.totalFiles,
+    required this.savedCount,
+    required this.cancelledCount,
+    required this.failedCount,
+    this.failedFileNames = const [],
+    this.errorMessage,
+  });
+
+  bool get isAllSuccess => savedCount == totalFiles && totalFiles > 0;
+  bool get isAllSuccessful => isAllSuccess;
+  bool get isPartialSuccess => savedCount > 0 && (cancelledCount > 0 || failedCount > 0);
+  bool get wasCancelled => cancelledCount > 0 && savedCount == 0 && failedCount == 0;
+  bool get isAllFailed => failedCount == totalFiles && totalFiles > 0;
+  int get totalCount => totalFiles;
 }

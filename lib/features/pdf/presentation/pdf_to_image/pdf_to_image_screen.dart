@@ -12,6 +12,7 @@ import '../../../../shared/presentation/processing_screen.dart';
 import '../../../../shared/widgets/file_picker_helper.dart';
 import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
+import '../../../monetization/ad_service.dart';
 import '../../../monetization/free_usage_config.dart';
 import '../../../monetization/providers/monetization_provider.dart';
 import '../../../monetization/services/free_limit_helper.dart';
@@ -135,12 +136,17 @@ class _PdfToImageScreenState extends ConsumerState<PdfToImageScreen> {
       ref.read(freeUsageManagerProvider).consumeReward(ToolFeature.pdfToImage);
       ref.read(freeUsageManagerProvider).recordFeatureUsage(ToolFeature.pdfToImage);
 
+      await ref.read(adServiceProvider).maybeShowTransitionInterstitial(
+        point: AdTransitionPoint.processingComplete,
+      );
+
       if (mounted) {
         setState(() => _isProcessing = false);
         context.pushReplacement(
           RouteConstants.result,
           extra: ProcessingResult(
             success: true,
+            feature: ToolFeature.pdfToImage,
             title: 'Images Exported Successfully',
             message: 'Extracted ${outputImages.length} page images locally.',
             outputFiles: outputImages,

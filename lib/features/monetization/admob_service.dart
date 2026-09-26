@@ -118,6 +118,9 @@ class AdmobService implements AdService {
     );
   }
 
+  int _transitionActionCount = 0;
+  bool _isInterstitialShowing = false;
+
   @override
   Future<void> recordOperationCompleted() async {
     _operationCount++;
@@ -125,30 +128,125 @@ class AdmobService implements AdService {
   }
 
   @override
-  Future<void> showInterstitialIfReady({bool force = false}) async {
-    if (!_initialized || _isPro || !AdConfig.interstitialEnabled) return;
+  void recordAction(AdTransitionPoint point) {
+    if (_isPro) return;
+    _transitionActionCount++;
+  }
+
+  @override
+  bool isInterstitialEligible() {
+    if (!_initialized || _isPro || !AdConfig.interstitialEnabled) return false;
+    if (_isInterstitialShowing) return false;
+
+    // Check transition action threshold
+    if (_transitionActionCount < AdConfig.maxActionsBetweenInterstitials &&
+        _operationCount < AdConfig.interstitialOperationThreshold) {
+      debugPrint('Interstitial skipped: Action threshold not reached (actions=$_transitionActionCount, ops=$_operationCount)');
+      return false;
+    }
 
     // Check cooldown
-    if (!force && _lastInterstitialTime != null) {
+    if (_lastInterstitialTime != null) {
       final elapsed = DateTime.now().difference(_lastInterstitialTime!);
       if (elapsed < AdConfig.interstitialCooldown) {
         debugPrint('Interstitial skipped: Cooldown active (${elapsed.inSeconds}s < ${AdConfig.interstitialCooldown.inSeconds}s)');
-        return;
+        return false;
       }
     }
 
-    if (force || _operationCount >= AdConfig.interstitialOperationThreshold) {
-      if (_interstitialAd != null) {
-        await _interstitialAd!.show();
-        _interstitialAd = null;
-        _operationCount = 0;
-        _lastInterstitialTime = DateTime.now();
-        await _prefs.setInt(AppConstants.keyOperationCount, 0);
+    return true;
+  }
+
+  @override
+  Future<bool> maybeShowTransitionInterstitial({
+    required AdTransitionPoint point,
+    Duration timeout = const Duration(seconds: 2),
+  }) async {
+    if (!_initialized || _isPro || !AdConfig.interstitialEnabled) return false;
+
+    recordAction(point);
+
+    if (!isInterstitialEligible()) {
+      return false;
+    }
+
+    if (_interstitialAd != null) {
+      return _showLoadedInterstitial();
+    }
+
+    if (_isInterstitialLoading) {
+      final completer = Completer<bool>();
+      Timer? timer;
+      timer = Timer.periodic(const Duration(milliseconds: 100), (t) {
+        if (_interstitialAd != null) {
+          timer?.cancel();
+          if (!completer.isCompleted) {
+            _showLoadedInterstitial().then((val) {
+              if (!completer.isCompleted) completer.complete(val);
+            });
+          }
+        } else if (t.tick >= (timeout.inMilliseconds / 100)) {
+          timer?.cancel();
+          if (!completer.isCompleted) completer.complete(false);
+        }
+      });
+      return completer.future;
+    }
+
+    _loadInterstitialAd();
+    return false;
+  }
+
+  Future<bool> _showLoadedInterstitial() async {
+    if (_interstitialAd == null || _isInterstitialShowing) return false;
+    _isInterstitialShowing = true;
+    final ad = _interstitialAd!;
+    _interstitialAd = null;
+    _transitionActionCount = 0;
+    _operationCount = 0;
+    _lastInterstitialTime = DateTime.now();
+    await _prefs.setInt(AppConstants.keyOperationCount, 0);
+
+    final completer = Completer<bool>();
+    ad.fullScreenContentCallback = FullScreenContentCallback(
+      onAdDismissedFullScreenContent: (ad) {
+        ad.dispose();
+        _isInterstitialShowing = false;
+        if (!completer.isCompleted) completer.complete(true);
         if (!_isPro && AdConfig.interstitialEnabled) {
           _loadInterstitialAd();
         }
+      },
+      onAdFailedToShowFullScreenContent: (ad, error) {
+        ad.dispose();
+        _isInterstitialShowing = false;
+        if (!completer.isCompleted) completer.complete(false);
+        if (!_isPro && AdConfig.interstitialEnabled) {
+          _loadInterstitialAd();
+        }
+      },
+    );
+
+    try {
+      await ad.show();
+      return await completer.future;
+    } catch (e) {
+      _isInterstitialShowing = false;
+      if (!_isPro && AdConfig.interstitialEnabled) {
+        _loadInterstitialAd();
+      }
+      return false;
+    }
+  }
+
+  @override
+  Future<void> showInterstitialIfReady({bool force = false}) async {
+    if (!_initialized || _isPro || !AdConfig.interstitialEnabled) return;
+
+    if (force || isInterstitialEligible()) {
+      if (_interstitialAd != null) {
+        await _showLoadedInterstitial();
       } else {
-        // Interstitial was not ready, trigger preload
         _loadInterstitialAd();
       }
     }
@@ -261,6 +359,17 @@ class AdmobService implements AdService {
     }
 
     return completer.future;
+  }
+
+  @override
+  Future<bool> isNetworkAvailable() async {
+    try {
+      final result = await InternetAddress.lookup('google.com')
+          .timeout(const Duration(seconds: 2));
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } catch (_) {
+      return false;
+    }
   }
 
   @override

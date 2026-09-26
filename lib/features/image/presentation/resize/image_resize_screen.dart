@@ -11,6 +11,7 @@ import '../../../../shared/presentation/processing_screen.dart';
 import '../../../../shared/widgets/file_picker_helper.dart';
 import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
+import '../../../monetization/ad_service.dart';
 import '../../../monetization/free_usage_config.dart';
 import '../../../monetization/providers/monetization_provider.dart';
 import '../../../monetization/services/free_limit_helper.dart';
@@ -83,11 +84,10 @@ class _ImageResizeScreenState extends ConsumerState<ImageResizeScreen> {
       return;
     }
 
-    int maxFileSizeBytes = 0;
+    int totalInputBytes = 0;
     for (final img in _selectedImages) {
       if (await img.exists()) {
-        final len = await img.length();
-        if (len > maxFileSizeBytes) maxFileSizeBytes = len;
+        totalInputBytes += await img.length();
       }
     }
     if (!mounted) return;
@@ -96,7 +96,7 @@ class _ImageResizeScreenState extends ConsumerState<ImageResizeScreen> {
       context: context,
       ref: ref,
       feature: ToolFeature.imageResize,
-      requestedAmount: maxFileSizeBytes,
+      requestedAmount: totalInputBytes,
     );
     if (!allowed) return;
 
@@ -158,12 +158,17 @@ class _ImageResizeScreenState extends ConsumerState<ImageResizeScreen> {
       ref.read(freeUsageManagerProvider).consumeReward(ToolFeature.imageResize);
       ref.read(freeUsageManagerProvider).recordFeatureUsage(ToolFeature.imageResize);
 
+      await ref.read(adServiceProvider).maybeShowTransitionInterstitial(
+        point: AdTransitionPoint.processingComplete,
+      );
+
       if (mounted) {
         setState(() => _isProcessing = false);
         context.pushReplacement(
           RouteConstants.result,
           extra: ProcessingResult(
             success: true,
+            feature: ToolFeature.imageResize,
             title: 'Image Resized Successfully',
             message: 'Adjusted resolution for ${outputFiles.length} images locally.',
             outputFiles: outputFiles,

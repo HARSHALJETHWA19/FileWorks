@@ -48,6 +48,24 @@ class MockAdService implements AdService {
 
   @override
   Future<void> preloadRewardedAd() async {}
+
+  @override
+  Future<bool> isNetworkAvailable() async => true;
+
+  @override
+  bool isInterstitialEligible() => false;
+
+  @override
+  void recordAction(AdTransitionPoint point) {}
+
+  @override
+  Future<bool> maybeShowTransitionInterstitial({
+    required AdTransitionPoint point,
+    Duration timeout = const Duration(seconds: 2),
+  }) async {
+    showInterstitialCallCount++;
+    return false;
+  }
 }
 
 void main() {

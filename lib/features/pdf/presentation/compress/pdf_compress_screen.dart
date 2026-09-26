@@ -12,6 +12,7 @@ import '../../../../shared/presentation/processing_screen.dart';
 import '../../../../shared/widgets/file_picker_helper.dart';
 import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
+import '../../../monetization/ad_service.dart';
 import '../../../monetization/free_usage_config.dart';
 import '../../../monetization/providers/monetization_provider.dart';
 import '../../../monetization/services/free_limit_helper.dart';
@@ -121,6 +122,10 @@ class _PdfCompressScreenState extends ConsumerState<PdfCompressScreen> {
       ref.read(freeUsageManagerProvider).consumeReward(ToolFeature.pdfCompress);
       ref.read(freeUsageManagerProvider).recordFeatureUsage(ToolFeature.pdfCompress);
 
+      await ref.read(adServiceProvider).maybeShowTransitionInterstitial(
+        point: AdTransitionPoint.processingComplete,
+      );
+
       if (mounted) {
         setState(() => _isProcessing = false);
 
@@ -144,6 +149,7 @@ class _PdfCompressScreenState extends ConsumerState<PdfCompressScreen> {
           RouteConstants.result,
           extra: ProcessingResult(
             success: true,
+            feature: ToolFeature.pdfCompress,
             title: 'PDF Compression Complete',
             message: message,
             outputFiles: [compressedFile],

@@ -41,7 +41,55 @@ class FreeLimitSheet extends ConsumerStatefulWidget {
 
 class _FreeLimitSheetState extends ConsumerState<FreeLimitSheet> {
   bool _isLoadingAd = false;
+  bool _isCheckingConnection = false;
+  bool _isOffline = false;
   String? _errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkInitialConnectivity();
+  }
+
+  Future<void> _checkInitialConnectivity() async {
+    final adService = ref.read(adServiceProvider);
+    final online = await adService.isNetworkAvailable();
+    if (mounted) {
+      setState(() {
+        _isOffline = !online;
+      });
+    }
+  }
+
+  Future<void> _handleRetryConnection() async {
+    if (_isCheckingConnection) return;
+    setState(() {
+      _isCheckingConnection = true;
+      _errorMessage = null;
+    });
+
+    final adService = ref.read(adServiceProvider);
+    final online = await adService.isNetworkAvailable();
+
+    if (!mounted) return;
+
+    setState(() {
+      _isCheckingConnection = false;
+      _isOffline = !online;
+      if (!online) {
+        _errorMessage = "Still offline. Please check your internet connection.";
+      }
+    });
+
+    if (online) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Connected to the internet! You can now watch an ad.'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
 
   Future<void> _handleWatchAd() async {
     if (_isLoadingAd) return;
@@ -53,6 +101,16 @@ class _FreeLimitSheetState extends ConsumerState<FreeLimitSheet> {
 
     try {
       final adService = ref.read(adServiceProvider);
+      final isOnline = await adService.isNetworkAvailable();
+      if (!isOnline) {
+        if (!mounted) return;
+        setState(() {
+          _isLoadingAd = false;
+          _isOffline = true;
+        });
+        return;
+      }
+
       final rewardEarned = await adService.showRewardedAd();
 
       if (!mounted) return;
@@ -65,7 +123,7 @@ class _FreeLimitSheetState extends ConsumerState<FreeLimitSheet> {
           _isLoadingAd = false;
           _errorMessage =
               "You're offline or a rewarded ad is currently unavailable. "
-              "You can upgrade to Premium or try again when connected.";
+              "Connect to the internet to try again, or upgrade to Premium.";
         });
       }
     } catch (e) {
@@ -73,8 +131,8 @@ class _FreeLimitSheetState extends ConsumerState<FreeLimitSheet> {
         setState(() {
           _isLoadingAd = false;
           _errorMessage =
-              "A rewarded ad could not be displayed right now. "
-              "You can upgrade to Premium or try again when online.";
+              "You're offline or a rewarded ad is currently unavailable. "
+              "Connect to the internet to try again, or upgrade to Premium.";
         });
       }
     }
@@ -94,8 +152,8 @@ class _FreeLimitSheetState extends ConsumerState<FreeLimitSheet> {
     final formattedReq = FreeUsageConfig.formatAmount(widget.feature, widget.requestedAmount);
     final formattedFree = FreeUsageConfig.formatAmount(widget.feature, freeLimit);
     final formattedReward = FreeUsageConfig.formatAmount(widget.feature, rewardedLimit);
-    final bonusText = FreeUsageConfig.getRewardBonusText(widget.feature);
-
+    final limitDescription = FreeUsageConfig.getFeatureLimitDescription(widget.feature);
+    final rewardDescription = FreeUsageConfig.getRewardedDescription(widget.feature);
     final canUnlockWithAd = widget.requestedAmount <= rewardedLimit;
 
     return Padding(
@@ -129,12 +187,14 @@ class _FreeLimitSheetState extends ConsumerState<FreeLimitSheet> {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.primaryContainer.withAlpha(120),
+                    color: _isOffline
+                        ? theme.colorScheme.errorContainer.withAlpha(120)
+                        : theme.colorScheme.primaryContainer.withAlpha(120),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Icon(
-                    Icons.lock_clock_rounded,
-                    color: theme.colorScheme.primary,
+                    _isOffline ? Icons.wifi_off_rounded : Icons.lock_clock_rounded,
+                    color: _isOffline ? theme.colorScheme.error : theme.colorScheme.primary,
                     size: 28,
                   ),
                 ),
@@ -150,7 +210,9 @@ class _FreeLimitSheetState extends ConsumerState<FreeLimitSheet> {
                         ),
                       ),
                       Text(
-                        "You're using the free version of FileWorks.",
+                        _isOffline
+                            ? "Rewarded ads require an internet connection."
+                            : "You're using the free version of FileWorks.",
                         style: theme.textTheme.bodyMedium?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
                         ),
@@ -162,7 +224,7 @@ class _FreeLimitSheetState extends ConsumerState<FreeLimitSheet> {
             ),
             const SizedBox(height: 20),
 
-            // Details Container
+            // Main Content Container
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -170,65 +232,81 @@ class _FreeLimitSheetState extends ConsumerState<FreeLimitSheet> {
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: theme.colorScheme.outlineVariant),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        toolName,
-                        style: theme.textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+              child: _isOffline
+                  ? Text(
+                      "You're currently offline, so a rewarded ad isn't available.\n\n"
+                      "Connect to the internet to watch an ad and continue, or upgrade to Premium.",
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurface,
+                        height: 1.4,
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.errorContainer.withAlpha(150),
-                          borderRadius: BorderRadius.circular(8),
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              toolName,
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.errorContainer.withAlpha(150),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                '$formattedReq selected',
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  color: theme.colorScheme.onErrorContainer,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        child: Text(
-                          '$formattedReq selected',
-                          style: theme.textTheme.labelSmall?.copyWith(
-                            color: theme.colorScheme.onErrorContainer,
-                            fontWeight: FontWeight.w700,
+                        const SizedBox(height: 10),
+                        Text(
+                          'Free limit: $formattedFree per operation.',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Free limit: $formattedFree per operation.',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
+                        const SizedBox(height: 6),
+                        Text(
+                          limitDescription,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.onSurface,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        if (canUnlockWithAd) ...[
+                          Text(
+                            rewardDescription,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.primary,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ] else ...[
+                          Text(
+                            'This operation exceeds the ad-rewarded allowance ($formattedReward). '
+                            'Upgrade to FileWorks Premium for higher limits, or adjust your selection.',
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.error,
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 4),
-                  if (canUnlockWithAd) ...[
-                    Text(
-                      'Watch an ad to unlock $bonusText ($formattedReward total) for this operation.',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ] else ...[
-                    Text(
-                      'This operation exceeds the ad-rewarded allowance ($formattedReward). '
-                      'Upgrade to FileWorks Premium for higher limits, or adjust your selection.',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.error,
-                      ),
-                    ),
-                  ],
-                ],
-              ),
             ),
             const SizedBox(height: 16),
 
-            // Error / Offline notification if any
+            // Error / notification if any
             if (_errorMessage != null) ...[
               Container(
                 padding: const EdgeInsets.all(12),
@@ -241,7 +319,7 @@ class _FreeLimitSheetState extends ConsumerState<FreeLimitSheet> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Icon(
-                      Icons.wifi_off_rounded,
+                      Icons.error_outline_rounded,
                       color: theme.colorScheme.error,
                       size: 20,
                     ),
@@ -260,8 +338,18 @@ class _FreeLimitSheetState extends ConsumerState<FreeLimitSheet> {
               const SizedBox(height: 16),
             ],
 
-            // Action: Watch Ad & Continue (only if request fits within rewarded limit)
-            if (canUnlockWithAd) ...[
+            // Action Buttons
+            if (_isOffline) ...[
+              PrimaryButton(
+                label: _isCheckingConnection
+                    ? 'Checking Connection…'
+                    : 'Connect / Try Again',
+                icon: Icons.refresh_rounded,
+                isLoading: _isCheckingConnection,
+                onPressed: _isCheckingConnection ? null : _handleRetryConnection,
+              ),
+              const SizedBox(height: 10),
+            ] else if (canUnlockWithAd) ...[
               PrimaryButton(
                 label: _isLoadingAd
                     ? 'Loading Ad…'
@@ -284,7 +372,7 @@ class _FreeLimitSheetState extends ConsumerState<FreeLimitSheet> {
               icon: const Icon(Icons.auto_awesome_rounded),
               label: const Text(
                 'Go Premium (Unlimited & Ad-Free)',
-                semanticsLabel: 'Go Premium',
+                semanticsLabel: 'Go Premium (Unlimited & Ad-Free)',
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
               ),
               onPressed: _handleGoPremium,

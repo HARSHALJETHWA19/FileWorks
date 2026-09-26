@@ -64,6 +64,27 @@ class ControllableAdService implements AdService {
 
     return shouldEarnReward;
   }
+
+  bool networkAvailable = true;
+  int transitionAdCalls = 0;
+
+  @override
+  Future<bool> isNetworkAvailable() async => networkAvailable;
+
+  @override
+  bool isInterstitialEligible() => false;
+
+  @override
+  void recordAction(AdTransitionPoint point) {}
+
+  @override
+  Future<bool> maybeShowTransitionInterstitial({
+    required AdTransitionPoint point,
+    Duration timeout = const Duration(seconds: 2),
+  }) async {
+    transitionAdCalls++;
+    return false;
+  }
 }
 
 void main() {

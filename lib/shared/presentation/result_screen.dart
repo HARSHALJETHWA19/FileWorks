@@ -11,6 +11,7 @@ import '../../core/services/file_save_service.dart';
 import '../../core/utils/file_utils.dart';
 import '../../core/widgets/app_scaffold.dart';
 import '../../core/widgets/primary_button.dart';
+import '../../features/monetization/ad_service.dart';
 import '../../features/monetization/presentation/banner_ad_widget.dart';
 import '../../features/monetization/providers/monetization_provider.dart';
 import '../models/processing_result.dart';
@@ -37,14 +38,17 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
     });
   }
 
-  Future<void> _triggerAdIfEligible() async {
+  Future<void> _triggerAdIfEligible(AdTransitionPoint point) async {
     final isPro = ref.read(isProProvider);
     if (isPro) return;
     try {
       final adService = ref.read(adServiceProvider);
-      await adService.showInterstitialIfReady().timeout(
+      await adService.maybeShowTransitionInterstitial(point: point).timeout(
         const Duration(seconds: 2),
-        onTimeout: () => debugPrint('Interstitial timeout on navigation'),
+        onTimeout: () {
+          debugPrint('Interstitial timeout on transition ($point)');
+          return false;
+        },
       );
     } catch (e) {
       debugPrint('Ad trigger error: $e');
@@ -84,7 +88,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
   Future<void> _onDonePressed(BuildContext context) async {
     if (_isNavigating) return;
     _isNavigating = true;
-    await _triggerAdIfEligible();
+    await _triggerAdIfEligible(AdTransitionPoint.doneNavigation);
     if (context.mounted) {
       _handleDone(context);
     }
@@ -93,7 +97,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
   Future<void> _onProcessAnotherPressed(BuildContext context) async {
     if (_isNavigating) return;
     _isNavigating = true;
-    await _triggerAdIfEligible();
+    await _triggerAdIfEligible(AdTransitionPoint.processAnotherFile);
     if (context.mounted) {
       _handleProcessAnother(context);
     }
@@ -181,29 +185,49 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                       icon: Icons.share_rounded,
                       isSecondary: true,
                       width: double.infinity,
-                      onPressed: () async {
-                        await _shareFiles(context, result.outputFiles);
-                        await _triggerAdIfEligible();
-                      },
+                      onPressed: () => _shareFiles(context, result.outputFiles),
                     ),
                     const SizedBox(height: 12),
                   ] else if (isMultiFile) ...[
-                    PrimaryButton(
-                      label: 'Save All to Device (ZIP)',
-                      icon: Icons.folder_zip_rounded,
-                      width: double.infinity,
-                      onPressed: () => _saveAllAsZip(context, result.outputFiles),
-                    ),
-                    const SizedBox(height: 12),
+                    if (result.isExtractZip) ...[
+                      PrimaryButton(
+                        label: 'Save All Files',
+                        icon: Icons.download_rounded,
+                        width: double.infinity,
+                        onPressed: () => _saveAllFilesIndividually(context, result.outputFiles),
+                      ),
+                      const SizedBox(height: 12),
+                      PrimaryButton(
+                        label: 'Save as ZIP',
+                        icon: Icons.folder_zip_rounded,
+                        isSecondary: true,
+                        width: double.infinity,
+                        onPressed: () => _saveAllAsZip(context, result.outputFiles),
+                      ),
+                      const SizedBox(height: 12),
+                    ] else ...[
+                      PrimaryButton(
+                        label: 'Save All to Device (ZIP)',
+                        icon: Icons.folder_zip_rounded,
+                        width: double.infinity,
+                        onPressed: () => _saveAllAsZip(context, result.outputFiles),
+                      ),
+                      const SizedBox(height: 12),
+                      PrimaryButton(
+                        label: 'Save All Files',
+                        icon: Icons.download_rounded,
+                        isSecondary: true,
+                        width: double.infinity,
+                        onPressed: () => _saveAllFilesIndividually(context, result.outputFiles),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
                     PrimaryButton(
                       label: 'Share All (${result.totalFilesCount} files)',
                       icon: Icons.share_rounded,
                       isSecondary: true,
                       width: double.infinity,
-                      onPressed: () async {
-                        await _shareFiles(context, result.outputFiles);
-                        await _triggerAdIfEligible();
-                      },
+                      onPressed: () => _shareFiles(context, result.outputFiles),
                     ),
                     const SizedBox(height: 12),
                   ],
@@ -517,6 +541,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
           backgroundColor: Colors.green.shade800,
         ),
       );
+      await _triggerAdIfEligible(AdTransitionPoint.saveToDeviceComplete);
     } else if (res.status == FileSaveStatus.failed) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -544,10 +569,57 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
           backgroundColor: Colors.green.shade800,
         ),
       );
+      await _triggerAdIfEligible(AdTransitionPoint.saveToDeviceComplete);
     } else if (res.status == FileSaveStatus.failed) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to save archive: ${res.errorMessage ?? "Unknown error"}'),
+          backgroundColor: Colors.red.shade800,
+        ),
+      );
+    }
+  }
+
+  Future<void> _saveAllFilesIndividually(BuildContext context, List<File> files) async {
+    final res = await FileSaveService.saveAllFilesIndividually(files: files);
+    if (!context.mounted) return;
+
+    if (res.isAllSuccessful) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Successfully saved all ${res.savedCount} files to device.'),
+          backgroundColor: Colors.green.shade800,
+        ),
+      );
+      await _triggerAdIfEligible(AdTransitionPoint.saveToDeviceComplete);
+    } else if (res.wasCancelled && res.savedCount > 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Saved ${res.savedCount} of ${res.totalCount} files (cancelled remaining).'),
+          backgroundColor: Colors.orange.shade800,
+        ),
+      );
+      await _triggerAdIfEligible(AdTransitionPoint.saveToDeviceComplete);
+    } else if (res.wasCancelled && res.savedCount == 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Save cancelled.'),
+        ),
+      );
+    } else if (res.failedCount > 0 && res.savedCount > 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Saved ${res.savedCount} files, ${res.failedCount} failed.'),
+          backgroundColor: Colors.orange.shade800,
+        ),
+      );
+      await _triggerAdIfEligible(AdTransitionPoint.saveToDeviceComplete);
+    } else if (res.isAllFailed) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Failed to save files: ${res.failedFileNames.isNotEmpty ? res.failedFileNames.join(", ") : res.errorMessage ?? "Unknown error"}',
+          ),
           backgroundColor: Colors.red.shade800,
         ),
       );

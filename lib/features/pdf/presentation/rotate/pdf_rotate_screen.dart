@@ -12,6 +12,7 @@ import '../../../../shared/presentation/processing_screen.dart';
 import '../../../../shared/widgets/file_picker_helper.dart';
 import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
+import '../../../monetization/ad_service.dart';
 import '../../../monetization/free_usage_config.dart';
 import '../../../monetization/providers/monetization_provider.dart';
 import '../../../monetization/services/free_limit_helper.dart';
@@ -128,12 +129,17 @@ class _PdfRotateScreenState extends ConsumerState<PdfRotateScreen> {
       ref.read(freeUsageManagerProvider).consumeReward(ToolFeature.pdfRotate);
       ref.read(freeUsageManagerProvider).recordFeatureUsage(ToolFeature.pdfRotate);
 
+      await ref.read(adServiceProvider).maybeShowTransitionInterstitial(
+        point: AdTransitionPoint.processingComplete,
+      );
+
       if (mounted) {
         setState(() => _isProcessing = false);
         context.pushReplacement(
           RouteConstants.result,
           extra: ProcessingResult(
             success: true,
+            feature: ToolFeature.pdfRotate,
             title: 'PDF Rotated Successfully',
             message: '${rotations.length} pages rotated by $_selectedAngle°.',
             outputFiles: [rotatedFile],

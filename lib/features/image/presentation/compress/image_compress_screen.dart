@@ -12,6 +12,7 @@ import '../../../../shared/presentation/processing_screen.dart';
 import '../../../../shared/widgets/file_picker_helper.dart';
 import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
+import '../../../monetization/ad_service.dart';
 import '../../../monetization/free_usage_config.dart';
 import '../../../monetization/providers/monetization_provider.dart';
 import '../../../monetization/services/free_limit_helper.dart';
@@ -68,11 +69,10 @@ class _ImageCompressScreenState extends ConsumerState<ImageCompressScreen> {
   Future<void> _processCompress() async {
     if (_selectedImages.isEmpty) return;
 
-    int maxFileSizeBytes = 0;
+    int totalInputBytes = 0;
     for (final img in _selectedImages) {
       if (await img.exists()) {
-        final len = await img.length();
-        if (len > maxFileSizeBytes) maxFileSizeBytes = len;
+        totalInputBytes += await img.length();
       }
     }
     if (!mounted) return;
@@ -81,7 +81,7 @@ class _ImageCompressScreenState extends ConsumerState<ImageCompressScreen> {
       context: context,
       ref: ref,
       feature: ToolFeature.imageCompress,
-      requestedAmount: maxFileSizeBytes,
+      requestedAmount: totalInputBytes,
     );
     if (!allowed) return;
 
@@ -156,6 +156,10 @@ class _ImageCompressScreenState extends ConsumerState<ImageCompressScreen> {
       ref.read(freeUsageManagerProvider).consumeReward(ToolFeature.imageCompress);
       ref.read(freeUsageManagerProvider).recordFeatureUsage(ToolFeature.imageCompress);
 
+      await ref.read(adServiceProvider).maybeShowTransitionInterstitial(
+        point: AdTransitionPoint.processingComplete,
+      );
+
       if (mounted) {
         setState(() => _isProcessing = false);
         // Evaluate target-size achievement if in targetSize mode
@@ -176,6 +180,7 @@ class _ImageCompressScreenState extends ConsumerState<ImageCompressScreen> {
           RouteConstants.result,
           extra: ProcessingResult(
             success: true,
+            feature: ToolFeature.imageCompress,
             title: 'Image Compression Complete',
             message: message,
             outputFiles: outputFiles,
