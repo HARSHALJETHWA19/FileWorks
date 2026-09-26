@@ -25,7 +25,7 @@ android {
     defaultConfig {
         applicationId = "com.fileworks.app"
         minSdk = 29
-        targetSdk = 35
+        targetSdk = 36
         multiDexEnabled = true
         versionCode = flutter.versionCode
         versionName = flutter.versionName
