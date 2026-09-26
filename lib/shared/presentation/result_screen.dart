@@ -317,10 +317,13 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
 
   Future<void> _shareFiles(BuildContext context, List<File> files) async {
     final xFiles = files.map((f) => XFile(f.path)).toList();
+    final box = context.findRenderObject() as RenderBox?;
+    final origin = box != null ? box.localToGlobal(Offset.zero) & box.size : null;
     await SharePlus.instance.share(
       ShareParams(
         files: xFiles,
         text: 'Processed with FileWorks (100% on-device)',
+        sharePositionOrigin: origin,
       ),
     );
   }

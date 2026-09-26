@@ -238,10 +238,14 @@ class HistoryScreen extends ConsumerWidget {
       return;
     }
 
+    if (!context.mounted) return;
+    final box = context.findRenderObject() as RenderBox?;
+    final origin = box != null ? box.localToGlobal(Offset.zero) & box.size : null;
     await SharePlus.instance.share(
       ShareParams(
         files: existingFiles,
         text: 'Shared from FileWorks',
+        sharePositionOrigin: origin,
       ),
     );
   }
