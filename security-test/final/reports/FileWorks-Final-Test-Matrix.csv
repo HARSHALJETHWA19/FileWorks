@@ -1,0 +1,53 @@
+Test_ID,Category,Test_Name,Execution_Type,Result,Evidence_Reference,Notes
+APP-BUILD-001,Build Verification,Production Release APK Generation,Automated,PASS,security-test/final/evidence/final_app-release.apk,Multi-arch release APK built with minSdk=29 and production keystore
+APP-BUILD-002,Build Verification,Production Release AAB Generation,Automated,PASS,security-test/final/evidence/final_app-release.aab,Play Store App Bundle built and signed with production keystore
+SEC-SIGN-001,Signature Security,Production Upload Keystore Signing,Automated,PASS,security-test/final/evidence/final_app-release.apk,CN=FileWorks Release 2048-bit RSA key verified via apksigner
+SEC-SIGN-002,Signature Security,APK Signature Scheme v2,Automated,PASS,security-test/final/evidence/final_app-release.apk,Verified v2 scheme tamper-proof integrity
+SEC-MANIFEST-001,Manifest Security,minSdkVersion=29 Floor Enforcement,Automated,PASS,security-test/final/evidence/final_app-release.apk,Android 10 (API 29) enforced as minimum OS version
+SEC-MANIFEST-002,Manifest Security,targetSdkVersion=35 Enforcement,Automated,PASS,security-test/final/evidence/final_app-release.apk,Targeting modern Android 15 standard
+SEC-MANIFEST-003,Manifest Security,Backup Hardening (allowBackup=false),Automated,PASS,android/app/src/main/AndroidManifest.xml,Disallowed all auto-backup mechanisms
+SEC-MANIFEST-004,Manifest Security,XML Data Extraction Rules,Automated,PASS,android/app/src/main/res/xml/data_extraction_rules.xml,Excluded all domains (root/file/database/sharedpref/external)
+SEC-MANIFEST-005,Manifest Security,Full Backup Content Exclusions,Automated,PASS,android/app/src/main/res/xml/backup_rules.xml,Full backup exclusions configured for all domains
+SEC-PERM-001,Permission Audit,Permission Minimization (Remove Video/Audio),Automated,PASS,android/app/src/main/AndroidManifest.xml,Removed READ_MEDIA_VIDEO and READ_MEDIA_AUDIO via tools:node=remove
+SEC-PERM-002,Permission Audit,Retained Core Permissions Justification,Automated,PASS,android/app/src/main/AndroidManifest.xml,INTERNET (AdMob), READ_MEDIA_IMAGES (picker), READ_EXTERNAL_STORAGE (API 29-32)
+SEC-PROVIDER-001,FileProvider Security,openfile Root Path Elimination,Automated,PASS,android/app/src/main/res/xml/filepaths.xml,Overrode library XML to completely remove dangerous root-path mapping
+SEC-PROVIDER-002,FileProvider Security,share_plus Cache Scoping,Automated,PASS,security-test/final/evidence/final_app-release.apk,ShareFileProvider restricted to cache-path share_plus/
+SEC-PROVIDER-003,FileProvider Security,Non-Exported FileProviders,Automated,PASS,security-test/final/evidence/final_app-release.apk,All FileProviders configured with android:exported=false
+DYN-EMU-001,Dynamic Testing,Emulator Installation & Launch,Dynamic,PASS,Pixel_10 (API 37),Successfully installed production APK and launched MainActivity (PID 13585)
+DYN-EMU-002,Dynamic Testing,Release Non-Debuggable Verification,Dynamic,PASS,Pixel_10 (API 37),run-as confirms package not debuggable (exit code 1)
+DYN-EMU-003,Dynamic Testing,Screen Rotation Lifecycle,Dynamic,PASS,Pixel_10 (API 37),Portrait to landscape rotation handled with zero crash or PID recreation
+DYN-EMU-004,Dynamic Testing,Background / Foreground Lifecycle,Dynamic,PASS,Pixel_10 (API 37),App backgrounded to home and resumed with state preserved
+DYN-EMU-005,Dynamic Testing,Malformed Intent Fuzzing,Dynamic,PASS,Pixel_10 (API 37),Dispatched path traversal and oversized extras intents; process remained healthy
+DYN-EMU-006,Dynamic Testing,Zero-Exfiltration Canary Test,Dynamic,PASS,Pixel_10 (API 37),FILEWORKS_SECURITY_CANARY_9F73A2 processed locally with 0 network leaks
+DYN-EMU-007,Dynamic Testing,Logcat Secret Leakage Audit,Dynamic,PASS,Pixel_10 (API 37),Zero tokens passwords or canary data found in logcat during runtime
+DYN-EMU-008,Dynamic Testing,Live Memory Allocation Audit,Dynamic,PASS,Pixel_10 (API 37),Total PSS 142 MB with Java heap under 8 MB
+SEC-ZIP-001,Vulnerability QA,Standard Unix Path Traversal,Automated,PASS,test/security_test.dart,Throws SecurityException on ../outside.txt
+SEC-ZIP-002,Vulnerability QA,Deep Nested Unix Traversal,Automated,PASS,test/security_test.dart,Throws SecurityException on sub/dir/../../../../etc/passwd
+SEC-ZIP-003,Vulnerability QA,Windows Backslash Traversal,Automated,PASS,test/security_test.dart,Throws SecurityException on ..\..\outside.txt
+SEC-ZIP-004,Vulnerability QA,Windows Mixed-Slash Traversal,Automated,PASS,test/security_test.dart,Throws SecurityException on sub\dir/../../../outside.txt
+SEC-ZIP-005,Vulnerability QA,Partial Path Sibling Traversal,Automated,PASS,test/security_test.dart,Blocked via strict path normalization and p.isWithin
+SEC-ZIP-006,Vulnerability QA,Valid Archive Sub-path,Automated,PASS,test/security_test.dart,Safely resolves inside destination directory
+SEC-ZIP-007,Vulnerability QA,Absolute Unix Path Override,Automated,PASS,test/security_test.dart,Leading slashes stripped and confined inside destination
+SEC-ZIP-008,Vulnerability QA,Windows Drive Root Escape,Automated,PASS,test/security_test.dart,Throws SecurityException on drive letters (C:\)
+FUZZ-PDF-001,Fuzzing & Robustness,0-byte PDF Page Count,Automated,PASS,test/fuzzing_test.dart,Throws typed CorruptFileException
+FUZZ-PDF-002,Fuzzing & Robustness,Corrupted Garbage PDF Header,Automated,PASS,test/fuzzing_test.dart,Throws typed CorruptFileException
+FUZZ-PDF-003,Fuzzing & Robustness,0-byte File PDF Merge,Automated,PASS,test/fuzzing_test.dart,Throws typed CorruptFileException
+FUZZ-PDF-004,Fuzzing & Robustness,Truncated PDF EOF,Automated,PASS,test/fuzzing_test.dart,Throws typed CorruptFileException
+FUZZ-IMG-001,Fuzzing & Robustness,0-byte Image Dimensions,Automated,PASS,test/fuzzing_test.dart,Throws typed UnsupportedFormatException
+FUZZ-IMG-002,Fuzzing & Robustness,ASCII Disguised as JPEG,Automated,PASS,test/fuzzing_test.dart,Throws typed AppException
+FUZZ-ZIP-001,Fuzzing & Robustness,0-byte ZIP Extraction,Automated,PASS,test/fuzzing_test.dart,Throws typed CorruptFileException
+FUZZ-ZIP-002,Fuzzing & Robustness,Corrupted Archive Header Extraction,Automated,PASS,test/fuzzing_test.dart,Throws typed CorruptFileException
+PRIVACY-001,Privacy & Network,pubspec.yaml Dependency Audit,Automated,PASS,test/privacy_test.dart,Zero HTTP/cloud exfiltration libraries in dependencies
+PRIVACY-002,Privacy & Network,lib/ Network Client Scan,Automated,PASS,test/privacy_test.dart,Zero HttpClient/Dio/Http imports across all Dart files
+PRIVACY-003,Privacy & Network,Canary String Isolation,Automated,PASS,test/privacy_test.dart,Canary strictly confined locally
+PRIVACY-004,Monetization QA,AdMob Frequency Capping,Automated,PASS,test/privacy_test.dart,Interstitial triggered only after threshold (3 operations)
+PERF-001,Performance,PDF 20-Page Read Benchmark,Automated,PASS,test/performance_benchmark_test.dart,35 ms execution time
+PERF-002,Performance,1080p Image Compress Benchmark,Automated,PASS,test/performance_benchmark_test.dart,212 ms execution time
+PERF-003,Performance,ZIP 10-File Create & Extract,Automated,PASS,test/performance_benchmark_test.dart,14 ms create / 31 ms extract
+COMPAT-A10,Compatibility,Android 10 (API 29) Dynamic Validation,Dynamic,BLOCKED,None,BLOCKED — emulator/device unavailable (AVD Pixel_10 is API 37)
+COMPAT-A11,Compatibility,Android 11 (API 30) Dynamic Validation,Dynamic,BLOCKED,None,BLOCKED — emulator/device unavailable
+COMPAT-A12,Compatibility,Android 12 (API 31) Dynamic Validation,Dynamic,BLOCKED,None,BLOCKED — emulator/device unavailable
+COMPAT-A13,Compatibility,Android 13 (API 33) Dynamic Validation,Dynamic,BLOCKED,None,BLOCKED — emulator/device unavailable
+COMPAT-A14,Compatibility,Android 14 (API 34) Dynamic Validation,Dynamic,BLOCKED,None,BLOCKED — emulator/device unavailable
+COMPAT-A15,Compatibility,Android 15 (API 35) Dynamic Validation,Dynamic,BLOCKED,None,BLOCKED — emulator/device unavailable
+COMPAT-A16,Compatibility,Android 16+ (API 36/37) Dynamic Validation,Dynamic,PASS,Pixel_10 (API 37),Full installation launch lifecycle and canary tests executed

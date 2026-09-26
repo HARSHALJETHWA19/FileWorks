@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
+import '../../../../core/constants/route_constants.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../../shared/models/processing_result.dart';
@@ -95,6 +96,7 @@ class _PdfReorderScreenState extends ConsumerState<PdfReorderScreen> {
                 outputFiles: [reorderedFile],
                 originalTotalBytes: originalBytes,
                 outputTotalBytes: outputBytes,
+                repeatRoute: RouteConstants.pdfReorder,
               ),
             ),
           ),

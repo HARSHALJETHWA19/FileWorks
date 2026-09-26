@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/constants/route_constants.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../../shared/models/processing_result.dart';
@@ -93,6 +94,7 @@ class _BatchRenameScreenState extends ConsumerState<BatchRenameScreen> {
                 outputFiles: renamedFiles,
                 originalTotalBytes: totalBytes,
                 outputTotalBytes: totalBytes,
+                repeatRoute: RouteConstants.batchRename,
               ),
             ),
           ),

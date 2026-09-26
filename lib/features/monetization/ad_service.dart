@@ -6,4 +6,5 @@ abstract class AdService {
   Future<void> showInterstitialIfReady({bool force = false});
   Future<void> recordOperationCompleted();
   int get operationCount;
+  void updateProStatus(bool isPro);
 }

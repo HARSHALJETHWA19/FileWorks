@@ -25,12 +25,22 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
   @override
   void initState() {
     super.initState();
-    // Record operation completed and trigger occasional interstitial if threshold reached
+    // Record operation completed safely without showing an ad on entry
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final adService = ref.read(adServiceProvider);
       adService.recordOperationCompleted();
-      adService.showInterstitialIfReady();
     });
+  }
+
+  Future<void> _triggerAdIfEligible() async {
+    final isPro = ref.read(isProProvider);
+    if (isPro) return;
+    try {
+      final adService = ref.read(adServiceProvider);
+      await adService.showInterstitialIfReady();
+    } catch (_) {
+      // Ads must always fail gracefully
+    }
   }
 
   @override
@@ -199,17 +209,54 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
                       icon: Icons.share_rounded,
                       isSecondary: true,
                       width: double.infinity,
-                      onPressed: () => _shareFiles(context, result.outputFiles),
+                      onPressed: () async {
+                        await _shareFiles(context, result.outputFiles);
+                        await _triggerAdIfEligible();
+                      },
                     ),
                     const SizedBox(height: 12),
                   ],
+                  // Process Another File button
+                  FilledButton.tonalIcon(
+                    style: FilledButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                    icon: const Icon(Icons.replay_rounded),
+                    label: const Text(
+                      'Process Another File',
+                      semanticsLabel: 'Process Another File',
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                    ),
+                    onPressed: () async {
+                      await _triggerAdIfEligible();
+                      if (context.mounted) {
+                        _handleProcessAnother(context);
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 12),
                   OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                     icon: const Icon(Icons.check_rounded),
-                    label: const Text('Done'),
-                    onPressed: () => context.go(RouteConstants.home),
+                    label: const Text(
+                      'Done',
+                      semanticsLabel: 'Done and return home',
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                    ),
+                    onPressed: () async {
+                      await _triggerAdIfEligible();
+                      if (context.mounted) {
+                        context.go(RouteConstants.home);
+                      }
+                    },
                   ),
                 ],
               ),
@@ -219,6 +266,22 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
         ],
       ),
     );
+  }
+
+  void _handleProcessAnother(BuildContext context) {
+    try {
+      if (widget.result.repeatRoute != null) {
+        context.go(widget.result.repeatRoute!);
+      } else if (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      } else {
+        context.go(RouteConstants.home);
+      }
+    } catch (_) {
+      if (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      }
+    }
   }
 
   Widget _buildStatColumn(ThemeData theme, String label, String value) {

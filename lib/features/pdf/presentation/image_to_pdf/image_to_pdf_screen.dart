@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
+import '../../../../core/constants/route_constants.dart';
 import '../../../../core/utils/file_utils.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../../../core/widgets/primary_button.dart';
@@ -92,6 +93,7 @@ class _ImageToPdfScreenState extends ConsumerState<ImageToPdfScreen> {
                 outputFiles: [pdfFile],
                 originalTotalBytes: originalTotalBytes,
                 outputTotalBytes: outputBytes,
+                repeatRoute: RouteConstants.imageToPdf,
               ),
             ),
           ),

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
+import '../../../../core/constants/route_constants.dart';
 import '../../../../core/utils/file_utils.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../../../core/widgets/primary_button.dart';
@@ -83,6 +84,7 @@ class _ExtractZipScreenState extends ConsumerState<ExtractZipScreen> {
                 outputFiles: extractedFiles,
                 originalTotalBytes: originalBytes,
                 outputTotalBytes: totalOutputBytes,
+                repeatRoute: RouteConstants.extractZip,
               ),
             ),
           ),
@@ -148,7 +150,7 @@ class _ExtractZipScreenState extends ConsumerState<ExtractZipScreen> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            'Safely unpack compressed archives on your device with built-in path traversal security.',
+                            'Safely unpack compressed archives on your device with complete local privacy.',
                             textAlign: TextAlign.center,
                             style: theme.textTheme.bodyMedium?.copyWith(
                               color: theme.colorScheme.onSurfaceVariant,

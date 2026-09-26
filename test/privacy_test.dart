@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:filekit/core/constants/app_constants.dart';
 import 'package:filekit/features/monetization/ad_config.dart';
 import 'package:filekit/features/monetization/admob_service.dart';
 

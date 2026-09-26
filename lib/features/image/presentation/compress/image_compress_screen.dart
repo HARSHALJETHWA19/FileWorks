@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
+import '../../../../core/constants/route_constants.dart';
 import '../../../../core/utils/file_utils.dart';
 import '../../../../core/widgets/app_scaffold.dart';
 import '../../../../core/widgets/primary_button.dart';
@@ -29,7 +30,28 @@ class _ImageCompressScreenState extends ConsumerState<ImageCompressScreen> {
 
   ImageCompressMode _mode = ImageCompressMode.quality;
   int _quality = 70; // 1 - 100
-  int _targetBytes = 1024 * 1024; // 1 MB default
+  int _targetBytes = 500 * 1024; // 500 KB default
+  String _selectedPreset = '500kb'; // '100kb', '200kb', '500kb', '2mb', 'custom'
+  final TextEditingController _customSizeController = TextEditingController(text: '300');
+  String _customUnit = 'KB';
+
+  @override
+  void dispose() {
+    _customSizeController.dispose();
+    super.dispose();
+  }
+
+  void _updateCustomTarget() {
+    final text = _customSizeController.text.trim();
+    final value = double.tryParse(text);
+    if (value != null && value > 0) {
+      if (_customUnit == 'MB') {
+        _targetBytes = (value * 1024 * 1024).round().clamp(10 * 1024, 100 * 1024 * 1024);
+      } else {
+        _targetBytes = (value * 1024).round().clamp(10 * 1024, 100 * 1024 * 1024);
+      }
+    }
+  }
 
   Future<void> _pickImages() async {
     final images = await FilePickerHelper.pickImageFiles(allowMultiple: true);
@@ -114,16 +136,31 @@ class _ImageCompressScreenState extends ConsumerState<ImageCompressScreen> {
 
       if (mounted) {
         setState(() => _isProcessing = false);
+        // Evaluate target-size achievement if in targetSize mode
+        String message;
+        if (_mode == ImageCompressMode.targetSize) {
+          final allUnderTarget = outputFiles.every((f) => f.existsSync() && f.lengthSync() <= _targetBytes);
+          final formattedTarget = FileUtils.formatBytes(_targetBytes);
+          if (allUnderTarget) {
+            message = 'Target reached! All images reduced under $formattedTarget.';
+          } else {
+            message = 'Reduced file size by ${savings.toStringAsFixed(1)}%. Quality limit reached for requested target ($formattedTarget).';
+          }
+        } else {
+          message = 'Reduced file size by ${savings.toStringAsFixed(1)}% locally.';
+        }
+
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (_) => ResultScreen(
               result: ProcessingResult(
                 success: true,
                 title: 'Image Compression Complete',
-                message: 'Reduced file size by ${savings.toStringAsFixed(1)}% locally.',
+                message: message,
                 outputFiles: outputFiles,
                 originalTotalBytes: originalTotalBytes,
                 outputTotalBytes: outputTotalBytes,
+                repeatRoute: RouteConstants.imageCompress,
               ),
             ),
           ),
@@ -332,37 +369,94 @@ class _ImageCompressScreenState extends ConsumerState<ImageCompressScreen> {
                           Card(
                             child: Column(
                               children: [
-                                RadioListTile<int>(
-                                  title: const Text('Target: 500 KB'),
-                                  subtitle: const Text('Perfect for quick web uploads and forms'),
-                                  value: 500 * 1024,
-                                  groupValue: _targetBytes,
-                                  onChanged: (val) => setState(() => _targetBytes = val!),
+                                RadioListTile<String>(
+                                  title: const Text('< 100 KB'),
+                                  subtitle: const Text('Strict exam, government & job portal forms'),
+                                  value: '100kb',
+                                  groupValue: _selectedPreset,
+                                  onChanged: (val) => setState(() {
+                                    _selectedPreset = val!;
+                                    _targetBytes = 100 * 1024;
+                                  }),
                                 ),
                                 const Divider(height: 1),
-                                RadioListTile<int>(
-                                  title: const Text('Target: 1 MB'),
-                                  subtitle: const Text('Ideal for messaging and email sharing'),
-                                  value: 1024 * 1024,
-                                  groupValue: _targetBytes,
-                                  onChanged: (val) => setState(() => _targetBytes = val!),
+                                RadioListTile<String>(
+                                  title: const Text('< 200 KB'),
+                                  subtitle: const Text('Standard resume & online portal uploads'),
+                                  value: '200kb',
+                                  groupValue: _selectedPreset,
+                                  onChanged: (val) => setState(() {
+                                    _selectedPreset = val!;
+                                    _targetBytes = 200 * 1024;
+                                  }),
                                 ),
                                 const Divider(height: 1),
-                                RadioListTile<int>(
-                                  title: const Text('Target: 2 MB'),
-                                  subtitle: const Text('High detail with controlled file footprint'),
-                                  value: 2 * 1024 * 1024,
-                                  groupValue: _targetBytes,
-                                  onChanged: (val) => setState(() => _targetBytes = val!),
+                                RadioListTile<String>(
+                                  title: const Text('< 500 KB'),
+                                  subtitle: const Text('Great for email attachments & web uploads'),
+                                  value: '500kb',
+                                  groupValue: _selectedPreset,
+                                  onChanged: (val) => setState(() {
+                                    _selectedPreset = val!;
+                                    _targetBytes = 500 * 1024;
+                                  }),
                                 ),
                                 const Divider(height: 1),
-                                RadioListTile<int>(
-                                  title: const Text('Target: 5 MB'),
-                                  subtitle: const Text('Gentle compression for ultra high-res photos'),
-                                  value: 5 * 1024 * 1024,
-                                  groupValue: _targetBytes,
-                                  onChanged: (val) => setState(() => _targetBytes = val!),
+                                RadioListTile<String>(
+                                  title: const Text('< 2 MB'),
+                                  subtitle: const Text('Balanced high-resolution image compression'),
+                                  value: '2mb',
+                                  groupValue: _selectedPreset,
+                                  onChanged: (val) => setState(() {
+                                    _selectedPreset = val!;
+                                    _targetBytes = 2 * 1024 * 1024;
+                                  }),
                                 ),
+                                const Divider(height: 1),
+                                RadioListTile<String>(
+                                  title: const Text('Custom Target Size'),
+                                  subtitle: const Text('Specify exact maximum KB or MB'),
+                                  value: 'custom',
+                                  groupValue: _selectedPreset,
+                                  onChanged: (val) => setState(() {
+                                    _selectedPreset = val!;
+                                    _updateCustomTarget();
+                                  }),
+                                ),
+                                if (_selectedPreset == 'custom') ...[
+                                  const Divider(height: 1),
+                                  Padding(
+                                    padding: const EdgeInsets.all(16),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: TextField(
+                                            controller: _customSizeController,
+                                            keyboardType: TextInputType.number,
+                                            decoration: const InputDecoration(
+                                              labelText: 'Maximum Size',
+                                              border: OutlineInputBorder(),
+                                              isDense: true,
+                                            ),
+                                            onChanged: (_) => _updateCustomTarget(),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        SegmentedButton<String>(
+                                          segments: const [
+                                            ButtonSegment(value: 'KB', label: Text('KB')),
+                                            ButtonSegment(value: 'MB', label: Text('MB')),
+                                          ],
+                                          selected: {_customUnit},
+                                          onSelectionChanged: (set) => setState(() {
+                                            _customUnit = set.first;
+                                            _updateCustomTarget();
+                                          }),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ],
                             ),
                           ),

@@ -16,8 +16,10 @@ analyzer:
     - ios/**
     - windows/**
     - macos/**
+    - security-test/**
   errors:
     deprecated_member_use: ignore
+    avoid_print: ignore
 
 linter:
   # The lint rules applied to this project can be customized in the

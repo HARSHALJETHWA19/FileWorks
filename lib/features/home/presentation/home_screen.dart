@@ -174,7 +174,7 @@ class HomeScreen extends ConsumerWidget {
                       ),
                       ToolCard(
                         title: 'Extract ZIP',
-                        description: 'Safe extraction without Zip Slip',
+                        description: 'Unpack ZIP archives quickly & securely',
                         icon: Icons.unarchive_rounded,
                         color: const Color(0xFF475569),
                         onTap: () => _navigateToTool(context, ref, RouteConstants.extractZip),

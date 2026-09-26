@@ -1,0 +1,15 @@
+MASVS_Category,Control_ID,Requirement,FileWorks_Implementation,Status,Evidence
+MASVS-STORAGE,MASVS-STORAGE-1,System credential storage and app data directory,Processed files scoped to private app sandbox and Documents/FileWorks,COMPLIANT,lib/core/utils/file_utils.dart
+MASVS-STORAGE,MASVS-STORAGE-2,No sensitive data leaked to logs,Logcat audit confirmed zero document tokens or canary content in logs,COMPLIANT,security-test/final/logs/dynamic_logcat.txt
+MASVS-STORAGE,MASVS-STORAGE-3,Secure backup configuration,android:allowBackup=false with dataExtractionRules and backup_rules excluding all domains,COMPLIANT,android/app/src/main/res/xml/data_extraction_rules.xml
+MASVS-CRYPTO,MASVS-CRYPTO-1,Industry standard cryptography,N/A - App operates offline on local files without custom encryption protocols,COMPLIANT,pubspec.yaml
+MASVS-AUTH,MASVS-AUTH-1,Authentication architecture,N/A - Offline utility with 0 remote user accounts or sessions,COMPLIANT,lib/
+MASVS-NETWORK,MASVS-NETWORK-1,Zero unauthorized network exfiltration,Canary testing and socket audit confirmed 0 data exfiltration; zero cloud SDKs,COMPLIANT,security-test/final/logs/dynamic_logcat.txt
+MASVS-NETWORK,MASVS-NETWORK-2,Secure TLS communication for 3rd party ads,Official Google Mobile Ads SDK enforces TLS 1.2/1.3 endpoints via Google Play,COMPLIANT,security-test/reverse-engineering/extracted_urls.txt
+MASVS-PLATFORM,MASVS-PLATFORM-1,Least privilege permissions,Trimmed unused video/audio perms; only INTERNET and scoped images requested,COMPLIANT,android/app/src/main/AndroidManifest.xml
+MASVS-PLATFORM,MASVS-PLATFORM-2,Minimal exported attack surface,MainActivity launcher exported; internal system services protected by signature perms,COMPLIANT,android/app/src/main/AndroidManifest.xml
+MASVS-PLATFORM,MASVS-PLATFORM-3,Strict input validation and traversal defense,Strict Zip-Slip path normalization strips slashes and blocks drive letters and sibling escape,COMPLIANT,test/security_test.dart
+MASVS-PLATFORM,MASVS-PLATFORM-4,FileProvider path restrictions,Overrode openfile XML configuration to eliminate dangerous root-path mapping,COMPLIANT,android/app/src/main/res/xml/filepaths.xml
+MASVS-CODE,MASVS-CODE-1,Production build security and non-debuggable binary,run-as confirms package not debuggable; AOT release mode enabled,COMPLIANT,Pixel_10 terminal output
+MASVS-CODE,MASVS-CODE-2,APK signature integrity,Signed with 2048-bit RSA production upload key via APK Signature Scheme v2,COMPLIANT,security-test/final/evidence/final_app-release.apk
+MASVS-CODE,MASVS-CODE-4,Zero hardcoded credentials or secrets,Static regex scan of source files and unpacked DEX strings found zero leaked credentials,COMPLIANT,security-test/reverse-engineering/secret_scan_results.txt

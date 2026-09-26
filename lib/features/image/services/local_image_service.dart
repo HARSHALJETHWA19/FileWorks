@@ -92,7 +92,7 @@ class LocalImageService implements ImageService {
         throw UnsupportedFormatException('Unable to decode image.');
       }
 
-      // Binary search for optimal JPG/WEBP quality
+      // Binary search for optimal JPG quality
       int low = 5;
       int high = 95;
       List<int> bestEncoded = [];
@@ -109,10 +109,31 @@ class LocalImageService implements ImageService {
         }
       }
 
+      // If still exceeding target, iteratively downscale dimensions up to 3 times
       if (bestEncoded.isEmpty) {
-        // If even lowest quality is larger than target, downscale dimensions
-        decoded = img.copyResize(decoded, width: (decoded.width * 0.7).toInt());
-        bestEncoded = img.encodeJpg(decoded, quality: 30);
+        var resized = decoded;
+        for (int step = 0; step < 3; step++) {
+          final newWidth = (resized.width * 0.75).toInt();
+          if (newWidth < 100) break; // Don't shrink below 100px width
+          resized = img.copyResize(resized, width: newWidth);
+
+          // Try low-to-medium quality range on resized image
+          final testEncoded = img.encodeJpg(resized, quality: 45);
+          if (testEncoded.length <= params.targetBytes) {
+            bestEncoded = testEncoded;
+            break;
+          }
+          final minEncoded = img.encodeJpg(resized, quality: 20);
+          if (minEncoded.length <= params.targetBytes) {
+            bestEncoded = minEncoded;
+            break;
+          }
+          bestEncoded = minEncoded; // Best achievable attempt
+        }
+      }
+
+      if (bestEncoded.isEmpty) {
+        bestEncoded = img.encodeJpg(decoded, quality: 20);
       }
 
       final outFile = File(params.outputPath);

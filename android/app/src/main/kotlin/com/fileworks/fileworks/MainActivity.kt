@@ -1,4 +1,4 @@
-package com.filekit.filekit
+package com.fileworks.fileworks
 
 import io.flutter.embedding.android.FlutterActivity
 

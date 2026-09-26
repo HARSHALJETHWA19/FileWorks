@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../constants/route_constants.dart';
 
 class AppScaffold extends StatelessWidget {
   final String title;
@@ -22,23 +24,37 @@ class AppScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+    return PopScope(
+      canPop: Navigator.of(context).canPop(),
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          context.go(RouteConstants.home);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 20),
+          ),
+          centerTitle: false,
+          leading: showBackButton
+              ? IconButton(
+                  icon: const Icon(Icons.arrow_back_rounded),
+                  onPressed: onBackPressed ??
+                      () {
+                        if (Navigator.of(context).canPop()) {
+                          Navigator.of(context).pop();
+                        } else {
+                          context.go(RouteConstants.home);
+                        }
+                      },
+                )
+              : null,
+          actions: actions,
+          elevation: 0,
+          scrolledUnderElevation: 1,
         ),
-        centerTitle: false,
-        leading: showBackButton && Navigator.of(context).canPop()
-            ? IconButton(
-                icon: const Icon(Icons.arrow_back_rounded),
-                onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
-              )
-            : null,
-        actions: actions,
-        elevation: 0,
-        scrolledUnderElevation: 1,
-      ),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) {
@@ -55,6 +71,7 @@ class AppScaffold extends StatelessWidget {
       ),
       floatingActionButton: floatingActionButton,
       bottomNavigationBar: bottomNavigationBar,
-    );
-  }
+    ),
+  );
+}
 }

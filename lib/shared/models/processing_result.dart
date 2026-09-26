@@ -8,6 +8,7 @@ class ProcessingResult {
   final int originalTotalBytes;
   final int outputTotalBytes;
   final Map<String, dynamic>? extraStats;
+  final String? repeatRoute;
 
   const ProcessingResult({
     required this.success,
@@ -17,6 +18,7 @@ class ProcessingResult {
     this.originalTotalBytes = 0,
     this.outputTotalBytes = 0,
     this.extraStats,
+    this.repeatRoute,
   });
 
   bool get hasFiles => outputFiles.isNotEmpty;

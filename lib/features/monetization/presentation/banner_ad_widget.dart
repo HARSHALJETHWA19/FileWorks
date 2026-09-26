@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../ad_config.dart';
 import '../providers/monetization_provider.dart';
 
 class BannerAdContainer extends ConsumerWidget {
@@ -8,7 +9,7 @@ class BannerAdContainer extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isPro = ref.watch(isProProvider);
-    if (isPro) {
+    if (isPro || !AdConfig.bannerEnabled) {
       return const SizedBox.shrink();
     }
 

@@ -1,11 +1,19 @@
 class AdConfig {
   /// Toggle to switch between Google Test Ad IDs and real AdMob Production Ad IDs.
-  /// Keep false during development and automated tests.
+  /// Keep false during development, testing, and pre-launch QA.
   static const bool isProduction = false;
+
+  /// Global master toggles for ad formats
+  static const bool bannerEnabled = true;
+  static const bool interstitialEnabled = true;
 
   /// Number of completed operations before showing an interstitial ad.
   /// Ensures ads never interrupt workflow and do not annoy users.
   static const int interstitialOperationThreshold = 3;
+
+  /// Minimum cooldown interval between two interstitial ads.
+  /// Prevents ad spamming on rapid successive operations.
+  static const Duration interstitialCooldown = Duration(seconds: 45);
 
   /// Official Google Mobile Ads Sample Ad Unit IDs for Android:
   /// https://developers.google.com/admob/android/test-ads

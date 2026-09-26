@@ -151,25 +151,28 @@ class SettingsScreen extends ConsumerWidget {
                 // About Section
                 _buildSectionHeader(theme, 'ABOUT'),
                 Card(
-                  child: Column(
-                    children: [
-                      ListTile(
-                        leading: const Icon(Icons.info_outline_rounded),
-                        title: const Text('Version'),
-                        trailing: Text(
-                          AppConstants.appVersion,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                  child: ListTile(
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        'assets/branding/app_icon_in_app.png',
+                        width: 38,
+                        height: 38,
+                        fit: BoxFit.cover,
                       ),
-                      const Divider(height: 1),
-                      ListTile(
-                        leading: const Icon(Icons.mail_outline_rounded),
-                        title: const Text('Contact Support'),
-                        subtitle: const Text(AppConstants.contactEmail),
+                    ),
+                    title: const Text(
+                      'FileWorks',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    subtitle: const Text('Fast & Private File Utilities'),
+                    trailing: Text(
+                      'v${AppConstants.appVersion}',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: theme.colorScheme.primary,
                       ),
-                    ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 24),
