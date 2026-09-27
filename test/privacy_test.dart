@@ -91,9 +91,9 @@ void main() {
 
     test('PRIVACY-005: Privacy Policy URL is public HTTPS URL without localhost or file schemes', () {
       expect(AppConstants.privacyPolicyUrl, startsWith('https://'));
-      expect(AppConstants.privacyPolicyUrl, contains('privacy-policy.html'));
+      expect(AppConstants.privacyPolicyUrl, equals('https://harshaljethwa19.github.io/FileWorks/privacy-policy.html'));
       expect(AppConstants.manageSubscriptionsUrl, startsWith('https://play.google.com/store/account/subscriptions'));
-      expect(AppConstants.contactEmail, contains('@fileworks.app'));
+      expect(AppConstants.contactEmail, equals('aetherkube@gmail.com'));
     });
 
     test('PRIVACY-006: Standalone HTML Privacy Policy exists and contains required disclosures', () {
@@ -104,7 +104,11 @@ void main() {
       expect(content, contains('On-Device Local File Processing'));
       expect(content, contains('Google Mobile Ads SDK'));
       expect(content, contains('Google Play Billing and Subscriptions'));
-      expect(content, contains('support@fileworks.app'));
+      expect(content, contains('aetherkube@gmail.com'));
+      expect(content, contains('mailto:aetherkube@gmail.com'));
+      final legacyEmail = ['support', 'fileworks.app'].join('@');
+      expect(content.contains(legacyEmail), isFalse);
+      expect(content.contains('mailto:$legacyEmail'), isFalse);
       expect(content, contains('fileworks_premium_6m'));
       expect(content, contains('fileworks_premium_1y'));
     });
@@ -126,6 +130,7 @@ void main() {
       expect(find.text('6. Permissions Used'), findsOneWidget);
       expect(find.text('7. Third-Party Service Providers'), findsOneWidget);
       expect(find.text('8. Contact & Data Inquiries'), findsOneWidget);
+      expect(find.textContaining('Email: aetherkube@gmail.com'), findsOneWidget);
       expect(find.text('View Official Web Privacy Policy'), findsOneWidget);
     });
 
@@ -156,6 +161,25 @@ void main() {
       expect(find.text('Privacy Policy'), findsOneWidget);
       expect(find.text('Ad & Privacy Choices'), findsOneWidget);
       expect(find.text('Manage Subscriptions'), findsOneWidget);
+    });
+
+    test('PRIVACY-009: Legacy support email is completely absent from app source and privacy policy', () {
+      final legacyEmail = ['support', 'fileworks.app'].join('@');
+
+      final htmlContent = File('docs/privacy-policy.html').readAsStringSync();
+      expect(htmlContent.contains(legacyEmail), isFalse);
+
+      final libDir = Directory('lib');
+      final dartFiles = libDir
+          .listSync(recursive: true)
+          .whereType<File>()
+          .where((f) => f.path.endsWith('.dart'));
+
+      for (final file in dartFiles) {
+        final code = file.readAsStringSync();
+        expect(code.contains(legacyEmail), isFalse,
+            reason: 'Found legacy support email in ${file.path}');
+      }
     });
   });
 }

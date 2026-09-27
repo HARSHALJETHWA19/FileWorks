@@ -14,7 +14,7 @@ class AppConstants {
       'https://harshaljethwa19.github.io/FileWorks/privacy-policy.html';
   static const String manageSubscriptionsUrl =
       'https://play.google.com/store/account/subscriptions?package=com.fileworks.app';
-  static const String contactEmail = 'support@fileworks.app';
+  static const String contactEmail = 'aetherkube@gmail.com';
 
   // Local storage keys
   static const String keyThemeMode = 'settings_theme_mode';
