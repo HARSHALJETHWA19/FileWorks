@@ -65,7 +65,7 @@ class CustomMockFilePickerPlatform extends FilePickerPlatform {
   }
 }
 
-class TestAdService implements AdService {
+class TestAdService extends AdService {
   int interstitialCount = 0;
   int rewardedCount = 0;
   bool isProUser = false;

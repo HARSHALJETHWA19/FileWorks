@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convert Images to PDF Online — Free JPG/PNG to PDF | FileWorks</title>
+  <meta name="description" content="Convert JPG, PNG, and WEBP images into a clean PDF document for free. Customize page size, orientation, and margins. No server upload required — runs 100% locally.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://fileworks.pages.dev/pages/image-to-pdf.html">
+  <meta property="og:title" content="Convert Images to PDF — FileWorks">
+  <meta property="og:description" content="Turn your photos and screenshots into a single organized PDF document. Free and private.">
+  <meta property="og:type" content="website">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Image to PDF — FileWorks","description":"Convert images to PDF documents online for free, processed client-side.","applicationCategory":"UtilitiesApplication","url":"https://fileworks.pages.dev/pages/image-to-pdf.html","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <style>
+    .image-sort-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .image-sort-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: grab;
+      position: relative;
+    }
+    .image-sort-card img {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+    }
+    .image-sort-card__footer {
+      padding: 6px 8px;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .image-sort-card__del {
+      background: none;
+      border: none;
+      color: var(--color-danger);
+      cursor: pointer;
+      font-weight: 700;
+      padding: 0 4px;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav" role="navigation"><div class="nav__inner">
+  <a href="/" class="nav__logo"><span class="nav__logo-icon">⚡</span>FileWorks</a>
+  <div class="nav__links">
+    <a href="/" class="nav__link" id="nav-home">Tools</a>
+    <a href="/pages/privacy.html" class="nav__link">Privacy</a>
+    <a href="/pages/terms.html" class="nav__link">Terms</a>
+  </div>
+  <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Menu">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+</div></nav>
+<nav class="nav-mobile-menu" id="nav-mobile-menu">
+  <a href="/">🔧 Tools</a><a href="/pages/privacy.html">🔒 Privacy</a><a href="/pages/terms.html">📜 Terms</a>
+</nav>
+
+<main class="tool-page" id="main-content">
+<div class="container-tool">
+
+  <!-- Header -->
+  <div class="tool-header">
+    <a href="/" class="tool-header__back" id="back-link">← All Tools</a>
+    <div class="tool-header__icon" style="background:rgba(5,150,105,0.15);" id="tool-icon">📄</div>
+    <h1 id="tool-title">Convert Images to PDF</h1>
+    <p class="tool-header__desc" id="tool-desc">Combine JPG, PNG, and other images into a single professional PDF file. Drag images to reorder them.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+      <span class="badge badge-privacy">🔒 Files stay local</span>
+      <span class="badge badge-primary">Free</span>
+    </div>
+  </div>
+
+  <!-- Ad slot: Above tool -->
+  <div class="ad-container ad-container--banner" id="ad-top" style="margin-bottom:28px;" aria-label="Advertisement">
+    <span class="ad-container__label">Advertisement</span>
+  </div>
+
+  <!-- Tool Workspace -->
+  <div id="drop-area">
+    <div class="dropzone" id="dropzone" role="button" aria-label="Drop images here or click to select">
+      <div class="dropzone__icon">🖼️</div>
+      <p class="dropzone__title">Drop images here</p>
+      <p class="dropzone__sub">Supports JPG, PNG, WEBP, GIF, BMP — up to 50 images</p>
+      <input type="file" id="file-input" accept="image/*" multiple aria-label="Select images">
+    </div>
+  </div>
+
+  <!-- Options & List Section -->
+  <div id="workspace-section" class="hidden" style="margin-top:20px;">
+    <div class="card" style="padding:20px;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:16px;">
+        <div class="form-group">
+          <label class="form-label" for="page-size-select">Page Size</label>
+          <select class="form-input" id="page-size-select">
+            <option value="a4">A4 (Standard)</option>
+            <option value="letter">US Letter</option>
+            <option value="original">Fit Image Size</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="orientation-select">Orientation</label>
+          <select class="form-input" id="orientation-select">
+            <option value="portrait">Portrait</option>
+            <option value="landscape">Landscape</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="margin-select">Page Margin</label>
+          <select class="form-input" id="margin-select">
+            <option value="20">Small (20pt)</option>
+            <option value="0">No Margin (Full Bleed)</option>
+            <option value="40">Wide (40pt)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;display:flex;justify-content:space-between;align-items:center;">
+        <span class="section-label" id="img-count-label">0 images selected</span>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-ghost btn-sm" id="btn-add-more">+ Add More</button>
+          <input type="file" id="file-input-extra" accept="image/*" multiple class="hidden" aria-label="Add more images">
+          <button class="btn btn-ghost btn-sm" id="btn-clear-all">Clear All</button>
+        </div>
+      </div>
+
+      <div class="image-sort-grid" id="image-sort-grid"></div>
+
+      <div style="margin-top:24px;">
+        <button class="btn btn-primary" id="btn-create-pdf">📄 Create PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Processing -->
+  <div id="processing-section" class="hidden" style="margin-top:20px;">
+    <div class="processing-overlay">
+      <div class="spinner"></div>
+      <p id="processing-msg">Generating PDF from images...</p>
+      <div class="progress-bar" style="width:200px;"><div class="progress-bar__fill" style="width:100%"></div></div>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div id="result-section" class="hidden" style="margin-top:20px;">
+    <div class="result-section">
+      <div class="result-section__icon">✅</div>
+      <h3>PDF Generated Successfully!</h3>
+      <p id="result-desc">Your document is ready to download.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;">
+        <button class="btn btn-success" id="btn-download">⬇ Download PDF</button>
+        <button class="btn btn-ghost" id="btn-create-another">Convert More Images</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ad slot: Mid page -->
+  <div class="ad-container ad-container--banner" id="ad-mid" style="margin-top:32px;" aria-label="Advertisement">
+    <span class="ad-container__label">Advertisement</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
+    <div class="faq">
+      <details class="faq-item"><summary>Can I convert multiple photos into one PDF?</summary><div class="faq-item__body">Yes! You can select dozens of images at once. Drag them into any sequence you want before generating your PDF.</div></details>
+      <details class="faq-item"><summary>What image formats are supported?</summary><div class="faq-item__body">FileWorks supports JPG, PNG, WEBP, GIF, and BMP files.</div></details>
+      <details class="faq-item"><summary>Are my images kept private?</summary><div class="faq-item__body">Completely private. The PDF document is created directly in your browser using JavaScript. No pictures ever touch our servers.</div></details>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Related Tools -->
+  <section id="related-tools">
+    <h2 style="margin-bottom:20px;font-size:1.4rem;">Related Image & PDF Tools</h2>
+    <div class="related-tools">
+      <a href="/pages/pdf-to-image.html" class="related-tool"><span class="related-tool__icon">🖼️</span>PDF to Image</a>
+      <a href="/pages/image-compress.html" class="related-tool"><span class="related-tool__icon">🗜️</span>Compress Image</a>
+      <a href="/pages/image-resize.html" class="related-tool"><span class="related-tool__icon">📐</span>Resize Image</a>
+      <a href="/pages/image-convert.html" class="related-tool"><span class="related-tool__icon">🔄</span>Convert Image</a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer class="footer"><div class="container">
+  <div class="footer__bottom">
+    <p>© 2026 FileWorks. All rights reserved.</p>
+    <p><a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a> · <a href="/pages/terms.html" style="color:var(--color-primary);">Terms</a></p>
+  </div>
+</div></footer>
+
+<div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
+  <p>We display ads to keep FileWorks free. Files are processed locally. <a href="/pages/privacy.html">Privacy Policy</a></p>
+  <div class="cookie-banner__actions">
+    <button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button>
+    <button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button>
+  </div>
+</div>
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/tools/image-tools.js"></script>
+<script>
+(function() {
+  let selectedFiles = []; // { file, previewUrl }
+  let resultBlob = null;
+
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('file-input');
+  const fileInputExtra = document.getElementById('file-input-extra');
+  const dropArea = document.getElementById('drop-area');
+  const workspaceSection = document.getElementById('workspace-section');
+  const processingSection = document.getElementById('processing-section');
+  const resultSection = document.getElementById('result-section');
+  const imageSortGrid = document.getElementById('image-sort-grid');
+  const imgCountLabel = document.getElementById('img-count-label');
+  const pageSizeSelect = document.getElementById('page-size-select');
+  const orientationSelect = document.getElementById('orientation-select');
+  const marginSelect = document.getElementById('margin-select');
+  const btnAddMore = document.getElementById('btn-add-more');
+  const btnClearAll = document.getElementById('btn-clear-all');
+  const btnCreatePdf = document.getElementById('btn-create-pdf');
+  const btnDownload = document.getElementById('btn-download');
+  const btnCreateAnother = document.getElementById('btn-create-another');
+
+  function addImages(files) {
+    for (const f of files) {
+      try {
+        FW.file.validateSize(f, 50);
+        FW.file.validateType(f, ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp']);
+        if (selectedFiles.length >= 50) {
+          FW.toast.warning('Maximum 50 images.');
+          break;
+        }
+        selectedFiles.push({ file: f, previewUrl: URL.createObjectURL(f) });
+      } catch(e) {
+        FW.toast.error(e.message);
+      }
+    }
+    renderGrid();
+  }
+
+  function renderGrid() {
+    if (selectedFiles.length === 0) {
+      workspaceSection.classList.add('hidden');
+      dropArea.classList.remove('hidden');
+      return;
+    }
+    dropArea.classList.add('hidden');
+    workspaceSection.classList.remove('hidden');
+    imgCountLabel.textContent = `${selectedFiles.length} image${selectedFiles.length > 1 ? 's' : ''} (drag to reorder)`;
+
+    imageSortGrid.innerHTML = '';
+    selectedFiles.forEach((item, index) => {
+      const card = document.createElement('div');
+      card.className = 'image-sort-card';
+      card.draggable = true;
+      card.dataset.index = index;
+      card.innerHTML = `
+        <img src="${item.previewUrl}" alt="${item.file.name}">
+        <div class="image-sort-card__footer">
+          <span title="${item.file.name}">${item.file.name}</span>
+          <button class="image-sort-card__del" data-del="${index}" title="Remove">✕</button>
+        </div>
+      `;
+      imageSortGrid.appendChild(card);
+    });
+
+    setupCardDrag(imageSortGrid);
+
+    imageSortGrid.querySelectorAll('[data-del]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const idx = parseInt(btn.dataset.del);
+        URL.revokeObjectURL(selectedFiles[idx].previewUrl);
+        selectedFiles.splice(idx, 1);
+        renderGrid();
+      });
+    });
+  }
+
+  function setupCardDrag(grid) {
+    let dragIdx = null;
+    grid.querySelectorAll('.image-sort-card').forEach(card => {
+      card.addEventListener('dragstart', () => {
+        dragIdx = parseInt(card.dataset.index);
+        card.style.opacity = '0.4';
+      });
+      card.addEventListener('dragend', () => card.style.opacity = '1');
+      card.addEventListener('dragover', (e) => e.preventDefault());
+      card.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const dropIdx = parseInt(card.dataset.index);
+        if (dragIdx === null || dragIdx === dropIdx) return;
+        const moved = selectedFiles.splice(dragIdx, 1)[0];
+        selectedFiles.splice(dropIdx, 0, moved);
+        dragIdx = null;
+        renderGrid();
+      });
+    });
+  }
+
+  FW.dropzone.init(dropzone, fileInput, addImages, { accept: 'image/*', multiple: true });
+  btnAddMore.addEventListener('click', () => fileInputExtra.click());
+  fileInputExtra.addEventListener('change', (e) => {
+    addImages(Array.from(e.target.files || []));
+    e.target.value = '';
+  });
+
+  btnClearAll.addEventListener('click', () => {
+    selectedFiles.forEach(i => URL.revokeObjectURL(i.previewUrl));
+    selectedFiles = [];
+    renderGrid();
+  });
+
+  btnCreatePdf.addEventListener('click', async () => {
+    if (selectedFiles.length === 0) return;
+    workspaceSection.classList.add('hidden');
+    processingSection.classList.remove('hidden');
+    FW.analytics.track('processing_started', { tool: 'image_to_pdf', count: selectedFiles.length });
+
+    try {
+      const options = {
+        pageSize: pageSizeSelect.value,
+        orientation: orientationSelect.value,
+        margin: parseInt(marginSelect.value),
+      };
+      const filesOnly = selectedFiles.map(i => i.file);
+      const res = await ImageTools.imagesToPdf(filesOnly, options);
+      resultBlob = res.blob;
+
+      processingSection.classList.add('hidden');
+      resultSection.classList.remove('hidden');
+      document.getElementById('result-desc').textContent = `Created PDF with ${selectedFiles.length} pages (${FW.file.formatSize(resultBlob.size)})`;
+      FW.analytics.track('processing_completed', { tool: 'image_to_pdf' });
+    } catch(e) {
+      processingSection.classList.add('hidden');
+      workspaceSection.classList.remove('hidden');
+      FW.toast.error(e.message || 'Failed to create PDF.');
+      FW.analytics.track('error_occurred', { tool: 'image_to_pdf' });
+    }
+  });
+
+  btnDownload.addEventListener('click', () => {
+    if (!resultBlob) return;
+    FW.file.download(resultBlob, 'images_fileworks.pdf');
+    FW.analytics.track('download_started', { tool: 'image_to_pdf' });
+  });
+
+  btnCreateAnother.addEventListener('click', () => {
+    selectedFiles.forEach(i => URL.revokeObjectURL(i.previewUrl));
+    selectedFiles = [];
+    resultBlob = null;
+    resultSection.classList.add('hidden');
+    dropArea.classList.remove('hidden');
+    fileInput.value = '';
+  });
+
+  FW.analytics.track('tool_open', { tool: 'image_to_pdf' });
+})();
+</script>
+</body>
+</html>

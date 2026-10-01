@@ -14,6 +14,7 @@ import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
 import '../../../monetization/ad_service.dart';
 import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/presentation/banner_ad_widget.dart';
 import '../../../monetization/providers/monetization_provider.dart';
 import '../../../monetization/services/free_limit_helper.dart';
 import '../../providers/file_tools_providers.dart';
@@ -29,6 +30,14 @@ class _ExtractZipScreenState extends ConsumerState<ExtractZipScreen> {
   File? _selectedZip;
   final TextEditingController _folderController = TextEditingController();
   bool _isProcessing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(adServiceProvider).preloadInterstitialAd();
+    });
+  }
 
   Future<void> _pickZip() async {
     final zip = await FilePickerHelper.pickZipFile();
@@ -278,6 +287,8 @@ class _ExtractZipScreenState extends ConsumerState<ExtractZipScreen> {
                 onPressed: _processExtract,
               ),
             ),
+          if (_selectedZip == null)
+            const BannerAdContainer(),
         ],
       ),
     );

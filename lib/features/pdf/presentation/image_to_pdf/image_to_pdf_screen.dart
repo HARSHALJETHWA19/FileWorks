@@ -14,6 +14,8 @@ import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
 import '../../../monetization/ad_service.dart';
 import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/presentation/banner_ad_widget.dart';
+import '../../../monetization/presentation/rewarded_unlock_card.dart';
 import '../../../monetization/providers/monetization_provider.dart';
 import '../../../monetization/services/free_limit_helper.dart';
 import '../../models/pdf_models.dart';
@@ -36,6 +38,14 @@ class _ImageToPdfScreenState extends ConsumerState<ImageToPdfScreen> {
   ImageToPdfOrientation _orientation = ImageToPdfOrientation.portrait;
   final ImageToPdfMargin _margin = ImageToPdfMargin.none;
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(adServiceProvider).preloadInterstitialAd();
+    });
+  }
+
   Future<void> _pickImages() async {
     final images = await FilePickerHelper.pickImageFiles(allowMultiple: true);
     if (images.isNotEmpty) {
@@ -57,6 +67,7 @@ class _ImageToPdfScreenState extends ConsumerState<ImageToPdfScreen> {
     if (!allowed) return;
 
     setState(() => _isProcessing = true);
+    ref.read(adServiceProvider).setProcessing(true);
 
     try {
       final pdfService = ref.read(pdfServiceProvider);
@@ -95,6 +106,9 @@ class _ImageToPdfScreenState extends ConsumerState<ImageToPdfScreen> {
       ref.read(freeUsageManagerProvider).consumeReward(ToolFeature.imageToPdf);
       ref.read(freeUsageManagerProvider).recordFeatureUsage(ToolFeature.imageToPdf);
 
+      // Release processing flag before transition interstitial
+      ref.read(adServiceProvider).setProcessing(false);
+
       await ref.read(adServiceProvider).maybeShowTransitionInterstitial(
         point: AdTransitionPoint.processingComplete,
       );
@@ -116,6 +130,7 @@ class _ImageToPdfScreenState extends ConsumerState<ImageToPdfScreen> {
         );
       }
     } catch (e) {
+      ref.read(adServiceProvider).setProcessing(false);
       if (mounted) {
         setState(() => _isProcessing = false);
         ScaffoldMessenger.of(context).showSnackBar(
@@ -187,6 +202,8 @@ class _ImageToPdfScreenState extends ConsumerState<ImageToPdfScreen> {
                             icon: Icons.add_photo_alternate_rounded,
                             onPressed: _pickImages,
                           ),
+                          const SizedBox(height: 16),
+                          const RewardedUnlockCard(feature: ToolFeature.imageToPdf),
                         ],
                       ),
                     ),
@@ -348,6 +365,8 @@ class _ImageToPdfScreenState extends ConsumerState<ImageToPdfScreen> {
                 onPressed: _processConvert,
               ),
             ),
+          if (_selectedImages.isEmpty)
+            const BannerAdContainer(),
         ],
       ),
     );

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resize Image Online — Change Dimensions Free | FileWorks</title>
+  <meta name="description" content="Resize image dimensions (width and height in pixels) online for free. Maintain aspect ratio with instant preview. 100% private in-browser image resizer.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://fileworks.pages.dev/pages/image-resize.html">
+  <meta property="og:title" content="Resize Image Online — FileWorks">
+  <meta property="og:description" content="Change image dimensions easily. Maintain aspect ratio or specify custom pixel size.">
+  <meta property="og:type" content="website">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Resize Image — FileWorks","description":"Resize images online for free, processed client-side.","applicationCategory":"UtilitiesApplication","url":"https://fileworks.pages.dev/pages/image-resize.html","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <style>
+    .preset-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .preset-chip {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      font-size: 0.8rem;
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .preset-chip:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+    .image-preview-box {
+      max-height: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .image-preview-box img {
+      max-width: 100%;
+      max-height: 280px;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav" role="navigation"><div class="nav__inner">
+  <a href="/" class="nav__logo"><span class="nav__logo-icon">⚡</span>FileWorks</a>
+  <div class="nav__links">
+    <a href="/" class="nav__link" id="nav-home">Tools</a>
+    <a href="/pages/privacy.html" class="nav__link">Privacy</a>
+    <a href="/pages/terms.html" class="nav__link">Terms</a>
+  </div>
+  <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Menu">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+</div></nav>
+<nav class="nav-mobile-menu" id="nav-mobile-menu">
+  <a href="/">🔧 Tools</a><a href="/pages/privacy.html">🔒 Privacy</a><a href="/pages/terms.html">📜 Terms</a>
+</nav>
+
+<main class="tool-page" id="main-content">
+<div class="container-tool">
+
+  <!-- Header -->
+  <div class="tool-header">
+    <a href="/" class="tool-header__back" id="back-link">← All Tools</a>
+    <div class="tool-header__icon" style="background:rgba(59,130,246,0.15);" id="tool-icon">📐</div>
+    <h1 id="tool-title">Resize Image Online</h1>
+    <p class="tool-header__desc" id="tool-desc">Change image width and height with pixel precision or scale percentages while preserving quality.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+      <span class="badge badge-privacy">🔒 Files stay local</span>
+      <span class="badge badge-primary">Free</span>
+    </div>
+  </div>
+
+  <!-- Ad slot: Above tool -->
+  <div class="ad-container ad-container--banner" id="ad-top" style="margin-bottom:28px;" aria-label="Advertisement">
+    <span class="ad-container__label">Advertisement</span>
+  </div>
+
+  <!-- Input -->
+  <div id="drop-area">
+    <div class="dropzone" id="dropzone" role="button" aria-label="Drop image here or click to select">
+      <div class="dropzone__icon">🖼️</div>
+      <p class="dropzone__title">Drop an image here</p>
+      <p class="dropzone__sub">Supports JPG, PNG, WEBP, GIF, BMP — up to 50 MB</p>
+      <input type="file" id="file-input" accept="image/*" aria-label="Select image">
+    </div>
+  </div>
+
+  <!-- Options Area -->
+  <div id="options-area" class="hidden" style="margin-top:20px;">
+    <div class="card" style="padding:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div>
+          <strong id="file-name-label">image.jpg</strong>
+          <span class="badge" id="orig-dims-badge" style="margin-left:8px;">0 × 0 px</span>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="btn-change-file">Change Image</button>
+      </div>
+
+      <div class="image-preview-box">
+        <img id="img-preview" src="" alt="Selected image">
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:16px;">
+        <div class="form-group">
+          <label class="form-label" for="width-input">Width (px)</label>
+          <input type="number" class="form-input" id="width-input" min="1" max="12000" placeholder="Width">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="height-input">Height (px)</label>
+          <input type="number" class="form-input" id="height-input" min="1" max="12000" placeholder="Height">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="format-select">Format</label>
+          <select class="form-input" id="format-select">
+            <option value="auto">Keep Original Format</option>
+            <option value="image/jpeg">JPG</option>
+            <option value="image/png">PNG</option>
+            <option value="image/webp">WebP</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;">
+        <label style="display:flex;align-items:center;gap:8px;font-size:0.9rem;cursor:pointer;">
+          <input type="checkbox" id="aspect-ratio-check" checked>
+          <span>Lock aspect ratio (proportional scaling)</span>
+        </label>
+      </div>
+
+      <div style="margin-top:16px;">
+        <span class="section-label">Quick Presets:</span>
+        <div class="preset-chips">
+          <button class="preset-chip" data-scale="0.25">25%</button>
+          <button class="preset-chip" data-scale="0.5">50%</button>
+          <button class="preset-chip" data-scale="0.75">75%</button>
+          <button class="preset-chip" data-fixed="1920x1080">1080p (1920×1080)</button>
+          <button class="preset-chip" data-fixed="1280x720">720p (1280×720)</button>
+          <button class="preset-chip" data-fixed="800x600">800×600</button>
+          <button class="preset-chip" data-fixed="500x500">Square (500×500)</button>
+        </div>
+      </div>
+
+      <div style="margin-top:24px;">
+        <button class="btn btn-primary" id="btn-resize">📐 Resize & Download</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Processing -->
+  <div id="processing-section" class="hidden" style="margin-top:20px;">
+    <div class="processing-overlay">
+      <div class="spinner"></div>
+      <p id="processing-msg">Resizing image...</p>
+      <div class="progress-bar" style="width:200px;"><div class="progress-bar__fill" style="width:100%"></div></div>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div id="result-section" class="hidden" style="margin-top:20px;">
+    <div class="result-section">
+      <div class="result-section__icon">✅</div>
+      <h3>Image Resized!</h3>
+      <p id="result-desc">Your resized image is ready to download.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;">
+        <button class="btn btn-success" id="btn-download">⬇ Download Resized Image</button>
+        <button class="btn btn-ghost" id="btn-resize-again">Resize Another Image</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ad slot: Mid page -->
+  <div class="ad-container ad-container--banner" id="ad-mid" style="margin-top:32px;" aria-label="Advertisement">
+    <span class="ad-container__label">Advertisement</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
+    <div class="faq">
+      <details class="faq-item"><summary>Will resizing stretch or distort my photo?</summary><div class="faq-item__body">No, as long as "Lock aspect ratio" remains checked, adjusting the width automatically recalculates the height proportionally, avoiding any distortion.</div></details>
+      <details class="faq-item"><summary>Can I enlarge small images?</summary><div class="faq-item__body">Yes, you can scale images up. However, enlarging raster images beyond their native resolution will inevitably decrease sharpness.</div></details>
+      <details class="faq-item"><summary>Are images uploaded anywhere?</summary><div class="faq-item__body">No. FileWorks executes all image scaling directly on your computer using high-quality bicubic canvas algorithms.</div></details>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Related Tools -->
+  <section id="related-tools">
+    <h2 style="margin-bottom:20px;font-size:1.4rem;">Related Image Tools</h2>
+    <div class="related-tools">
+      <a href="/pages/image-compress.html" class="related-tool"><span class="related-tool__icon">🗜️</span>Compress Image</a>
+      <a href="/pages/image-convert.html" class="related-tool"><span class="related-tool__icon">🔄</span>Convert Image</a>
+      <a href="/pages/image-to-pdf.html" class="related-tool"><span class="related-tool__icon">📄</span>Image to PDF</a>
+      <a href="/pages/pdf-to-image.html" class="related-tool"><span class="related-tool__icon">🖼️</span>PDF to Image</a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer class="footer"><div class="container">
+  <div class="footer__bottom">
+    <p>© 2026 FileWorks. All rights reserved.</p>
+    <p><a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a> · <a href="/pages/terms.html" style="color:var(--color-primary);">Terms</a></p>
+  </div>
+</div></footer>
+
+<div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
+  <p>We display ads to keep FileWorks free. Files are processed locally. <a href="/pages/privacy.html">Privacy Policy</a></p>
+  <div class="cookie-banner__actions">
+    <button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button>
+    <button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button>
+  </div>
+</div>
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<script src="/js/app.js"></script>
+<script src="/js/tools/image-tools.js"></script>
+<script>
+(function() {
+  let currentFile = null;
+  let naturalW = 0;
+  let naturalH = 0;
+  let resultBlob = null;
+  let resultName = '';
+
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('file-input');
+  const dropArea = document.getElementById('drop-area');
+  const optionsArea = document.getElementById('options-area');
+  const processingSection = document.getElementById('processing-section');
+  const resultSection = document.getElementById('result-section');
+  const fileNameLabel = document.getElementById('file-name-label');
+  const origDimsBadge = document.getElementById('orig-dims-badge');
+  const imgPreview = document.getElementById('img-preview');
+  const widthInput = document.getElementById('width-input');
+  const heightInput = document.getElementById('height-input');
+  const formatSelect = document.getElementById('format-select');
+  const aspectRatioCheck = document.getElementById('aspect-ratio-check');
+  const btnChangeFile = document.getElementById('btn-change-file');
+  const btnResize = document.getElementById('btn-resize');
+  const btnDownload = document.getElementById('btn-download');
+  const btnResizeAgain = document.getElementById('btn-resize-again');
+
+  async function handleFile(file) {
+    try {
+      FW.file.validateSize(file, 50);
+      FW.file.validateType(file, ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp']);
+      currentFile = file;
+      fileNameLabel.textContent = file.name;
+
+      const img = await ImageTools._loadImage(file);
+      naturalW = img.naturalWidth;
+      naturalH = img.naturalHeight;
+      origDimsBadge.textContent = `${naturalW} × ${naturalH} px`;
+
+      imgPreview.src = img.src;
+      widthInput.value = naturalW;
+      heightInput.value = naturalH;
+
+      dropArea.classList.add('hidden');
+      optionsArea.classList.remove('hidden');
+    } catch(e) {
+      FW.toast.error(e.message || 'Cannot read image.');
+    }
+  }
+
+  widthInput.addEventListener('input', () => {
+    if (aspectRatioCheck.checked && naturalW > 0) {
+      const w = parseInt(widthInput.value) || 0;
+      if (w > 0) {
+        heightInput.value = Math.round(w / (naturalW / naturalH));
+      }
+    }
+  });
+
+  heightInput.addEventListener('input', () => {
+    if (aspectRatioCheck.checked && naturalH > 0) {
+      const h = parseInt(heightInput.value) || 0;
+      if (h > 0) {
+        widthInput.value = Math.round(h * (naturalW / naturalH));
+      }
+    }
+  });
+
+  document.querySelectorAll('.preset-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      if (chip.dataset.scale && naturalW > 0) {
+        const factor = parseFloat(chip.dataset.scale);
+        widthInput.value = Math.round(naturalW * factor);
+        heightInput.value = Math.round(naturalH * factor);
+      } else if (chip.dataset.fixed) {
+        const [w, h] = chip.dataset.fixed.split('x').map(s => parseInt(s));
+        widthInput.value = w;
+        heightInput.value = h;
+      }
+    });
+  });
+
+  FW.dropzone.init(dropzone, fileInput, (files) => {
+    if (files.length > 0) handleFile(files[0]);
+  }, { accept: 'image/*', multiple: false });
+
+  btnChangeFile.addEventListener('click', () => {
+    currentFile = null;
+    optionsArea.classList.add('hidden');
+    dropArea.classList.remove('hidden');
+    fileInput.value = '';
+  });
+
+  btnResize.addEventListener('click', async () => {
+    if (!currentFile) return;
+    const targetW = parseInt(widthInput.value);
+    const targetH = parseInt(heightInput.value);
+    if (!targetW || targetW < 1 || !targetH || targetH < 1) {
+      FW.toast.warning('Please enter valid width and height in pixels.');
+      return;
+    }
+
+    optionsArea.classList.add('hidden');
+    processingSection.classList.remove('hidden');
+    FW.analytics.track('processing_started', { tool: 'image_resize' });
+
+    try {
+      const chosenFormat = formatSelect.value === 'auto' ? null : formatSelect.value;
+      const res = await ImageTools.resize(
+        currentFile,
+        targetW,
+        targetH,
+        aspectRatioCheck.checked,
+        chosenFormat
+      );
+      resultBlob = res.blob;
+      resultName = res.name;
+
+      processingSection.classList.add('hidden');
+      resultSection.classList.remove('hidden');
+      document.getElementById('result-desc').textContent = `Resized to ${targetW} × ${targetH} px (${FW.file.formatSize(resultBlob.size)})`;
+      FW.analytics.track('processing_completed', { tool: 'image_resize' });
+    } catch(e) {
+      processingSection.classList.add('hidden');
+      optionsArea.classList.remove('hidden');
+      FW.toast.error(e.message || 'Resize failed.');
+      FW.analytics.track('error_occurred', { tool: 'image_resize' });
+    }
+  });
+
+  btnDownload.addEventListener('click', () => {
+    if (!resultBlob) return;
+    FW.file.download(resultBlob, resultName);
+    FW.analytics.track('download_started', { tool: 'image_resize' });
+  });
+
+  btnResizeAgain.addEventListener('click', () => {
+    currentFile = null;
+    resultBlob = null;
+    resultSection.classList.add('hidden');
+    dropArea.classList.remove('hidden');
+    fileInput.value = '';
+  });
+
+  FW.analytics.track('tool_open', { tool: 'image_resize' });
+})();
+</script>
+</body>
+</html>

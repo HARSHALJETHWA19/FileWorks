@@ -17,6 +17,7 @@ class HomeScreen extends ConsumerWidget {
 
   void _navigateToTool(BuildContext context, WidgetRef ref, String route) {
     ref.read(recentToolsProvider.notifier).recordToolUsage(route);
+    ref.read(adServiceProvider).preloadInterstitialAd();
     context.push(route);
   }
 

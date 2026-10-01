@@ -9,7 +9,7 @@ import 'package:filekit/features/monetization/presentation/free_limit_sheet.dart
 import 'package:filekit/features/monetization/providers/monetization_provider.dart';
 import 'package:filekit/features/monetization/services/free_usage_manager.dart';
 
-class ControllableAdService implements AdService {
+class ControllableAdService extends AdService {
   bool isAdAvailable = true;
   bool shouldEarnReward = true;
   bool shouldFailLoad = false;

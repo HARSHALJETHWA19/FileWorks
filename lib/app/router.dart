@@ -18,6 +18,7 @@ import '../features/pdf/presentation/rotate/pdf_rotate_screen.dart';
 import '../features/pdf/presentation/split/pdf_split_screen.dart';
 import '../features/settings/presentation/privacy_policy_screen.dart';
 import '../features/settings/presentation/settings_screen.dart';
+import '../features/monetization/presentation/ad_diagnostics_screen.dart';
 import '../shared/models/processing_result.dart';
 import '../shared/presentation/result_screen.dart';
 
@@ -132,6 +133,11 @@ final appRouter = GoRouter(
       path: RouteConstants.privacyPolicy,
       parentNavigatorKey: _rootNavigatorKey,
       builder: (context, state) => const PrivacyPolicyScreen(),
+    ),
+    GoRoute(
+      path: RouteConstants.adDiagnostics,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) => const AdDiagnosticsScreen(),
     ),
 
     // Result Screen

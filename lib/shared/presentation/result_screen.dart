@@ -35,6 +35,7 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final adService = ref.read(adServiceProvider);
       adService.recordOperationCompleted();
+      adService.preloadInterstitialAd();
     });
   }
 
@@ -532,7 +533,14 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
 
   Future<void> _saveFileToDevice(BuildContext context, File file) async {
     final fileName = p.basename(file.path);
-    final res = await FileSaveService.saveFileToDevice(file: file);
+    final adService = ref.read(adServiceProvider);
+    adService.setSaving(true);
+    FileSaveResult res;
+    try {
+      res = await FileSaveService.saveFileToDevice(file: file);
+    } finally {
+      adService.setSaving(false);
+    }
     if (!context.mounted) return;
     if (res.status == FileSaveStatus.success) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -557,10 +565,17 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
       widget.result.title.toLowerCase().replaceAll(' ', '_'),
     );
     final defaultZipName = '$cleanTitle.zip';
-    final res = await FileSaveService.saveMultipleFilesAsZipToDevice(
-      files: files,
-      zipFileName: defaultZipName,
-    );
+    final adService = ref.read(adServiceProvider);
+    adService.setSaving(true);
+    FileSaveResult res;
+    try {
+      res = await FileSaveService.saveMultipleFilesAsZipToDevice(
+        files: files,
+        zipFileName: defaultZipName,
+      );
+    } finally {
+      adService.setSaving(false);
+    }
     if (!context.mounted) return;
     if (res.status == FileSaveStatus.success) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -581,7 +596,14 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
   }
 
   Future<void> _saveAllFilesIndividually(BuildContext context, List<File> files) async {
-    final res = await FileSaveService.saveAllFilesIndividually(files: files);
+    final adService = ref.read(adServiceProvider);
+    adService.setSaving(true);
+    BatchSaveResult res;
+    try {
+      res = await FileSaveService.saveAllFilesIndividually(files: files);
+    } finally {
+      adService.setSaving(false);
+    }
     if (!context.mounted) return;
 
     if (res.isAllSuccessful) {
@@ -631,12 +653,18 @@ class _ResultScreenState extends ConsumerState<ResultScreen> {
     if (!context.mounted) return;
     final box = context.findRenderObject() as RenderBox?;
     final origin = box != null ? box.localToGlobal(Offset.zero) & box.size : null;
-    await SharePlus.instance.share(
-      ShareParams(
-        files: xFiles,
-        text: 'Processed with FileWorks (100% on-device)',
-        sharePositionOrigin: origin,
-      ),
-    );
+    final adService = ref.read(adServiceProvider);
+    adService.setSharing(true);
+    try {
+      await SharePlus.instance.share(
+        ShareParams(
+          files: xFiles,
+          text: 'Processed with FileWorks (100% on-device)',
+          sharePositionOrigin: origin,
+        ),
+      );
+    } finally {
+      adService.setSharing(false);
+    }
   }
 }

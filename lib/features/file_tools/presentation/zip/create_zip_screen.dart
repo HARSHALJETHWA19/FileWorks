@@ -14,6 +14,8 @@ import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
 import '../../../monetization/ad_service.dart';
 import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/presentation/banner_ad_widget.dart';
+import '../../../monetization/presentation/rewarded_unlock_card.dart';
 import '../../../monetization/providers/monetization_provider.dart';
 import '../../../monetization/services/free_limit_helper.dart';
 import '../../providers/file_tools_providers.dart';
@@ -30,6 +32,14 @@ class _CreateZipScreenState extends ConsumerState<CreateZipScreen> {
   final TextEditingController _nameController =
       TextEditingController(text: 'archive.zip');
   bool _isProcessing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(adServiceProvider).preloadInterstitialAd();
+    });
+  }
 
   Future<void> _pickFiles() async {
     final files = await FilePickerHelper.pickAnyFiles(allowMultiple: true);
@@ -254,6 +264,8 @@ class _CreateZipScreenState extends ConsumerState<CreateZipScreen> {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 12),
+                      const RewardedUnlockCard(feature: ToolFeature.createZip),
                     ],
                   ),
           ),
@@ -267,6 +279,8 @@ class _CreateZipScreenState extends ConsumerState<CreateZipScreen> {
                 onPressed: _processZip,
               ),
             ),
+          if (_selectedFiles.isEmpty)
+            const BannerAdContainer(),
         ],
       ),
     );

@@ -40,7 +40,7 @@ class MockFilePickerPlatform extends FilePickerPlatform {
   }
 }
 
-class MockAdService implements AdService {
+class MockAdService extends AdService {
   int recordOperationCount = 0;
   int interstitialCount = 0;
 

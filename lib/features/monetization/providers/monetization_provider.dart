@@ -80,3 +80,26 @@ final adServiceProvider = Provider<AdService>((ref) {
   final service = AdmobService(prefs);
   return service;
 });
+
+class PrivacyOptionsNotifier extends Notifier<bool> {
+  AdService? _adService;
+
+  @override
+  bool build() {
+    _adService = ref.watch(adServiceProvider);
+    _adService!.addConsentListener(_onConsentChanged);
+    ref.onDispose(() {
+      _adService?.removeConsentListener(_onConsentChanged);
+    });
+    return _adService!.isPrivacyOptionsRequired;
+  }
+
+  void _onConsentChanged() {
+    if (_adService != null) {
+      state = _adService!.isPrivacyOptionsRequired;
+    }
+  }
+}
+
+final privacyOptionsRequiredProvider =
+    NotifierProvider<PrivacyOptionsNotifier, bool>(PrivacyOptionsNotifier.new);

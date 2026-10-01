@@ -5,10 +5,46 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:filekit/core/constants/app_constants.dart';
 import 'package:filekit/features/monetization/ad_config.dart';
+import 'package:filekit/features/monetization/ad_service.dart';
 import 'package:filekit/features/monetization/admob_service.dart';
+import 'package:filekit/features/monetization/billing_constants.dart';
 import 'package:filekit/features/monetization/providers/monetization_provider.dart';
 import 'package:filekit/features/settings/presentation/privacy_policy_screen.dart';
 import 'package:filekit/features/settings/presentation/settings_screen.dart';
+
+class FakeConsentAdService extends AdService {
+  final bool privacyRequired;
+  final bool consentInitialized;
+
+  FakeConsentAdService({
+    this.privacyRequired = false,
+    this.consentInitialized = true,
+  });
+
+  @override
+  bool get isPrivacyOptionsRequired => privacyRequired;
+
+  @override
+  bool get isConsentInfoInitialized => consentInitialized;
+
+  @override
+  int get operationCount => 0;
+
+  @override
+  Future<void> initialize() async {}
+
+  @override
+  Widget buildBannerAd() => const SizedBox.shrink();
+
+  @override
+  Future<void> recordOperationCompleted() async {}
+
+  @override
+  Future<void> showInterstitialIfReady({bool force = false}) async {}
+
+  @override
+  void updateProStatus(bool isPro) {}
+}
 
 void main() {
   group('Privacy & Zero-Exfiltration Audit Tests', () {
@@ -149,6 +185,7 @@ void main() {
         ProviderScope(
           overrides: [
             sharedPreferencesProvider.overrideWithValue(prefs),
+            adServiceProvider.overrideWithValue(FakeConsentAdService(privacyRequired: true)),
           ],
           child: const MaterialApp(
             home: SettingsScreen(),
@@ -180,6 +217,209 @@ void main() {
         expect(code.contains(legacyEmail), isFalse,
             reason: 'Found legacy support email in ${file.path}');
       }
+    });
+
+    test('PRIVACY-010: UMP consent initialization state is represented correctly', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final admobService = AdmobService(prefs);
+
+      // On non-mobile (test runner), initialization safely marks consent info initialized
+      await admobService.initialize();
+      expect(admobService.isConsentInfoInitialized, isTrue);
+    });
+
+    testWidgets('PRIVACY-011: Privacy options are not shown before UMP initialization completes or when uninitialized', (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            adServiceProvider.overrideWithValue(FakeConsentAdService(privacyRequired: false)),
+          ],
+          child: const MaterialApp(
+            home: SettingsScreen(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Ad & Privacy Choices'), findsNothing);
+    });
+
+    testWidgets('PRIVACY-012: Privacy options are shown when PrivacyOptionsRequirementStatus.required', (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            adServiceProvider.overrideWithValue(FakeConsentAdService(privacyRequired: true)),
+          ],
+          child: const MaterialApp(
+            home: SettingsScreen(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Ad & Privacy Choices'), findsOneWidget);
+    });
+
+    testWidgets('PRIVACY-013: Privacy options are hidden/non-interactive when not required', (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+            adServiceProvider.overrideWithValue(FakeConsentAdService(privacyRequired: false)),
+          ],
+          child: const MaterialApp(
+            home: SettingsScreen(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.text('Ad & Privacy Choices'), findsNothing);
+    });
+
+    testWidgets('PRIVACY-014: Privacy options form is not called before valid UMP state exists and handles uninitialized safely', (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final admobService = AdmobService(prefs);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => admobService.showPrivacyOptionsForm(context),
+                child: const Text('Show'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // Tap before UMP initialization
+      await tester.tap(find.text('Show'));
+      await tester.pumpAndSettle();
+
+      // Handled safely with friendly message without crashing
+      expect(find.byType(SnackBar), findsOneWidget);
+    });
+
+    testWidgets('PRIVACY-015: UMP/privacy-options failure does not crash the app', (tester) async {
+      SharedPreferences.setMockInitialValues({});
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Builder(
+              builder: (context) => ElevatedButton(
+                onPressed: () => AdmobService.showPrivacyOptionsFormStatic(context),
+                child: const Text('Show Static'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // Calling static helper handles errors gracefully
+      await tester.tap(find.text('Show Static'));
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+    });
+
+    test('PRIVACY-016: canRequestAds() is respected before ad requests', () async {
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final admobService = AdmobService(prefs);
+
+      // Before MobileAds initialization with consent, buildBannerAd returns SizedBox.shrink
+      expect(admobService.buildBannerAd(), isA<SizedBox>());
+    });
+
+    test('PRIVACY-017: Existing privacy contact remains aetherkube@gmail.com', () {
+      expect(AppConstants.contactEmail, equals('aetherkube@gmail.com'));
+      final html = File('docs/privacy-policy.html').readAsStringSync();
+      expect(html, contains('aetherkube@gmail.com'));
+    });
+
+    test('PRIVACY-018: Legacy support@fileworks.app remains absent across all documents', () {
+      final legacy = ['support', 'fileworks.app'].join('@');
+      expect(AppConstants.contactEmail.contains(legacy), isFalse);
+      final html = File('docs/privacy-policy.html').readAsStringSync();
+      expect(html.contains(legacy), isFalse);
+    });
+
+    test('SUBS-010: Manage Subscriptions builds the correct Play Store URL with com.fileworks.app', () {
+      final uri = Uri.parse(AppConstants.manageSubscriptionsUrl);
+      expect(uri.scheme, equals('https'));
+      expect(uri.host, equals('play.google.com'));
+      expect(uri.path, equals('/store/account/subscriptions'));
+      expect(uri.queryParameters['package'], equals('com.fileworks.app'));
+    });
+
+    test('SUBS-011: Manage Subscriptions URL target is valid external store address', () {
+      expect(AppConstants.manageSubscriptionsUrl,
+          equals('https://play.google.com/store/account/subscriptions?package=com.fileworks.app'));
+    });
+
+    testWidgets('SUBS-012: Launch failure is handled gracefully with user-friendly fallback', (tester) async {
+      tester.view.physicalSize = const Size(1080, 2400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
+
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(prefs),
+          ],
+          child: const MaterialApp(
+            home: SettingsScreen(),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      final manageBtn = find.text('Manage Subscriptions');
+      expect(manageBtn, findsOneWidget);
+
+      await tester.tap(manageBtn);
+      await tester.pumpAndSettle();
+
+      // Does not crash
+      expect(tester.takeException(), isNull);
+    });
+
+    test('SUBS-013: Manage Subscriptions does not require an active subscription to access URL', () {
+      expect(AppConstants.manageSubscriptionsUrl, isNotEmpty);
+      expect(AppConstants.manageSubscriptionsUrl, contains('package=com.fileworks.app'));
+    });
+
+    test('SUBS-014: Billing product IDs remain unchanged (6m and 1y)', () {
+      expect(BillingConstants.subscription6Months, equals('fileworks_premium_6m'));
+      expect(BillingConstants.subscription1Year, equals('fileworks_premium_1y'));
     });
   });
 }

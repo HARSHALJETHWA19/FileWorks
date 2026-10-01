@@ -14,6 +14,7 @@ import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
 import '../../../monetization/ad_service.dart';
 import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/presentation/banner_ad_widget.dart';
 import '../../../monetization/providers/monetization_provider.dart';
 import '../../../monetization/services/free_limit_helper.dart';
 import '../../providers/pdf_providers.dart';
@@ -34,6 +35,14 @@ class _PdfRotateScreenState extends ConsumerState<PdfRotateScreen> {
   int _selectedAngle = 90; // 90, 180, 270
   String _applyScope = 'all'; // 'all', 'odd', 'even', 'custom'
   final TextEditingController _customPagesController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(adServiceProvider).preloadInterstitialAd();
+    });
+  }
 
   Future<void> _pickFile() async {
     final file = await FilePickerHelper.pickSinglePdfFile();
@@ -355,6 +364,8 @@ class _PdfRotateScreenState extends ConsumerState<PdfRotateScreen> {
                 onPressed: _processRotate,
               ),
             ),
+          if (_selectedFile == null)
+            const BannerAdContainer(),
         ],
       ),
     );

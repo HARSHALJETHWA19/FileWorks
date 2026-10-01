@@ -14,6 +14,7 @@ import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
 import '../../../monetization/ad_service.dart';
 import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/presentation/banner_ad_widget.dart';
 import '../../../monetization/providers/monetization_provider.dart';
 import '../../../monetization/services/free_limit_helper.dart';
 import '../../models/image_models.dart';
@@ -38,6 +39,14 @@ class _ImageCompressScreenState extends ConsumerState<ImageCompressScreen> {
   String _selectedPreset = '500kb'; // '100kb', '200kb', '500kb', '2mb', 'custom'
   final TextEditingController _customSizeController = TextEditingController(text: '300');
   String _customUnit = 'KB';
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(adServiceProvider).preloadInterstitialAd();
+    });
+  }
 
   @override
   void dispose() {
@@ -499,6 +508,8 @@ class _ImageCompressScreenState extends ConsumerState<ImageCompressScreen> {
                 onPressed: _processCompress,
               ),
             ),
+          if (_selectedImages.isEmpty)
+            const BannerAdContainer(),
         ],
       ),
     );

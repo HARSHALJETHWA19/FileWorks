@@ -13,6 +13,7 @@ import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
 import '../../../monetization/ad_service.dart';
 import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/presentation/banner_ad_widget.dart';
 import '../../../monetization/providers/monetization_provider.dart';
 import '../../../monetization/services/free_limit_helper.dart';
 import '../../models/image_models.dart';
@@ -39,6 +40,14 @@ class _ImageResizeScreenState extends ConsumerState<ImageResizeScreen> {
 
   int? _originalWidth;
   int? _originalHeight;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(adServiceProvider).preloadInterstitialAd();
+    });
+  }
 
   Future<void> _pickImages() async {
     final images = await FilePickerHelper.pickImageFiles(allowMultiple: true);
@@ -392,6 +401,8 @@ class _ImageResizeScreenState extends ConsumerState<ImageResizeScreen> {
                 onPressed: _processResize,
               ),
             ),
+          if (_selectedImages.isEmpty)
+            const BannerAdContainer(),
         ],
       ),
     );

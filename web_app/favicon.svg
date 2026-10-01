@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="fw-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#fw-grad)" />
+  <path d="M35 10 L19 34 L32 34 L29 54 L45 30 L32 30 Z" fill="#ffffff" />
+</svg>

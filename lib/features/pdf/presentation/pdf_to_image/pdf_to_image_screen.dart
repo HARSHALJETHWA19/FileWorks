@@ -14,6 +14,8 @@ import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
 import '../../../monetization/ad_service.dart';
 import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/presentation/banner_ad_widget.dart';
+import '../../../monetization/presentation/rewarded_unlock_card.dart';
 import '../../../monetization/providers/monetization_provider.dart';
 import '../../../monetization/services/free_limit_helper.dart';
 import '../../providers/pdf_providers.dart';
@@ -36,6 +38,14 @@ class _PdfToImageScreenState extends ConsumerState<PdfToImageScreen> {
   bool _isPng = false; // false = JPG, true = PNG
   String _pageScope = 'all'; // 'all', 'custom'
   final TextEditingController _customPagesController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(adServiceProvider).preloadInterstitialAd();
+    });
+  }
 
   Future<void> _pickFile() async {
     final file = await FilePickerHelper.pickSinglePdfFile();
@@ -330,6 +340,8 @@ class _PdfToImageScreenState extends ConsumerState<PdfToImageScreen> {
                             ),
                           ),
                         ],
+                        const SizedBox(height: 12),
+                        const RewardedUnlockCard(feature: ToolFeature.pdfToImage),
                       ],
                     ),
                   ),
@@ -344,6 +356,8 @@ class _PdfToImageScreenState extends ConsumerState<PdfToImageScreen> {
                 onPressed: _processConversion,
               ),
             ),
+          if (_selectedFile == null)
+            const BannerAdContainer(),
         ],
       ),
     );

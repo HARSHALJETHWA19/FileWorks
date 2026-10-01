@@ -1,0 +1,323 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Merge PDF Online — Combine PDF Files Free | FileWorks</title>
+  <meta name="description" content="Merge multiple PDF files into one document online for free. No upload required — files are processed locally in your browser. Fast, private, secure.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://fileworks.pages.dev/pages/pdf-merge.html">
+  <meta property="og:title" content="Merge PDF Online — FileWorks">
+  <meta property="og:description" content="Combine multiple PDF files into a single document. Free, private, browser-based.">
+  <meta property="og:type" content="website">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Merge PDF — FileWorks","description":"Merge multiple PDF files into a single document online for free, processed locally in your browser.","applicationCategory":"UtilitiesApplication","url":"https://fileworks.pages.dev/pages/pdf-merge.html","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+</head>
+<body>
+
+<nav class="nav" role="navigation"><div class="nav__inner">
+  <a href="/" class="nav__logo"><span class="nav__logo-icon">⚡</span>FileWorks</a>
+  <div class="nav__links">
+    <a href="/" class="nav__link" id="nav-home">Tools</a>
+    <a href="/pages/privacy.html" class="nav__link">Privacy</a>
+    <a href="/pages/terms.html" class="nav__link">Terms</a>
+  </div>
+  <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Menu">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+</div></nav>
+<nav class="nav-mobile-menu" id="nav-mobile-menu">
+  <a href="/">🔧 Tools</a><a href="/pages/privacy.html">🔒 Privacy</a><a href="/pages/terms.html">📜 Terms</a>
+</nav>
+
+<main class="tool-page" id="main-content">
+<div class="container-tool">
+
+  <!-- Header -->
+  <div class="tool-header">
+    <a href="/" class="tool-header__back" id="back-link">← All Tools</a>
+    <div class="tool-header__icon" style="background:rgba(37,99,235,0.15);" id="tool-icon">🔀</div>
+    <h1 id="tool-title">Merge PDF Online</h1>
+    <p class="tool-header__desc" id="tool-desc">Combine multiple PDF files into a single document. Drag to reorder before merging.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+      <span class="badge badge-privacy" id="badge-privacy">🔒 Files stay local</span>
+      <span class="badge badge-primary" id="badge-free">Free</span>
+    </div>
+  </div>
+
+  <!-- Ad slot: Above tool -->
+  <div class="ad-container ad-container--banner" id="ad-top" style="margin-bottom:28px;" aria-label="Advertisement">
+    <span class="ad-container__label">Advertisement</span>
+  </div>
+
+  <!-- File Input -->
+  <div id="input-section">
+    <div class="dropzone" id="dropzone" role="button" aria-label="Drop PDF files here or click to select">
+      <div class="dropzone__icon">📄</div>
+      <p class="dropzone__title">Drop PDF files here</p>
+      <p class="dropzone__sub">or click to select — up to 50 PDFs, 200 MB each</p>
+      <input type="file" id="file-input" accept=".pdf" multiple aria-label="Select PDF files">
+    </div>
+
+    <div id="file-list-section" class="hidden" style="margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <p class="section-label" id="file-count-label">0 files selected — drag to reorder</p>
+        <button class="btn btn-ghost btn-sm" id="btn-clear-all">Clear All</button>
+      </div>
+      <div class="file-list" id="file-list"></div>
+      <div style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-primary" id="btn-merge" disabled>🔀 Merge PDF</button>
+        <button class="btn btn-ghost btn-sm" id="btn-add-more">+ Add More</button>
+        <input type="file" id="file-input-extra" accept=".pdf" multiple class="hidden" aria-label="Add more PDF files">
+      </div>
+    </div>
+
+    <!-- Processing -->
+    <div id="processing-section" class="hidden">
+      <div class="processing-overlay">
+        <div class="spinner"></div>
+        <p id="processing-msg">Merging PDFs...</p>
+        <div class="progress-bar" style="width:200px;"><div class="progress-bar__fill" style="width:100%"></div></div>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div id="result-section" class="hidden">
+      <div class="result-section">
+        <div class="result-section__icon">✅</div>
+        <h3>PDFs Merged Successfully!</h3>
+        <p id="result-desc">Your merged PDF is ready to download.</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn btn-success" id="btn-download">⬇ Download Merged PDF</button>
+          <button class="btn btn-ghost" id="btn-merge-again">Merge More Files</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ad slot: After processing area -->
+  <div class="ad-container ad-container--banner" id="ad-mid" style="margin-top:32px;" aria-label="Advertisement">
+    <span class="ad-container__label">Advertisement</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- How to Use -->
+  <section id="how-to-use">
+    <h2 style="margin-bottom:24px;font-size:1.4rem;">How to Merge PDF Files</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step__content"><h4>Select your PDF files</h4><p>Click the area above or drag and drop multiple PDF files onto it.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step__content"><h4>Reorder if needed</h4><p>Drag the files in the list to set the order in which pages will appear in the merged PDF.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step__content"><h4>Click Merge PDF</h4><p>FileWorks combines all pages into a single PDF entirely within your browser.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step__content"><h4>Download</h4><p>Your merged PDF downloads directly to your device. No server involved.</p></div></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Details -->
+  <section id="details">
+    <h2 style="margin-bottom:20px;font-size:1.4rem;">About This Tool</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;" id="details-grid">
+      <div class="card"><h4>📁 Supported Formats</h4><p style="color:var(--color-text-muted);margin-top:8px;font-size:.875rem;">PDF files (.pdf). All files must be valid, non-encrypted PDFs.</p></div>
+      <div class="card"><h4>⚡ Limitations</h4><p style="color:var(--color-text-muted);margin-top:8px;font-size:.875rem;">Maximum 50 PDFs and 200 MB per file. Very large files may take longer to process depending on your device.</p></div>
+      <div class="card"><h4>🔒 Privacy</h4><p style="color:var(--color-text-muted);margin-top:8px;font-size:.875rem;">Files are processed in your browser using pdf-lib. They are never uploaded to any server.</p></div>
+      <div class="card"><h4>💾 Download</h4><p style="color:var(--color-text-muted);margin-top:8px;font-size:.875rem;">The merged PDF downloads directly from your browser memory to your device.</p></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
+    <div class="faq">
+      <details class="faq-item"><summary>Is this PDF merger free to use?</summary><div class="faq-item__body">Yes, FileWorks PDF Merge is completely free. No subscription, no sign-up, no limits on personal use.</div></details>
+      <details class="faq-item"><summary>Are my PDFs uploaded to a server?</summary><div class="faq-item__body">No. All merging happens in your browser using the pdf-lib JavaScript library. Your files never leave your device during processing.</div></details>
+      <details class="faq-item"><summary>Can I merge password-protected PDFs?</summary><div class="faq-item__body">Currently, password-protected (encrypted) PDFs cannot be merged. Please remove the password protection first using your PDF viewer.</div></details>
+      <details class="faq-item"><summary>Will the merged PDF look exactly the same?</summary><div class="faq-item__body">Yes. Page content, dimensions, and orientation are preserved. pdf-lib is a well-tested library used by millions of applications.</div></details>
+      <details class="faq-item"><summary>How many PDFs can I merge at once?</summary><div class="faq-item__body">Up to 50 PDF files at once. Each file can be up to 200 MB. For very large batches, processing depends on your device's available memory.</div></details>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Related Tools -->
+  <section id="related-tools">
+    <h2 style="margin-bottom:20px;font-size:1.4rem;">Related PDF Tools</h2>
+    <div class="related-tools">
+      <a href="/pages/pdf-split.html" class="related-tool"><span class="related-tool__icon">✂️</span>Split PDF</a>
+      <a href="/pages/pdf-rotate.html" class="related-tool"><span class="related-tool__icon">🔄</span>Rotate PDF</a>
+      <a href="/pages/pdf-compress.html" class="related-tool"><span class="related-tool__icon">⚡</span>Compress PDF</a>
+      <a href="/pages/pdf-to-image.html" class="related-tool"><span class="related-tool__icon">🖼️</span>PDF to Image</a>
+      <a href="/pages/image-to-pdf.html" class="related-tool"><span class="related-tool__icon">📄</span>Image to PDF</a>
+    </div>
+  </section>
+</div>
+</main>
+
+<!-- Footer -->
+<footer class="footer"><div class="container">
+  <div class="footer__bottom">
+    <p>© 2026 FileWorks. All rights reserved.</p>
+    <p><a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a> · <a href="/pages/terms.html" style="color:var(--color-primary);">Terms</a></p>
+  </div>
+</div></footer>
+
+<div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
+  <p>We display ads to keep FileWorks free. Files are processed locally. <a href="/pages/privacy.html">Privacy Policy</a></p>
+  <div class="cookie-banner__actions">
+    <button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button>
+    <button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button>
+  </div>
+</div>
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<!-- Libraries loaded from CDN -->
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/tools/pdf-tools.js"></script>
+<script>
+(function() {
+  let selectedFiles = [];
+  let resultBlob = null;
+
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('file-input');
+  const fileInputExtra = document.getElementById('file-input-extra');
+  const fileList = document.getElementById('file-list');
+  const fileListSection = document.getElementById('file-list-section');
+  const fileCountLabel = document.getElementById('file-count-label');
+  const inputSection = document.getElementById('input-section');
+  const processingSection = document.getElementById('processing-section');
+  const resultSection = document.getElementById('result-section');
+  const btnMerge = document.getElementById('btn-merge');
+  const btnClearAll = document.getElementById('btn-clear-all');
+  const btnAddMore = document.getElementById('btn-add-more');
+  const btnDownload = document.getElementById('btn-download');
+  const btnMergeAgain = document.getElementById('btn-merge-again');
+  const detailsGrid = document.getElementById('details-grid');
+
+  if (detailsGrid && window.innerWidth < 768) detailsGrid.style.gridTemplateColumns = '1fr';
+
+  function formatSize(b) { return FW.file.formatSize(b); }
+
+  function addFiles(files) {
+    for (const f of files) {
+      try {
+        FW.file.validateSize(f, 200);
+        FW.file.validateType(f, ['pdf']);
+        if (selectedFiles.length >= 50) { FW.toast.warning('Maximum 50 PDF files.'); break; }
+        selectedFiles.push(f);
+      } catch(e) { FW.toast.error(e.message); }
+    }
+    renderFileList();
+  }
+
+  function renderFileList() {
+    if (selectedFiles.length === 0) {
+      fileListSection.classList.add('hidden');
+      dropzone.classList.remove('hidden');
+      return;
+    }
+    fileListSection.classList.remove('hidden');
+    fileCountLabel.textContent = `${selectedFiles.length} file${selectedFiles.length > 1 ? 's' : ''} — drag to reorder`;
+    btnMerge.disabled = selectedFiles.length < 2;
+
+    fileList.innerHTML = '';
+    selectedFiles.forEach((f, i) => {
+      const item = document.createElement('div');
+      item.className = 'file-item';
+      item.draggable = true;
+      item.dataset.index = i;
+      item.dataset.draggable = 'true';
+      item.innerHTML = `
+        <span class="file-item__icon" style="cursor:grab">⠿</span>
+        <span class="file-item__name" title="${f.name}">${f.name}</span>
+        <span class="file-item__size">${formatSize(f.size)}</span>
+        <div class="file-item__actions">
+          <button class="file-item__btn danger" data-remove="${i}" aria-label="Remove ${f.name}" title="Remove">✕</button>
+        </div>`;
+      fileList.appendChild(item);
+    });
+
+    setupDragSort(fileList);
+
+    fileList.querySelectorAll('[data-remove]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.remove);
+        selectedFiles.splice(idx, 1);
+        renderFileList();
+      });
+    });
+  }
+
+  function setupDragSort(list) {
+    let dragIdx = null;
+    list.querySelectorAll('.file-item').forEach(item => {
+      item.addEventListener('dragstart', e => {
+        dragIdx = parseInt(item.dataset.index);
+        item.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      item.addEventListener('dragend', () => item.classList.remove('dragging'));
+      item.addEventListener('dragover', e => { e.preventDefault(); item.classList.add('drag-over-target'); });
+      item.addEventListener('dragleave', () => item.classList.remove('drag-over-target'));
+      item.addEventListener('drop', e => {
+        e.preventDefault();
+        item.classList.remove('drag-over-target');
+        const dropIdx = parseInt(item.dataset.index);
+        if (dragIdx === null || dragIdx === dropIdx) return;
+        const moved = selectedFiles.splice(dragIdx, 1)[0];
+        selectedFiles.splice(dropIdx, 0, moved);
+        dragIdx = null;
+        renderFileList();
+      });
+    });
+  }
+
+  FW.dropzone.init(dropzone, fileInput, addFiles, { accept: '.pdf', multiple: true });
+  fileInputExtra.addEventListener('change', e => { addFiles(Array.from(e.target.files || [])); e.target.value = ''; });
+  btnAddMore.addEventListener('click', () => fileInputExtra.click());
+  btnClearAll.addEventListener('click', () => { selectedFiles = []; renderFileList(); });
+
+  btnMerge.addEventListener('click', async () => {
+    if (selectedFiles.length < 2) { FW.toast.warning('Select at least 2 PDF files.'); return; }
+    inputSection.classList.add('hidden');
+    processingSection.classList.remove('hidden');
+    resultSection.classList.add('hidden');
+    FW.analytics.track('processing_started', { tool: 'pdf_merge', count: selectedFiles.length });
+    try {
+      resultBlob = await PdfTools.merge(selectedFiles);
+      processingSection.classList.add('hidden');
+      resultSection.classList.remove('hidden');
+      const desc = document.getElementById('result-desc');
+      desc.textContent = `Merged ${selectedFiles.length} PDFs — ${formatSize(resultBlob.size)}`;
+      FW.analytics.track('processing_completed', { tool: 'pdf_merge' });
+    } catch(e) {
+      processingSection.classList.add('hidden');
+      inputSection.classList.remove('hidden');
+      FW.toast.error(e.message || 'Failed to merge PDFs.');
+      FW.analytics.track('error_occurred', { tool: 'pdf_merge' });
+    }
+  });
+
+  btnDownload.addEventListener('click', () => {
+    if (!resultBlob) return;
+    FW.file.download(resultBlob, 'merged_fileworks.pdf');
+    FW.analytics.track('download_started', { tool: 'pdf_merge' });
+  });
+
+  btnMergeAgain.addEventListener('click', () => {
+    selectedFiles = []; resultBlob = null;
+    resultSection.classList.add('hidden');
+    inputSection.classList.remove('hidden');
+    renderFileList();
+  });
+
+  FW.analytics.track('tool_open', { tool: 'pdf_merge' });
+})();
+</script>
+</body>
+</html>

@@ -13,6 +13,7 @@ import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
 import '../../../monetization/ad_service.dart';
 import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/presentation/banner_ad_widget.dart';
 import '../../../monetization/providers/monetization_provider.dart';
 import '../../../monetization/services/free_limit_helper.dart';
 import '../../providers/pdf_providers.dart';
@@ -29,6 +30,14 @@ class _PdfReorderScreenState extends ConsumerState<PdfReorderScreen> {
   List<int> _pageOrder = [];
   bool _isLoading = false;
   bool _isProcessing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(adServiceProvider).preloadInterstitialAd();
+    });
+  }
 
   Future<void> _pickFile() async {
     final file = await FilePickerHelper.pickSinglePdfFile();
@@ -263,6 +272,8 @@ class _PdfReorderScreenState extends ConsumerState<PdfReorderScreen> {
                 onPressed: _processReorder,
               ),
             ),
+          if (_selectedFile == null)
+            const BannerAdContainer(),
         ],
       ),
     );

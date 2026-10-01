@@ -14,6 +14,7 @@ import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
 import '../../../monetization/ad_service.dart';
 import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/presentation/banner_ad_widget.dart';
 import '../../../monetization/providers/monetization_provider.dart';
 import '../../../monetization/services/free_limit_helper.dart';
 import '../../models/pdf_models.dart';
@@ -36,6 +37,14 @@ class _PdfCompressScreenState extends ConsumerState<PdfCompressScreen> {
   int _targetBytes = 500 * 1024;
   final TextEditingController _customSizeController = TextEditingController(text: '300');
   String _customUnit = 'KB';
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(adServiceProvider).preloadInterstitialAd();
+    });
+  }
 
   @override
   void dispose() {
@@ -450,6 +459,8 @@ class _PdfCompressScreenState extends ConsumerState<PdfCompressScreen> {
                 onPressed: _processCompress,
               ),
             ),
+          if (_selectedFile == null)
+            const BannerAdContainer(),
         ],
       ),
     );

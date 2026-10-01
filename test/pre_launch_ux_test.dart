@@ -10,7 +10,7 @@ import 'package:filekit/features/monetization/providers/monetization_provider.da
 import 'package:filekit/shared/models/processing_result.dart';
 import 'package:filekit/shared/presentation/result_screen.dart';
 
-class MockAdService implements AdService {
+class MockAdService extends AdService {
   int recordCallCount = 0;
   int showInterstitialCallCount = 0;
   bool forceShown = false;

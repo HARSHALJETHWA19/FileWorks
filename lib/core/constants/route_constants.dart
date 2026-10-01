@@ -4,6 +4,7 @@ class RouteConstants {
   static const String history = '/history';
   static const String settings = '/settings';
   static const String privacyPolicy = '/settings/privacy';
+  static const String adDiagnostics = '/settings/ad-diagnostics';
 
   // PDF Tool routes
   static const String pdfMerge = '/pdf/merge';

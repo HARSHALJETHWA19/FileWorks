@@ -1,21 +1,42 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:open_filex/open_filex.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/route_constants.dart';
 import '../../../core/widgets/app_scaffold.dart';
-import '../../monetization/admob_service.dart';
 import '../../monetization/presentation/banner_ad_widget.dart';
 import '../../monetization/presentation/pro_upgrade_sheet.dart';
 import '../../monetization/providers/monetization_provider.dart';
 import '../providers/settings_provider.dart';
 
-class SettingsScreen extends ConsumerWidget {
+class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends ConsumerState<SettingsScreen> {
+  int _devTapCount = 0;
+  bool _devModeUnlocked = false;
+
+  void _onVersionTap() {
+    _devTapCount++;
+    if (_devTapCount >= 5 && !_devModeUnlocked) {
+      setState(() => _devModeUnlocked = true);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Developer options unlocked!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final themeMode = ref.watch(themeModeProvider);
     final preferences = ref.watch(settingsPreferencesProvider);
@@ -145,21 +166,25 @@ class SettingsScreen extends ConsumerWidget {
                         trailing: const Icon(Icons.chevron_right_rounded),
                         onTap: () => context.push(RouteConstants.privacyPolicy),
                       ),
-                      const Divider(height: 1),
-                      ListTile(
-                        leading: const Icon(Icons.tune_rounded),
-                        title: const Text('Ad & Privacy Choices'),
-                        subtitle: const Text('Review European (EEA/UK) consent preferences'),
-                        trailing: const Icon(Icons.chevron_right_rounded),
-                        onTap: () => AdmobService.showPrivacyOptionsForm(context),
-                      ),
+                      if (ref.watch(privacyOptionsRequiredProvider)) ...[
+                        const Divider(height: 1),
+                        ListTile(
+                          leading: const Icon(Icons.tune_rounded),
+                          title: const Text('Ad & Privacy Choices'),
+                          subtitle: const Text('Review European (EEA/UK) consent preferences'),
+                          trailing: const Icon(Icons.chevron_right_rounded),
+                          onTap: () {
+                            ref.read(adServiceProvider).showPrivacyOptionsForm(context);
+                          },
+                        ),
+                      ],
                       const Divider(height: 1),
                       ListTile(
                         leading: const Icon(Icons.subscriptions_outlined),
                         title: const Text('Manage Subscriptions'),
                         subtitle: const Text('View or cancel plans in Google Play'),
                         trailing: const Icon(Icons.open_in_new_rounded),
-                        onTap: () => OpenFilex.open(AppConstants.manageSubscriptionsUrl),
+                        onTap: () => _handleManageSubscriptions(context),
                       ),
                     ],
                   ),
@@ -170,6 +195,7 @@ class SettingsScreen extends ConsumerWidget {
                 _buildSectionHeader(theme, 'ABOUT'),
                 Card(
                   child: ListTile(
+                    onTap: _onVersionTap,
                     leading: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Image.asset(
@@ -193,6 +219,19 @@ class SettingsScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
+                if (kDebugMode || _devModeUnlocked) ...[
+                  const SizedBox(height: 20),
+                  _buildSectionHeader(theme, 'DEVELOPER'),
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.bug_report_rounded, color: Colors.orange),
+                      title: const Text('Ad Diagnostics (Dev)'),
+                      subtitle: const Text('Inspect requests, impressions & state'),
+                      trailing: const Icon(Icons.chevron_right_rounded),
+                      onTap: () => context.push(RouteConstants.adDiagnostics),
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 24),
               ],
             ),
@@ -213,6 +252,36 @@ class SettingsScreen extends ConsumerWidget {
           fontWeight: FontWeight.w700,
           letterSpacing: 1.0,
         ),
+      ),
+    );
+  }
+
+  Future<void> _handleManageSubscriptions(BuildContext context) async {
+    final uri = Uri.parse(AppConstants.manageSubscriptionsUrl);
+    try {
+      final launched = await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+      if (!launched && context.mounted) {
+        _showSubscriptionFallback(context);
+      }
+    } catch (_) {
+      if (context.mounted) {
+        _showSubscriptionFallback(context);
+      }
+    }
+  }
+
+  void _showSubscriptionFallback(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          'Unable to open Google Play subscriptions. '
+          'Please open Google Play → Profile → Payments & subscriptions → Subscriptions.',
+        ),
+        behavior: SnackBarBehavior.floating,
+        duration: Duration(seconds: 5),
       ),
     );
   }

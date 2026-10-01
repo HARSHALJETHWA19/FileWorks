@@ -12,6 +12,8 @@ import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
 import '../../../monetization/ad_service.dart';
 import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/presentation/banner_ad_widget.dart';
+import '../../../monetization/presentation/rewarded_unlock_card.dart';
 import '../../../monetization/providers/monetization_provider.dart';
 import '../../../monetization/services/free_limit_helper.dart';
 import '../../providers/file_tools_providers.dart';
@@ -33,6 +35,14 @@ class _BatchRenameScreenState extends ConsumerState<BatchRenameScreen> {
   bool _isProcessing = false;
 
   List<RenamePreviewItem> _previewItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(adServiceProvider).preloadInterstitialAd();
+    });
+  }
 
   Future<void> _pickFiles() async {
     final files = await FilePickerHelper.pickAnyFiles(allowMultiple: true);
@@ -329,6 +339,8 @@ class _BatchRenameScreenState extends ConsumerState<BatchRenameScreen> {
                           },
                         ),
                       ),
+                      const SizedBox(height: 12),
+                      const RewardedUnlockCard(feature: ToolFeature.batchRename),
                     ],
                   ),
           ),
@@ -342,6 +354,8 @@ class _BatchRenameScreenState extends ConsumerState<BatchRenameScreen> {
                 onPressed: _processRename,
               ),
             ),
+          if (_selectedFiles.isEmpty)
+            const BannerAdContainer(),
         ],
       ),
     );

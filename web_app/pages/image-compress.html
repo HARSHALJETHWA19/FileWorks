@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compress Image Online — Reduce Image File Size Free | FileWorks</title>
+  <meta name="description" content="Compress JPG, PNG, and WEBP images online without losing quality. Reduce image file size by up to 80% directly in your browser. 100% free and private.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://fileworks.pages.dev/pages/image-compress.html">
+  <meta property="og:title" content="Compress Image Online — FileWorks">
+  <meta property="og:description" content="Reduce image file sizes by up to 80% without noticeable quality loss. Fast, free, browser-based.">
+  <meta property="og:type" content="website">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Compress Image — FileWorks","description":"Compress images online for free, processed client-side.","applicationCategory":"UtilitiesApplication","url":"https://fileworks.pages.dev/pages/image-compress.html","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <style>
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 0.9rem;
+    }
+    .results-table th, .results-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .results-table th {
+      background: var(--color-surface);
+      color: var(--color-text-muted);
+      font-weight: 600;
+    }
+    .savings-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav" role="navigation"><div class="nav__inner">
+  <a href="/" class="nav__logo"><span class="nav__logo-icon">⚡</span>FileWorks</a>
+  <div class="nav__links">
+    <a href="/" class="nav__link" id="nav-home">Tools</a>
+    <a href="/pages/privacy.html" class="nav__link">Privacy</a>
+    <a href="/pages/terms.html" class="nav__link">Terms</a>
+  </div>
+  <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Menu">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+</div></nav>
+<nav class="nav-mobile-menu" id="nav-mobile-menu">
+  <a href="/">🔧 Tools</a><a href="/pages/privacy.html">🔒 Privacy</a><a href="/pages/terms.html">📜 Terms</a>
+</nav>
+
+<main class="tool-page" id="main-content">
+<div class="container-tool">
+
+  <!-- Header -->
+  <div class="tool-header">
+    <a href="/" class="tool-header__back" id="back-link">← All Tools</a>
+    <div class="tool-header__icon" style="background:rgba(234,88,12,0.15);" id="tool-icon">🗜️</div>
+    <h1 id="tool-title">Compress Image Online</h1>
+    <p class="tool-header__desc" id="tool-desc">Optimize and reduce JPG, PNG, and WEBP image file sizes with real-time compression control.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+      <span class="badge badge-privacy">🔒 Files stay local</span>
+      <span class="badge badge-primary">Free</span>
+    </div>
+  </div>
+
+  <!-- Ad slot: Above tool -->
+  <div class="ad-container ad-container--banner" id="ad-top" style="margin-bottom:28px;" aria-label="Advertisement">
+    <span class="ad-container__label">Advertisement</span>
+  </div>
+
+  <!-- Input -->
+  <div id="drop-area">
+    <div class="dropzone" id="dropzone" role="button" aria-label="Drop images here or click to select">
+      <div class="dropzone__icon">🖼️</div>
+      <p class="dropzone__title">Drop images to compress</p>
+      <p class="dropzone__sub">Supports JPG, PNG, WEBP — up to 30 files, 50 MB each</p>
+      <input type="file" id="file-input" accept="image/*" multiple aria-label="Select images">
+    </div>
+  </div>
+
+  <!-- Settings Area -->
+  <div id="settings-area" class="hidden" style="margin-top:20px;">
+    <div class="card" style="padding:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <span class="section-label" id="img-count-label">0 images selected</span>
+        <button class="btn btn-ghost btn-sm" id="btn-change-files">Change Files</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:20px;align-items:center;">
+        <div class="form-group">
+          <label class="form-label" for="quality-range">
+            Compression Quality: <strong id="quality-val" style="color:var(--color-primary);">82%</strong>
+          </label>
+          <input type="range" id="quality-range" min="10" max="95" value="82" style="width:100%;cursor:pointer;">
+          <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--color-text-muted);margin-top:4px;">
+            <span>Smaller file (10%)</span>
+            <span>Balanced (82%)</span>
+            <span>Best quality (95%)</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="format-select">Output Format</label>
+          <select class="form-input" id="format-select">
+            <option value="auto">Keep Original Format</option>
+            <option value="image/webp">WebP (Best Web Compression)</option>
+            <option value="image/jpeg">JPG (Standard)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-top:20px;">
+        <button class="btn btn-primary" id="btn-compress">🗜️ Compress Images</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Processing -->
+  <div id="processing-section" class="hidden" style="margin-top:20px;">
+    <div class="processing-overlay">
+      <div class="spinner"></div>
+      <p id="processing-msg">Compressing images...</p>
+      <div class="progress-bar" style="width:200px;"><div class="progress-bar__fill" style="width:100%"></div></div>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  <div id="results-section" class="hidden" style="margin-top:20px;">
+    <div class="result-section">
+      <div class="result-section__icon">🎉</div>
+      <h3>Images Compressed!</h3>
+      <p id="savings-summary">Your images were compressed with great savings.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;">
+        <button class="btn btn-success" id="btn-download-all">⬇ Download All</button>
+        <button class="btn btn-ghost" id="btn-compress-again">Compress More Images</button>
+      </div>
+    </div>
+
+    <div style="overflow-x:auto;margin-top:24px;">
+      <table class="results-table">
+        <thead>
+          <tr>
+            <th>File</th>
+            <th>Original</th>
+            <th>Compressed</th>
+            <th>Savings</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="results-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Ad slot: Mid page -->
+  <div class="ad-container ad-container--banner" id="ad-mid" style="margin-top:32px;" aria-label="Advertisement">
+    <span class="ad-container__label">Advertisement</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
+    <div class="faq">
+      <details class="faq-item"><summary>How does browser-based image compression work?</summary><div class="faq-item__body">FileWorks utilizes your browser's native HTML5 Canvas API and modern image codecs. It optimizes the image data locally without needing to transmit anything over the internet.</div></details>
+      <details class="faq-item"><summary>Will my compressed images lose clarity?</summary><div class="faq-item__body">At the recommended 82% quality setting, file sizes drop significantly (often 40-70%) while remaining virtually indistinguishable from the original to the human eye.</div></details>
+      <details class="faq-item"><summary>Why convert to WebP?</summary><div class="faq-item__body">WebP provides superior lossless and lossy compression for web images, often saving 25-35% more space than JPEG at equivalent quality.</div></details>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Related Tools -->
+  <section id="related-tools">
+    <h2 style="margin-bottom:20px;font-size:1.4rem;">Related Image Tools</h2>
+    <div class="related-tools">
+      <a href="/pages/image-resize.html" class="related-tool"><span class="related-tool__icon">📐</span>Resize Image</a>
+      <a href="/pages/image-convert.html" class="related-tool"><span class="related-tool__icon">🔄</span>Convert Image</a>
+      <a href="/pages/image-to-pdf.html" class="related-tool"><span class="related-tool__icon">📄</span>Image to PDF</a>
+      <a href="/pages/pdf-compress.html" class="related-tool"><span class="related-tool__icon">⚡</span>Compress PDF</a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer class="footer"><div class="container">
+  <div class="footer__bottom">
+    <p>© 2026 FileWorks. All rights reserved.</p>
+    <p><a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a> · <a href="/pages/terms.html" style="color:var(--color-primary);">Terms</a></p>
+  </div>
+</div></footer>
+
+<div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
+  <p>We display ads to keep FileWorks free. Files are processed locally. <a href="/pages/privacy.html">Privacy Policy</a></p>
+  <div class="cookie-banner__actions">
+    <button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button>
+    <button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button>
+  </div>
+</div>
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<!-- Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/tools/image-tools.js"></script>
+<script>
+(function() {
+  let selectedFiles = [];
+  let compressedResults = []; // { originalFile, blob, name }
+
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('file-input');
+  const dropArea = document.getElementById('drop-area');
+  const settingsArea = document.getElementById('settings-area');
+  const processingSection = document.getElementById('processing-section');
+  const resultsSection = document.getElementById('results-section');
+  const imgCountLabel = document.getElementById('img-count-label');
+  const qualityRange = document.getElementById('quality-range');
+  const qualityVal = document.getElementById('quality-val');
+  const formatSelect = document.getElementById('format-select');
+  const btnChangeFiles = document.getElementById('btn-change-files');
+  const btnCompress = document.getElementById('btn-compress');
+  const btnDownloadAll = document.getElementById('btn-download-all');
+  const btnCompressAgain = document.getElementById('btn-compress-again');
+  const resultsTbody = document.getElementById('results-tbody');
+  const savingsSummary = document.getElementById('savings-summary');
+
+  qualityRange.addEventListener('input', () => {
+    qualityVal.textContent = `${qualityRange.value}%`;
+  });
+
+  function handleFiles(files) {
+    for (const f of files) {
+      try {
+        FW.file.validateSize(f, 50);
+        FW.file.validateType(f, ['jpg', 'jpeg', 'png', 'webp', 'gif', 'bmp']);
+        if (selectedFiles.length >= 30) {
+          FW.toast.warning('Maximum 30 images.');
+          break;
+        }
+        selectedFiles.push(f);
+      } catch(e) {
+        FW.toast.error(e.message);
+      }
+    }
+    if (selectedFiles.length > 0) {
+      dropArea.classList.add('hidden');
+      settingsArea.classList.remove('hidden');
+      imgCountLabel.textContent = `${selectedFiles.length} image${selectedFiles.length > 1 ? 's' : ''} selected`;
+    }
+  }
+
+  FW.dropzone.init(dropzone, fileInput, handleFiles, { accept: 'image/*', multiple: true });
+
+  btnChangeFiles.addEventListener('click', () => {
+    selectedFiles = [];
+    settingsArea.classList.add('hidden');
+    dropArea.classList.remove('hidden');
+    fileInput.value = '';
+  });
+
+  btnCompress.addEventListener('click', async () => {
+    if (selectedFiles.length === 0) return;
+    settingsArea.classList.add('hidden');
+    processingSection.classList.remove('hidden');
+    FW.analytics.track('processing_started', { tool: 'image_compress', count: selectedFiles.length });
+
+    compressedResults = [];
+    const quality = parseFloat(qualityRange.value) / 100;
+    const chosenFormat = formatSelect.value === 'auto' ? null : formatSelect.value;
+
+    try {
+      let totalOriginalSize = 0;
+      let totalNewSize = 0;
+
+      for (const file of selectedFiles) {
+        totalOriginalSize += file.size;
+        const res = await ImageTools.compress(file, quality, chosenFormat);
+        compressedResults.push({
+          originalFile: file,
+          blob: res.blob,
+          name: res.name
+        });
+        totalNewSize += res.blob.size;
+      }
+
+      processingSection.classList.add('hidden');
+      resultsSection.classList.remove('hidden');
+
+      const savedBytes = Math.max(0, totalOriginalSize - totalNewSize);
+      const savedPct = totalOriginalSize > 0 ? Math.round((savedBytes / totalOriginalSize) * 100) : 0;
+      savingsSummary.textContent = `Total saved: ${FW.file.formatSize(savedBytes)} (${savedPct}% reduction)`;
+
+      // Render table
+      resultsTbody.innerHTML = '';
+      compressedResults.forEach((item, index) => {
+        const itemSaved = Math.max(0, item.originalFile.size - item.blob.size);
+        const itemPct = item.originalFile.size > 0 ? Math.round((itemSaved / item.originalFile.size) * 100) : 0;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${item.name}</strong></td>
+          <td>${FW.file.formatSize(item.originalFile.size)}</td>
+          <td>${FW.file.formatSize(item.blob.size)}</td>
+          <td><span class="savings-badge">-${itemPct}%</span></td>
+          <td><button class="btn btn-ghost btn-sm" data-idx="${index}">⬇ Download</button></td>
+        `;
+        resultsTbody.appendChild(tr);
+      });
+
+      resultsTbody.querySelectorAll('[data-idx]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.idx);
+          const r = compressedResults[idx];
+          FW.file.download(r.blob, r.name);
+        });
+      });
+
+      FW.analytics.track('processing_completed', { tool: 'image_compress' });
+    } catch(e) {
+      processingSection.classList.add('hidden');
+      settingsArea.classList.remove('hidden');
+      FW.toast.error(e.message || 'Compression failed.');
+      FW.analytics.track('error_occurred', { tool: 'image_compress' });
+    }
+  });
+
+  btnDownloadAll.addEventListener('click', async () => {
+    if (compressedResults.length === 0) return;
+    if (compressedResults.length === 1) {
+      FW.file.download(compressedResults[0].blob, compressedResults[0].name);
+      return;
+    }
+    try {
+      const zip = new JSZip();
+      compressedResults.forEach(r => zip.file(r.name, r.blob));
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      FW.file.download(zipBlob, 'compressed_images.zip');
+      FW.analytics.track('download_started', { tool: 'image_compress' });
+    } catch(e) {
+      FW.toast.error('Failed to create ZIP package.');
+    }
+  });
+
+  btnCompressAgain.addEventListener('click', () => {
+    selectedFiles = [];
+    compressedResults = [];
+    resultsSection.classList.add('hidden');
+    dropArea.classList.remove('hidden');
+    fileInput.value = '';
+  });
+
+  FW.analytics.track('tool_open', { tool: 'image_compress' });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reorder PDF Pages Online — Free PDF Page Organizer | FileWorks</title>
+  <meta name="description" content="Reorder, rearrange, and sort PDF pages online for free. Drag and drop pages into any order. Files are processed locally in your browser with no upload required.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://fileworks.pages.dev/pages/pdf-reorder.html">
+  <meta property="og:title" content="Reorder PDF Pages Online — FileWorks">
+  <meta property="og:description" content="Rearrange PDF pages into any order. Drag and drop in your browser for free.">
+  <meta property="og:type" content="website">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Reorder PDF — FileWorks","description":"Rearrange pages of a PDF document online for free, processed client-side.","applicationCategory":"UtilitiesApplication","url":"https://fileworks.pages.dev/pages/pdf-reorder.html","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <style>
+    .page-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .page-card {
+      background: var(--color-surface);
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 16px 12px;
+      text-align: center;
+      cursor: grab;
+      user-select: none;
+      transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .page-card:hover {
+      border-color: var(--color-primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    .page-card.dragging {
+      opacity: 0.4;
+      border-style: dashed;
+    }
+    .page-card.drag-target {
+      border-color: var(--color-accent);
+      background: rgba(6, 182, 212, 0.08);
+    }
+    .page-card__num {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+    .page-card__label {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+    }
+    .page-card__btn-group {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px;
+    }
+    .page-card__mini-btn {
+      background: var(--color-surface-hover);
+      border: 1px solid var(--color-border);
+      color: var(--color-text);
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+    }
+    .page-card__mini-btn:hover {
+      background: var(--color-primary);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav" role="navigation"><div class="nav__inner">
+  <a href="/" class="nav__logo"><span class="nav__logo-icon">⚡</span>FileWorks</a>
+  <div class="nav__links">
+    <a href="/" class="nav__link" id="nav-home">Tools</a>
+    <a href="/pages/privacy.html" class="nav__link">Privacy</a>
+    <a href="/pages/terms.html" class="nav__link">Terms</a>
+  </div>
+  <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Menu">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+</div></nav>
+<nav class="nav-mobile-menu" id="nav-mobile-menu">
+  <a href="/">🔧 Tools</a><a href="/pages/privacy.html">🔒 Privacy</a><a href="/pages/terms.html">📜 Terms</a>
+</nav>
+
+<main class="tool-page" id="main-content">
+<div class="container-tool">
+
+  <!-- Header -->
+  <div class="tool-header">
+    <a href="/" class="tool-header__back" id="back-link">← All Tools</a>
+    <div class="tool-header__icon" style="background:rgba(139,92,246,0.15);" id="tool-icon">📑</div>
+    <h1 id="tool-title">Reorder PDF Pages</h1>
+    <p class="tool-header__desc" id="tool-desc">Rearrange pages in your PDF document. Drag and drop page cards or use arrow buttons to organize them.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+      <span class="badge badge-privacy">🔒 Files stay local</span>
+      <span class="badge badge-primary">Free</span>
+    </div>
+  </div>
+
+  <!-- Ad slot: Above tool -->
+  <div class="ad-container ad-container--banner" id="ad-top" style="margin-bottom:28px;" aria-label="Advertisement">
+    <span class="ad-container__label">Advertisement</span>
+  </div>
+
+  <!-- Main Tool Container -->
+  <div id="tool-body">
+    <!-- Dropzone -->
+    <div id="input-section">
+      <div class="dropzone" id="dropzone" role="button" aria-label="Drop a PDF file here or click to select">
+        <div class="dropzone__icon">📄</div>
+        <p class="dropzone__title">Drop a PDF file here</p>
+        <p class="dropzone__sub">or click to browse — up to 200 MB</p>
+        <input type="file" id="file-input" accept=".pdf" aria-label="Select PDF file">
+      </div>
+    </div>
+
+    <!-- Reorder Workspace -->
+    <div id="workspace-section" class="hidden" style="margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+        <div>
+          <strong id="file-name-label">Document</strong>
+          <span class="badge" id="page-count-badge" style="margin-left:8px;">0 pages</span>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-ghost btn-sm" id="btn-reverse">⇄ Reverse</button>
+          <button class="btn btn-ghost btn-sm" id="btn-reset">↺ Reset Order</button>
+          <button class="btn btn-ghost btn-sm" id="btn-change-file">Change File</button>
+        </div>
+      </div>
+
+      <p class="section-label">Drag page cards to reorder, or use the ◀ ▶ buttons:</p>
+      <div class="page-grid" id="page-grid"></div>
+
+      <div style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-primary" id="btn-save-reorder">📑 Save & Download Reordered PDF</button>
+      </div>
+    </div>
+
+    <!-- Processing Overlay -->
+    <div id="processing-section" class="hidden">
+      <div class="processing-overlay">
+        <div class="spinner"></div>
+        <p id="processing-msg">Generating reordered PDF...</p>
+        <div class="progress-bar" style="width:200px;"><div class="progress-bar__fill" style="width:100%"></div></div>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div id="result-section" class="hidden">
+      <div class="result-section">
+        <div class="result-section__icon">✅</div>
+        <h3>PDF Pages Reordered!</h3>
+        <p id="result-desc">Your rearranged document is ready to download.</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn btn-success" id="btn-download">⬇ Download Reordered PDF</button>
+          <button class="btn btn-ghost" id="btn-reorder-again">Reorder Another File</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ad slot: Mid page -->
+  <div class="ad-container ad-container--banner" id="ad-mid" style="margin-top:32px;" aria-label="Advertisement">
+    <span class="ad-container__label">Advertisement</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- How to use -->
+  <section id="how-to">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">How to Reorder PDF Pages</h2>
+    <div class="how-step">
+      <div class="how-step__num">1</div>
+      <div><strong>Select your PDF:</strong> Upload the PDF file you want to organize.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-step__num">2</div>
+      <div><strong>Drag & drop to rearrange:</strong> Grab any page number card and drop it where you want it. Or use the ◀ and ▶ buttons.</div>
+    </div>
+    <div class="how-step">
+      <div class="how-step__num">3</div>
+      <div><strong>Download:</strong> Click "Save & Download Reordered PDF" to instantly get your new document.</div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
+    <div class="faq">
+      <details class="faq-item"><summary>Is reordering PDF pages secure?</summary><div class="faq-item__body">Yes! The PDF is rearranged entirely in your web browser using WebAssembly and client-side JavaScript. Your file is never uploaded to any remote server.</div></details>
+      <details class="faq-item"><summary>Can I duplicate or delete pages?</summary><div class="faq-item__body">To delete or extract specific pages, use our <a href="/pages/pdf-split.html">PDF Split</a> tool. This tool specifically reorders the existing pages.</div></details>
+      <details class="faq-item"><summary>Is there a page count limit?</summary><div class="faq-item__body">You can reorder documents with hundreds of pages smoothly. Performance depends on your device's memory.</div></details>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Related Tools -->
+  <section id="related-tools">
+    <h2 style="margin-bottom:20px;font-size:1.4rem;">Related PDF Tools</h2>
+    <div class="related-tools">
+      <a href="/pages/pdf-merge.html" class="related-tool"><span class="related-tool__icon">🔀</span>Merge PDF</a>
+      <a href="/pages/pdf-split.html" class="related-tool"><span class="related-tool__icon">✂️</span>Split PDF</a>
+      <a href="/pages/pdf-rotate.html" class="related-tool"><span class="related-tool__icon">🔄</span>Rotate PDF</a>
+      <a href="/pages/pdf-compress.html" class="related-tool"><span class="related-tool__icon">⚡</span>Compress PDF</a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer class="footer"><div class="container">
+  <div class="footer__bottom">
+    <p>© 2026 FileWorks. All rights reserved.</p>
+    <p><a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a> · <a href="/pages/terms.html" style="color:var(--color-primary);">Terms</a></p>
+  </div>
+</div></footer>
+
+<div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
+  <p>We display ads to keep FileWorks free. Files are processed locally. <a href="/pages/privacy.html">Privacy Policy</a></p>
+  <div class="cookie-banner__actions">
+    <button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button>
+    <button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button>
+  </div>
+</div>
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/tools/pdf-tools.js"></script>
+<script>
+(function() {
+  let currentFile = null;
+  let totalPages = 0;
+  let pageOrder = []; // array of original 1-based page numbers
+  let resultBlob = null;
+
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('file-input');
+  const inputSection = document.getElementById('input-section');
+  const workspaceSection = document.getElementById('workspace-section');
+  const processingSection = document.getElementById('processing-section');
+  const resultSection = document.getElementById('result-section');
+  const pageGrid = document.getElementById('page-grid');
+  const fileNameLabel = document.getElementById('file-name-label');
+  const pageCountBadge = document.getElementById('page-count-badge');
+  const btnReverse = document.getElementById('btn-reverse');
+  const btnReset = document.getElementById('btn-reset');
+  const btnChangeFile = document.getElementById('btn-change-file');
+  const btnSaveReorder = document.getElementById('btn-save-reorder');
+  const btnDownload = document.getElementById('btn-download');
+  const btnReorderAgain = document.getElementById('btn-reorder-again');
+
+  async function handleFile(file) {
+    try {
+      FW.file.validateSize(file, 200);
+      FW.file.validateType(file, ['pdf']);
+      currentFile = file;
+      fileNameLabel.textContent = file.name;
+      totalPages = await PdfTools.getPageCount(file);
+      if (totalPages < 2) {
+        FW.toast.warning('This PDF only has 1 page. Select a document with multiple pages to reorder.');
+        return;
+      }
+      pageCountBadge.textContent = `${totalPages} pages`;
+      pageOrder = Array.from({ length: totalPages }, (_, i) => i + 1);
+      inputSection.classList.add('hidden');
+      workspaceSection.classList.remove('hidden');
+      renderGrid();
+    } catch(e) {
+      FW.toast.error(e.message || 'Failed to read PDF file.');
+    }
+  }
+
+  function renderGrid() {
+    pageGrid.innerHTML = '';
+    pageOrder.forEach((originalPageNum, index) => {
+      const card = document.createElement('div');
+      card.className = 'page-card';
+      card.draggable = true;
+      card.dataset.index = index;
+      card.innerHTML = `
+        <span class="page-card__num">${originalPageNum}</span>
+        <span class="page-card__label">Slot ${index + 1}</span>
+        <div class="page-card__btn-group">
+          <button class="page-card__mini-btn" data-action="prev" title="Move Left" ${index === 0 ? 'disabled' : ''}>◀</button>
+          <button class="page-card__mini-btn" data-action="next" title="Move Right" ${index === pageOrder.length - 1 ? 'disabled' : ''}>▶</button>
+        </div>
+      `;
+      pageGrid.appendChild(card);
+    });
+
+    setupCardDrag(pageGrid);
+
+    pageGrid.querySelectorAll('[data-action]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const action = btn.dataset.action;
+        const card = btn.closest('.page-card');
+        const idx = parseInt(card.dataset.index);
+        if (action === 'prev' && idx > 0) {
+          const temp = pageOrder[idx];
+          pageOrder[idx] = pageOrder[idx - 1];
+          pageOrder[idx - 1] = temp;
+          renderGrid();
+        } else if (action === 'next' && idx < pageOrder.length - 1) {
+          const temp = pageOrder[idx];
+          pageOrder[idx] = pageOrder[idx + 1];
+          pageOrder[idx + 1] = temp;
+          renderGrid();
+        }
+      });
+    });
+  }
+
+  function setupCardDrag(grid) {
+    let dragIdx = null;
+    grid.querySelectorAll('.page-card').forEach(card => {
+      card.addEventListener('dragstart', (e) => {
+        dragIdx = parseInt(card.dataset.index);
+        card.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      card.addEventListener('dragend', () => card.classList.remove('dragging'));
+      card.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        card.classList.add('drag-target');
+      });
+      card.addEventListener('dragleave', () => card.classList.remove('drag-target'));
+      card.addEventListener('drop', (e) => {
+        e.preventDefault();
+        card.classList.remove('drag-target');
+        const dropIdx = parseInt(card.dataset.index);
+        if (dragIdx === null || dragIdx === dropIdx) return;
+        const moved = pageOrder.splice(dragIdx, 1)[0];
+        pageOrder.splice(dropIdx, 0, moved);
+        dragIdx = null;
+        renderGrid();
+      });
+    });
+  }
+
+  FW.dropzone.init(dropzone, fileInput, (files) => {
+    if (files.length > 0) handleFile(files[0]);
+  }, { accept: '.pdf', multiple: false });
+
+  btnReverse.addEventListener('click', () => {
+    pageOrder.reverse();
+    renderGrid();
+  });
+
+  btnReset.addEventListener('click', () => {
+    pageOrder = Array.from({ length: totalPages }, (_, i) => i + 1);
+    renderGrid();
+  });
+
+  btnChangeFile.addEventListener('click', () => {
+    currentFile = null;
+    workspaceSection.classList.add('hidden');
+    inputSection.classList.remove('hidden');
+    fileInput.value = '';
+  });
+
+  btnSaveReorder.addEventListener('click', async () => {
+    if (!currentFile) return;
+    workspaceSection.classList.add('hidden');
+    processingSection.classList.remove('hidden');
+    FW.analytics.track('processing_started', { tool: 'pdf_reorder' });
+    try {
+      const outName = currentFile.name.replace(/\.pdf$/i, '_reordered.pdf');
+      const res = await PdfTools.reorder(currentFile, pageOrder, outName);
+      resultBlob = res.blob;
+      processingSection.classList.add('hidden');
+      resultSection.classList.remove('hidden');
+      document.getElementById('result-desc').textContent = `Reordered ${pageOrder.length} pages (${FW.file.formatSize(resultBlob.size)})`;
+      FW.analytics.track('processing_completed', { tool: 'pdf_reorder' });
+    } catch(e) {
+      processingSection.classList.add('hidden');
+      workspaceSection.classList.remove('hidden');
+      FW.toast.error(e.message || 'Failed to reorder PDF.');
+      FW.analytics.track('error_occurred', { tool: 'pdf_reorder' });
+    }
+  });
+
+  btnDownload.addEventListener('click', () => {
+    if (!resultBlob || !currentFile) return;
+    const outName = currentFile.name.replace(/\.pdf$/i, '_reordered.pdf');
+    FW.file.download(resultBlob, outName);
+    FW.analytics.track('download_started', { tool: 'pdf_reorder' });
+  });
+
+  btnReorderAgain.addEventListener('click', () => {
+    currentFile = null;
+    resultBlob = null;
+    resultSection.classList.add('hidden');
+    inputSection.classList.remove('hidden');
+    fileInput.value = '';
+  });
+
+  FW.analytics.track('tool_open', { tool: 'pdf_reorder' });
+})();
+</script>
+</body>
+</html>

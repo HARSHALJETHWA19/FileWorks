@@ -14,6 +14,7 @@ import '../../../history/models/history_item.dart';
 import '../../../history/providers/history_provider.dart';
 import '../../../monetization/ad_service.dart';
 import '../../../monetization/free_usage_config.dart';
+import '../../../monetization/presentation/banner_ad_widget.dart';
 import '../../../monetization/providers/monetization_provider.dart';
 import '../../../monetization/services/free_limit_helper.dart';
 import '../../models/pdf_models.dart';
@@ -34,6 +35,14 @@ class _PdfSplitScreenState extends ConsumerState<PdfSplitScreen> {
 
   PdfSplitMode _mode = PdfSplitMode.everyPage;
   final TextEditingController _rangeController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(adServiceProvider).preloadInterstitialAd();
+    });
+  }
 
   Future<void> _pickFile() async {
     final file = await FilePickerHelper.pickSinglePdfFile();
@@ -322,6 +331,8 @@ class _PdfSplitScreenState extends ConsumerState<PdfSplitScreen> {
                 onPressed: _processSplit,
               ),
             ),
+          if (_selectedFile == null)
+            const BannerAdContainer(),
         ],
       ),
     );

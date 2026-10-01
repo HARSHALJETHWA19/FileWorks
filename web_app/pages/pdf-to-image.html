@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convert PDF to Image Online — Free PDF to JPG/PNG | FileWorks</title>
+  <meta name="description" content="Convert PDF pages to JPG or PNG images online for free. High quality rendering, no file upload needed. 100% private browser-based PDF to image converter.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://fileworks.pages.dev/pages/pdf-to-image.html">
+  <meta property="og:title" content="PDF to Image Converter — FileWorks">
+  <meta property="og:description" content="Convert PDF pages into high resolution JPG or PNG images directly in your browser.">
+  <meta property="og:type" content="website">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"PDF to Image — FileWorks","description":"Convert PDF pages into JPG or PNG images online for free, processed client-side.","applicationCategory":"UtilitiesApplication","url":"https://fileworks.pages.dev/pages/pdf-to-image.html","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <style>
+    .image-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .image-preview-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .image-preview-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: contain;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+    }
+    .image-preview-card__info {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .image-preview-card__name {
+      font-size: 0.8rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--color-text);
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav" role="navigation"><div class="nav__inner">
+  <a href="/" class="nav__logo"><span class="nav__logo-icon">⚡</span>FileWorks</a>
+  <div class="nav__links">
+    <a href="/" class="nav__link" id="nav-home">Tools</a>
+    <a href="/pages/privacy.html" class="nav__link">Privacy</a>
+    <a href="/pages/terms.html" class="nav__link">Terms</a>
+  </div>
+  <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Menu">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+</div></nav>
+<nav class="nav-mobile-menu" id="nav-mobile-menu">
+  <a href="/">🔧 Tools</a><a href="/pages/privacy.html">🔒 Privacy</a><a href="/pages/terms.html">📜 Terms</a>
+</nav>
+
+<main class="tool-page" id="main-content">
+<div class="container-tool">
+
+  <!-- Header -->
+  <div class="tool-header">
+    <a href="/" class="tool-header__back" id="back-link">← All Tools</a>
+    <div class="tool-header__icon" style="background:rgba(234,88,12,0.15);" id="tool-icon">🖼️</div>
+    <h1 id="tool-title">PDF to Image Converter</h1>
+    <p class="tool-header__desc" id="tool-desc">Extract high-resolution JPG or PNG images from each page of your PDF document.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+      <span class="badge badge-privacy">🔒 Files stay local</span>
+      <span class="badge badge-primary">Free</span>
+    </div>
+  </div>
+
+  <!-- Ad slot: Above tool -->
+  <div class="ad-container ad-container--banner" id="ad-top" style="margin-bottom:28px;" aria-label="Advertisement">
+    <span class="ad-container__label">Advertisement</span>
+  </div>
+
+  <!-- File Input -->
+  <div id="input-section">
+    <div class="dropzone" id="dropzone" role="button" aria-label="Drop a PDF file here or click to select">
+      <div class="dropzone__icon">📄</div>
+      <p class="dropzone__title">Drop a PDF file here</p>
+      <p class="dropzone__sub">or click to browse — up to 200 MB</p>
+      <input type="file" id="file-input" accept=".pdf" aria-label="Select PDF file">
+    </div>
+  </div>
+
+  <!-- Options Section -->
+  <div id="options-section" class="hidden" style="margin-top:20px;">
+    <div class="card" style="padding:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div>
+          <strong id="file-name-label">Document</strong>
+          <span class="badge" id="page-count-badge" style="margin-left:8px;">0 pages</span>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="btn-change-file">Change File</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;">
+        <div class="form-group">
+          <label class="form-label" for="format-select">Image Format</label>
+          <select class="form-input" id="format-select">
+            <option value="jpeg">JPG (Smaller file size)</option>
+            <option value="png">PNG (Lossless, sharp text)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="page-scope">Pages to Convert</label>
+          <select class="form-input" id="page-scope">
+            <option value="all">All Pages</option>
+            <option value="first">First Page Only</option>
+            <option value="custom">Custom Page Numbers / Range</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group hidden" id="custom-pages-group" style="margin-top:12px;">
+        <label class="form-label" for="custom-pages-input">Page numbers (e.g. 1, 3-5, 8)</label>
+        <input type="text" class="form-input" id="custom-pages-input" placeholder="e.g. 1, 2-4">
+      </div>
+
+      <div style="margin-top:20px;">
+        <button class="btn btn-primary" id="btn-convert">🖼️ Convert to Images</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Processing -->
+  <div id="processing-section" class="hidden" style="margin-top:20px;">
+    <div class="processing-overlay">
+      <div class="spinner"></div>
+      <p id="processing-msg">Rendering PDF pages...</p>
+      <div class="progress-bar" style="width:240px;"><div class="progress-bar__fill" id="progress-bar-fill" style="width:0%"></div></div>
+      <span id="progress-text" style="font-size:0.85rem;color:var(--color-text-muted);">0 / 0 pages</span>
+    </div>
+  </div>
+
+  <!-- Result Section -->
+  <div id="result-section" class="hidden" style="margin-top:20px;">
+    <div class="result-section">
+      <div class="result-section__icon">✅</div>
+      <h3>Pages Converted!</h3>
+      <p id="result-desc">Images rendered successfully.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;">
+        <button class="btn btn-success" id="btn-download-all">⬇ Download All (ZIP)</button>
+        <button class="btn btn-ghost" id="btn-convert-another">Convert Another File</button>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;">
+      <h4 style="margin-bottom:12px;">Converted Pages:</h4>
+      <div class="image-preview-grid" id="image-preview-grid"></div>
+    </div>
+  </div>
+
+  <!-- Ad slot: Mid page -->
+  <div class="ad-container ad-container--banner" id="ad-mid" style="margin-top:32px;" aria-label="Advertisement">
+    <span class="ad-container__label">Advertisement</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
+    <div class="faq">
+      <details class="faq-item"><summary>What resolution are the converted images?</summary><div class="faq-item__body">Pages are rendered at 2x scale (approximately 144 DPI) for crisp readability of text and graphics.</div></details>
+      <details class="faq-item"><summary>Should I pick JPG or PNG?</summary><div class="faq-item__body">Choose JPG for standard documents and photos to keep download file sizes small. Choose PNG for charts, line art, or documents where maximum sharpness is needed.</div></details>
+      <details class="faq-item"><summary>Are my PDF documents uploaded?</summary><div class="faq-item__body">No. FileWorks uses Mozilla's PDF.js library to render pages directly inside your browser. No files are transferred to any server.</div></details>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Related Tools -->
+  <section id="related-tools">
+    <h2 style="margin-bottom:20px;font-size:1.4rem;">Related PDF Tools</h2>
+    <div class="related-tools">
+      <a href="/pages/image-to-pdf.html" class="related-tool"><span class="related-tool__icon">📄</span>Image to PDF</a>
+      <a href="/pages/pdf-merge.html" class="related-tool"><span class="related-tool__icon">🔀</span>Merge PDF</a>
+      <a href="/pages/pdf-split.html" class="related-tool"><span class="related-tool__icon">✂️</span>Split PDF</a>
+      <a href="/pages/image-compress.html" class="related-tool"><span class="related-tool__icon">🗜️</span>Compress Image</a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer class="footer"><div class="container">
+  <div class="footer__bottom">
+    <p>© 2026 FileWorks. All rights reserved.</p>
+    <p><a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a> · <a href="/pages/terms.html" style="color:var(--color-primary);">Terms</a></p>
+  </div>
+</div></footer>
+
+<div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
+  <p>We display ads to keep FileWorks free. Files are processed locally. <a href="/pages/privacy.html">Privacy Policy</a></p>
+  <div class="cookie-banner__actions">
+    <button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button>
+    <button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button>
+  </div>
+</div>
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<!-- Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/tools/pdf-tools.js"></script>
+<script src="/js/tools/file-tools.js"></script>
+<script>
+(function() {
+  let currentFile = null;
+  let totalDocPages = 0;
+  let convertedImages = []; // { blob, name, url }
+
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('file-input');
+  const inputSection = document.getElementById('input-section');
+  const optionsSection = document.getElementById('options-section');
+  const processingSection = document.getElementById('processing-section');
+  const resultSection = document.getElementById('result-section');
+  const fileNameLabel = document.getElementById('file-name-label');
+  const pageCountBadge = document.getElementById('page-count-badge');
+  const formatSelect = document.getElementById('format-select');
+  const pageScope = document.getElementById('page-scope');
+  const customPagesGroup = document.getElementById('custom-pages-group');
+  const customPagesInput = document.getElementById('custom-pages-input');
+  const btnChangeFile = document.getElementById('btn-change-file');
+  const btnConvert = document.getElementById('btn-convert');
+  const btnDownloadAll = document.getElementById('btn-download-all');
+  const btnConvertAnother = document.getElementById('btn-convert-another');
+  const progressBarFill = document.getElementById('progress-bar-fill');
+  const progressText = document.getElementById('progress-text');
+  const imagePreviewGrid = document.getElementById('image-preview-grid');
+
+  pageScope.addEventListener('change', () => {
+    if (pageScope.value === 'custom') {
+      customPagesGroup.classList.remove('hidden');
+    } else {
+      customPagesGroup.classList.add('hidden');
+    }
+  });
+
+  async function handleFile(file) {
+    try {
+      FW.file.validateSize(file, 200);
+      FW.file.validateType(file, ['pdf']);
+      currentFile = file;
+      fileNameLabel.textContent = file.name;
+
+      const arrayBuffer = await FW.file.readAsArrayBuffer(file);
+      const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+      const pdfDoc = await loadingTask.promise;
+      totalDocPages = pdfDoc.numPages;
+
+      pageCountBadge.textContent = `${totalDocPages} page${totalDocPages > 1 ? 's' : ''}`;
+      inputSection.classList.add('hidden');
+      optionsSection.classList.remove('hidden');
+    } catch(e) {
+      FW.toast.error(e.message || 'Failed to read PDF document.');
+    }
+  }
+
+  FW.dropzone.init(dropzone, fileInput, (files) => {
+    if (files.length > 0) handleFile(files[0]);
+  }, { accept: '.pdf', multiple: false });
+
+  btnChangeFile.addEventListener('click', () => {
+    currentFile = null;
+    optionsSection.classList.add('hidden');
+    inputSection.classList.remove('hidden');
+    fileInput.value = '';
+  });
+
+  function parsePageSelection() {
+    const scope = pageScope.value;
+    if (scope === 'all') {
+      return Array.from({ length: totalDocPages }, (_, i) => i + 1);
+    }
+    if (scope === 'first') {
+      return [1];
+    }
+    const raw = customPagesInput.value.trim();
+    if (!raw) throw new Error('Please enter page numbers or ranges (e.g. 1, 2-4).');
+    const pages = new Set();
+    const parts = raw.split(',');
+    for (const part of parts) {
+      const p = part.trim();
+      if (p.includes('-')) {
+        const [start, end] = p.split('-').map(s => parseInt(s.trim()));
+        if (isNaN(start) || isNaN(end)) continue;
+        for (let i = Math.max(1, start); i <= Math.min(totalDocPages, end); i++) {
+          pages.add(i);
+        }
+      } else {
+        const num = parseInt(p);
+        if (!isNaN(num) && num >= 1 && num <= totalDocPages) {
+          pages.add(num);
+        }
+      }
+    }
+    const result = Array.from(pages).sort((a, b) => a - b);
+    if (result.length === 0) throw new Error('No valid pages found in your selection.');
+    return result;
+  }
+
+  btnConvert.addEventListener('click', async () => {
+    let pagesToConvert;
+    try {
+      pagesToConvert = parsePageSelection();
+    } catch(e) {
+      FW.toast.warning(e.message);
+      return;
+    }
+
+    optionsSection.classList.add('hidden');
+    processingSection.classList.remove('hidden');
+    progressBarFill.style.width = '0%';
+    progressText.textContent = `0 / ${pagesToConvert.length} pages`;
+    FW.analytics.track('processing_started', { tool: 'pdf_to_image', count: pagesToConvert.length });
+
+    try {
+      const format = formatSelect.value;
+      const images = await PdfTools.pdfToImages(
+        currentFile,
+        pagesToConvert,
+        format,
+        0.92,
+        (current, total) => {
+          const pct = Math.round((current / total) * 100);
+          progressBarFill.style.width = `${pct}%`;
+          progressText.textContent = `${current} / ${total} pages`;
+        }
+      );
+
+      convertedImages = images.map(img => ({
+        ...img,
+        url: URL.createObjectURL(img.blob)
+      }));
+
+      processingSection.classList.add('hidden');
+      resultSection.classList.remove('hidden');
+      document.getElementById('result-desc').textContent = `Converted ${convertedImages.length} page${convertedImages.length > 1 ? 's' : ''} to ${format.toUpperCase()}`;
+
+      // Render previews
+      imagePreviewGrid.innerHTML = '';
+      convertedImages.forEach((img, i) => {
+        const card = document.createElement('div');
+        card.className = 'image-preview-card';
+        card.innerHTML = `
+          <img src="${img.url}" alt="${img.name}">
+          <div class="image-preview-card__info">
+            <span class="image-preview-card__name" title="${img.name}">${img.name}</span>
+            <button class="btn btn-ghost btn-sm" data-idx="${i}" style="width:100%;font-size:0.75rem;">⬇ Download</button>
+          </div>
+        `;
+        imagePreviewGrid.appendChild(card);
+      });
+
+      imagePreviewGrid.querySelectorAll('[data-idx]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const idx = parseInt(btn.dataset.idx);
+          const item = convertedImages[idx];
+          FW.file.download(item.blob, item.name);
+        });
+      });
+
+      FW.analytics.track('processing_completed', { tool: 'pdf_to_image' });
+    } catch(e) {
+      processingSection.classList.add('hidden');
+      optionsSection.classList.remove('hidden');
+      FW.toast.error(e.message || 'Conversion failed.');
+      FW.analytics.track('error_occurred', { tool: 'pdf_to_image' });
+    }
+  });
+
+  btnDownloadAll.addEventListener('click', async () => {
+    if (convertedImages.length === 0) return;
+    if (convertedImages.length === 1) {
+      FW.file.download(convertedImages[0].blob, convertedImages[0].name);
+      return;
+    }
+    try {
+      const zipName = currentFile.name.replace(/\.pdf$/i, '_images.zip');
+      const zip = new JSZip();
+      convertedImages.forEach(img => zip.file(img.name, img.blob));
+      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      FW.file.download(zipBlob, zipName);
+      FW.analytics.track('download_started', { tool: 'pdf_to_image' });
+    } catch(e) {
+      FW.toast.error('Failed to create ZIP package.');
+    }
+  });
+
+  btnConvertAnother.addEventListener('click', () => {
+    convertedImages.forEach(img => URL.revokeObjectURL(img.url));
+    convertedImages = [];
+    currentFile = null;
+    resultSection.classList.add('hidden');
+    inputSection.classList.remove('hidden');
+    fileInput.value = '';
+  });
+
+  FW.analytics.track('tool_open', { tool: 'pdf_to_image' });
+})();
+</script>
+</body>
+</html>

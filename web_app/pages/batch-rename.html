@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Batch Rename Files Online — Free File Renaming Tool | FileWorks</title>
+  <meta name="description" content="Rename multiple files at once online for free. Use custom patterns, sequential numbering, dates, and find-and-replace. Instant live preview and ZIP download.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://fileworks.pages.dev/pages/batch-rename.html">
+  <meta property="og:title" content="Batch Rename Files Online — FileWorks">
+  <meta property="og:description" content="Rename multiple files quickly with numbering patterns and find/replace. 100% free and in-browser.">
+  <meta property="og:type" content="website">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Batch Rename — FileWorks","description":"Rename files in batch using numbering and patterns online for free, processed client-side.","applicationCategory":"UtilitiesApplication","url":"https://fileworks.pages.dev/pages/batch-rename.html","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <style>
+    .token-chips {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    .token-chip {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      color: var(--color-primary);
+      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: monospace;
+    }
+    .token-chip:hover {
+      background: var(--color-primary);
+      color: #fff;
+    }
+    .rename-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+      font-size: 0.85rem;
+    }
+    .rename-table th, .rename-table td {
+      padding: 8px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--color-border);
+    }
+    .rename-table th {
+      background: var(--color-surface);
+      color: var(--color-text-muted);
+    }
+    .new-name-text {
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav" role="navigation"><div class="nav__inner">
+  <a href="/" class="nav__logo"><span class="nav__logo-icon">⚡</span>FileWorks</a>
+  <div class="nav__links">
+    <a href="/" class="nav__link" id="nav-home">Tools</a>
+    <a href="/pages/privacy.html" class="nav__link">Privacy</a>
+    <a href="/pages/terms.html" class="nav__link">Terms</a>
+  </div>
+  <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Menu">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+</div></nav>
+<nav class="nav-mobile-menu" id="nav-mobile-menu">
+  <a href="/">🔧 Tools</a><a href="/pages/privacy.html">🔒 Privacy</a><a href="/pages/terms.html">📜 Terms</a>
+</nav>
+
+<main class="tool-page" id="main-content">
+<div class="container-tool">
+
+  <!-- Header -->
+  <div class="tool-header">
+    <a href="/" class="tool-header__back" id="back-link">← All Tools</a>
+    <div class="tool-header__icon" style="background:rgba(99,102,241,0.15);" id="tool-icon">🏷️</div>
+    <h1 id="tool-title">Batch Rename Files Online</h1>
+    <p class="tool-header__desc" id="tool-desc">Quickly rename hundreds of files using sequential numbers, date stamps, and find-and-replace rules.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+      <span class="badge badge-privacy">🔒 Files stay local</span>
+      <span class="badge badge-primary">Free</span>
+    </div>
+  </div>
+
+  <!-- Ad slot: Above tool -->
+  <div class="ad-container ad-container--banner" id="ad-top" style="margin-bottom:28px;" aria-label="Advertisement">
+    <span class="ad-container__label">Advertisement</span>
+  </div>
+
+  <!-- Drop Area -->
+  <div id="drop-area">
+    <div class="dropzone" id="dropzone" role="button" aria-label="Drop files here or click to select">
+      <div class="dropzone__icon">📑</div>
+      <p class="dropzone__title">Drop files to rename</p>
+      <p class="dropzone__sub">Any file type supported — up to 100 files, 200 MB total</p>
+      <input type="file" id="file-input" multiple aria-label="Select files to rename">
+    </div>
+  </div>
+
+  <!-- Rename Controls & Preview -->
+  <div id="workspace-section" class="hidden" style="margin-top:20px;">
+    <div class="card" style="padding:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <span class="section-label" id="file-count-label">0 files selected</span>
+        <button class="btn btn-ghost btn-sm" id="btn-change-files">Change Files</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:16px;">
+        <div class="form-group">
+          <label class="form-label" for="pattern-input">Naming Pattern</label>
+          <input type="text" class="form-input" id="pattern-input" value="{name}_{number}">
+          <div class="token-chips">
+            <span class="token-chip" data-token="{name}">+ {name}</span>
+            <span class="token-chip" data-token="{number}">+ {number}</span>
+            <span class="token-chip" data-token="{date}">+ {date}</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="start-num-input">Start Number</label>
+          <input type="number" class="form-input" id="start-num-input" value="1" min="0">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="padding-select">Number Padding</label>
+          <select class="form-input" id="padding-select">
+            <option value="1">1, 2, 3 (No padding)</option>
+            <option value="2">01, 02, 03</option>
+            <option value="3" selected>001, 002, 003</option>
+            <option value="4">0001, 0002, 0003</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:16px;margin-top:16px;">
+        <div class="form-group">
+          <label class="form-label" for="find-input">Find Text (Optional)</label>
+          <input type="text" class="form-input" id="find-input" placeholder="e.g. IMG_">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="replace-input">Replace With</label>
+          <input type="text" class="form-input" id="replace-input" placeholder="e.g. Photo_">
+        </div>
+      </div>
+
+      <div style="margin-top:24px;">
+        <h4 style="margin-bottom:10px;">Live Rename Preview:</h4>
+        <div style="max-height:260px;overflow-y:auto;border:1px solid var(--color-border);border-radius:var(--radius-sm);">
+          <table class="rename-table">
+            <thead>
+              <tr>
+                <th>Original Filename</th>
+                <th>New Filename</th>
+              </tr>
+            </thead>
+            <tbody id="preview-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="margin-top:24px;">
+        <button class="btn btn-primary" id="btn-download-renamed">🏷️ Download Renamed Files (ZIP)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Processing -->
+  <div id="processing-section" class="hidden" style="margin-top:20px;">
+    <div class="processing-overlay">
+      <div class="spinner"></div>
+      <p id="processing-msg">Packaging renamed files into ZIP...</p>
+      <div class="progress-bar" style="width:200px;"><div class="progress-bar__fill" style="width:100%"></div></div>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div id="result-section" class="hidden" style="margin-top:20px;">
+    <div class="result-section">
+      <div class="result-section__icon">✅</div>
+      <h3>Files Renamed!</h3>
+      <p id="result-desc">Your renamed files archive is ready to download.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px;">
+        <button class="btn btn-success" id="btn-download-again">⬇ Download ZIP Again</button>
+        <button class="btn btn-ghost" id="btn-rename-more">Rename More Files</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ad slot: Mid page -->
+  <div class="ad-container ad-container--banner" id="ad-mid" style="margin-top:32px;" aria-label="Advertisement">
+    <span class="ad-container__label">Advertisement</span>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
+    <div class="faq">
+      <details class="faq-item"><summary>What tokens can I use in the naming pattern?</summary><div class="faq-item__body">You can use <code>{name}</code> for the original file name (without extension), <code>{number}</code> for the padded sequence index, and <code>{date}</code> for today's date stamp (YYYYMMDD).</div></details>
+      <details class="faq-item"><summary>Are file extensions preserved?</summary><div class="faq-item__body">Yes, all file extensions (e.g. .jpg, .pdf, .docx) are automatically maintained unless specifically changed.</div></details>
+      <details class="faq-item"><summary>How do I receive the renamed files?</summary><div class="faq-item__body">All renamed files are packaged into a single ZIP download, keeping your files organized and avoiding dozens of browser download prompts.</div></details>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Related Tools -->
+  <section id="related-tools">
+    <h2 style="margin-bottom:20px;font-size:1.4rem;">Related Tools</h2>
+    <div class="related-tools">
+      <a href="/pages/create-zip.html" class="related-tool"><span class="related-tool__icon">📦</span>Create ZIP</a>
+      <a href="/pages/extract-zip.html" class="related-tool"><span class="related-tool__icon">📂</span>Extract ZIP</a>
+      <a href="/pages/pdf-merge.html" class="related-tool"><span class="related-tool__icon">🔀</span>Merge PDF</a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer class="footer"><div class="container">
+  <div class="footer__bottom">
+    <p>© 2026 FileWorks. All rights reserved.</p>
+    <p><a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a> · <a href="/pages/terms.html" style="color:var(--color-primary);">Terms</a></p>
+  </div>
+</div></footer>
+
+<div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
+  <p>We display ads to keep FileWorks free. Files are processed locally. <a href="/pages/privacy.html">Privacy Policy</a></p>
+  <div class="cookie-banner__actions">
+    <button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button>
+    <button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button>
+  </div>
+</div>
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<!-- Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="/js/app.js"></script>
+<script src="/js/tools/file-tools.js"></script>
+<script>
+(function() {
+  let selectedFiles = [];
+  let previewItems = []; // { original, newName, file }
+  let resultBlob = null;
+
+  const dropzone = document.getElementById('dropzone');
+  const fileInput = document.getElementById('file-input');
+  const dropArea = document.getElementById('drop-area');
+  const workspaceSection = document.getElementById('workspace-section');
+  const processingSection = document.getElementById('processing-section');
+  const resultSection = document.getElementById('result-section');
+  const fileCountLabel = document.getElementById('file-count-label');
+  const patternInput = document.getElementById('pattern-input');
+  const startNumInput = document.getElementById('start-num-input');
+  const paddingSelect = document.getElementById('padding-select');
+  const findInput = document.getElementById('find-input');
+  const replaceInput = document.getElementById('replace-input');
+  const previewTbody = document.getElementById('preview-tbody');
+  const btnChangeFiles = document.getElementById('btn-change-files');
+  const btnDownloadRenamed = document.getElementById('btn-download-renamed');
+  const btnDownloadAgain = document.getElementById('btn-download-again');
+  const btnRenameMore = document.getElementById('btn-rename-more');
+
+  function handleFiles(files) {
+    for (const f of files) {
+      try {
+        FW.file.validateSize(f, 200);
+        if (selectedFiles.length >= 100) {
+          FW.toast.warning('Maximum 100 files at once.');
+          break;
+        }
+        selectedFiles.push(f);
+      } catch(e) {
+        FW.toast.error(e.message);
+      }
+    }
+    if (selectedFiles.length > 0) {
+      dropArea.classList.add('hidden');
+      workspaceSection.classList.remove('hidden');
+      fileCountLabel.textContent = `${selectedFiles.length} file${selectedFiles.length > 1 ? 's' : ''} selected`;
+      updatePreview();
+    }
+  }
+
+  function updatePreview() {
+    if (selectedFiles.length === 0) return;
+    const options = {
+      pattern: patternInput.value,
+      startNumber: parseInt(startNumInput.value) || 1,
+      zeroPadding: parseInt(paddingSelect.value) || 1,
+      findText: findInput.value,
+      replaceText: replaceInput.value,
+    };
+    previewItems = FileToolsLib.generateRenamePreview(selectedFiles, options);
+
+    previewTbody.innerHTML = '';
+    previewItems.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="color:var(--color-text-muted);">${item.original}</td>
+        <td><span class="new-name-text">${item.newName}</span></td>
+      `;
+      previewTbody.appendChild(tr);
+    });
+  }
+
+  [patternInput, startNumInput, paddingSelect, findInput, replaceInput].forEach(elem => {
+    elem.addEventListener('input', updatePreview);
+    elem.addEventListener('change', updatePreview);
+  });
+
+  document.querySelectorAll('.token-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      patternInput.value += chip.dataset.token;
+      updatePreview();
+    });
+  });
+
+  FW.dropzone.init(dropzone, fileInput, handleFiles, { multiple: true });
+
+  btnChangeFiles.addEventListener('click', () => {
+    selectedFiles = [];
+    previewItems = [];
+    workspaceSection.classList.add('hidden');
+    dropArea.classList.remove('hidden');
+    fileInput.value = '';
+  });
+
+  btnDownloadRenamed.addEventListener('click', async () => {
+    if (previewItems.length === 0) return;
+    workspaceSection.classList.add('hidden');
+    processingSection.classList.remove('hidden');
+    FW.analytics.track('processing_started', { tool: 'batch_rename', count: previewItems.length });
+
+    try {
+      const zip = new JSZip();
+      for (const item of previewItems) {
+        zip.file(item.newName, item.file);
+      }
+      resultBlob = await zip.generateAsync({ type: 'blob' });
+
+      processingSection.classList.add('hidden');
+      resultSection.classList.remove('hidden');
+      document.getElementById('result-desc').textContent = `Renamed ${previewItems.length} files (${FW.file.formatSize(resultBlob.size)})`;
+
+      FW.file.download(resultBlob, 'renamed_files.zip');
+      FW.analytics.track('processing_completed', { tool: 'batch_rename' });
+    } catch(e) {
+      processingSection.classList.add('hidden');
+      workspaceSection.classList.remove('hidden');
+      FW.toast.error(e.message || 'Failed to rename files.');
+      FW.analytics.track('error_occurred', { tool: 'batch_rename' });
+    }
+  });
+
+  btnDownloadAgain.addEventListener('click', () => {
+    if (resultBlob) FW.file.download(resultBlob, 'renamed_files.zip');
+  });
+
+  btnRenameMore.addEventListener('click', () => {
+    selectedFiles = [];
+    previewItems = [];
+    resultBlob = null;
+    resultSection.classList.add('hidden');
+    dropArea.classList.remove('hidden');
+    fileInput.value = '';
+  });
+
+  FW.analytics.track('tool_open', { tool: 'batch_rename' });
+})();
+</script>
+</body>
+</html>
