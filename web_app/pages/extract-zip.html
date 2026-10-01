@@ -7,9 +7,15 @@
   <meta name="description" content="Unzip and extract files from ZIP archives online for free. View and download individual files or download all. Safe browser-based extraction with zero file upload.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://fileworks.pages.dev/pages/extract-zip.html">
-  <meta property="og:title" content="Extract ZIP Online — FileWorks">
+  <meta property="og:title" content="Extract ZIP Online — Free Unzip Tool | FileWorks">
   <meta property="og:description" content="Unpack and extract files from ZIP archives directly in your browser. Fast, free, private.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://fileworks.pages.dev/pages/extract-zip.html">
+
+  <!-- Exact Google AdSense Snippet -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7044469500687742"
+     crossorigin="anonymous"></script>
+
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Extract ZIP — FileWorks","description":"Unzip and extract files from ZIP archives online for free, processed client-side.","applicationCategory":"UtilitiesApplication","url":"https://fileworks.pages.dev/pages/extract-zip.html","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
   <link rel="stylesheet" href="/css/main.css">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -17,7 +23,7 @@
 <body>
 
 <nav class="nav" role="navigation"><div class="nav__inner">
-  <a href="/" class="nav__logo"><span class="nav__logo-icon">⚡</span>FileWorks</a>
+  <a href="/" class="nav__logo" id="nav-logo"><span class="nav__logo-icon">⚡</span>FileWorks</a>
   <div class="nav__links">
     <a href="/" class="nav__link" id="nav-home">Tools</a>
     <a href="/pages/privacy.html" class="nav__link">Privacy</a>
@@ -39,58 +45,61 @@
     <a href="/" class="tool-header__back" id="back-link">← All Tools</a>
     <div class="tool-header__icon" style="background:rgba(20,184,166,0.15);" id="tool-icon">📂</div>
     <h1 id="tool-title">Extract ZIP File Online</h1>
-    <p class="tool-header__desc" id="tool-desc">Open, preview, and extract contents from any .ZIP file without installing extraction software.</p>
+    <p class="tool-header__desc" id="tool-desc">Unpack, preview, and extract contents from any .ZIP file directly in your browser without uploading.</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
-      <span class="badge badge-privacy">🔒 Files stay local</span>
-      <span class="badge badge-primary">Free</span>
+      <span class="badge badge-privacy" id="badge-privacy">🔒 Files stay local</span>
+      <span class="badge badge-primary" id="badge-free">Free Tier: Up to 10 Files</span>
     </div>
   </div>
 
-  <!-- Ad slot: Above tool -->
+  <!-- Ad slot: Safe top placement -->
   <div class="ad-container ad-container--banner" id="ad-top" style="margin-bottom:28px;" aria-label="Advertisement">
-    <span class="ad-container__label">Advertisement</span>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-7044469500687742"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
   </div>
 
-  <!-- Drop Area -->
-  <div id="drop-area">
-    <div class="dropzone" id="dropzone" role="button" aria-label="Drop ZIP archive here or click to select">
-      <div class="dropzone__icon">🗜️</div>
-      <p class="dropzone__title">Drop a ZIP archive here</p>
-      <p class="dropzone__sub">or click to browse — up to 200 MB</p>
-      <input type="file" id="file-input" accept=".zip" aria-label="Select ZIP file">
-    </div>
-  </div>
+  <!-- Interactive Work Area -->
+  <div id="interactive-area">
+    <div id="limit-warning-mount"></div>
 
-  <!-- Processing -->
-  <div id="processing-section" class="hidden" style="margin-top:20px;">
-    <div class="processing-overlay">
-      <div class="spinner"></div>
-      <p id="processing-msg">Unpacking archive contents...</p>
-      <div class="progress-bar" style="width:200px;"><div class="progress-bar__fill" style="width:100%"></div></div>
-    </div>
-  </div>
-
-  <!-- Extracted Results Area -->
-  <div id="extracted-section" class="hidden" style="margin-top:20px;">
-    <div class="card" style="padding:20px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
-        <div>
-          <strong id="archive-name-label">archive.zip</strong>
-          <span class="badge" id="extracted-count-badge" style="margin-left:8px;">0 files</span>
-        </div>
-        <div style="display:flex;gap:8px;">
-          <button class="btn btn-ghost btn-sm" id="btn-extract-another">Open Another ZIP</button>
-        </div>
+    <!-- Drop Area -->
+    <div id="drop-area">
+      <div class="dropzone" id="dropzone" role="button" aria-label="Drop ZIP archive here or click to select">
+        <div class="dropzone__icon">🗜️</div>
+        <p class="dropzone__title">Drop a ZIP archive here to extract</p>
+        <p class="dropzone__sub">Free tier: extract archives up to 10 files (max 200 MB)</p>
+        <input type="file" id="file-input" accept=".zip" aria-label="Select ZIP file">
       </div>
-
-      <div class="file-list" id="extracted-files-list"></div>
     </div>
+
+    <!-- Processing -->
+    <div id="processing-section" class="hidden" style="margin-top:20px;">
+      <div class="processing-overlay">
+        <div class="spinner"></div>
+        <p id="processing-msg" style="font-weight:600;font-size:1.05rem;">Unpacking archive contents locally...</p>
+        <div class="progress-bar" style="width:240px;margin-top:8px;"><div class="progress-bar__fill" style="width:100%"></div></div>
+      </div>
+    </div>
+
+    <!-- Result Mount Area -->
+    <div id="result-mount" class="hidden" style="margin-top:20px;"></div>
   </div>
 
-  <!-- Ad slot: Mid page -->
-  <div class="ad-container ad-container--banner" id="ad-mid" style="margin-top:32px;" aria-label="Advertisement">
-    <span class="ad-container__label">Advertisement</span>
-  </div>
+  <div class="divider"></div>
+
+  <!-- How to Use -->
+  <section id="how-to-use">
+    <h2 style="margin-bottom:24px;font-size:1.4rem;">How to Extract a ZIP File</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step__content"><h4>Select ZIP archive</h4><p>Choose or drop the .ZIP archive you want to extract.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step__content"><h4>Decompress locally</h4><p>FileWorks decompresses archive contents safely with Anti-Zip-Slip validation.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step__content"><h4>Preview files</h4><p>Preview extracted photos, documents, and text files right in your browser.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step__content"><h4>Download</h4><p>Download individual files directly or save everything as an organized bundle.</p></div></div>
+    </div>
+  </section>
 
   <div class="divider"></div>
 
@@ -98,9 +107,9 @@
   <section id="faq">
     <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
     <div class="faq">
-      <details class="faq-item"><summary>Can I extract specific files from an archive?</summary><div class="faq-item__body">Yes, each file in the archive has an individual "Download" button so you only save the exact files you need.</div></details>
-      <details class="faq-item"><summary>Is extracting ZIP files in browser safe?</summary><div class="faq-item__body">Yes! FileWorks includes built-in protection against path traversal and Zip Slip attacks. It processes all contents in a sandboxed client-side environment.</div></details>
-      <details class="faq-item"><summary>Do I need to install WinRAR or 7-Zip?</summary><div class="faq-item__body">No installations are required. FileWorks runs standard extraction algorithms directly within any modern web browser.</div></details>
+      <details class="faq-item"><summary>What is the free limit for ZIP extraction?</summary><div class="faq-item__body">The free tier allows extracting archives with up to 10 files, matching the Android application free limits.</div></details>
+      <details class="faq-item"><summary>Can I download individual files without re-zipping?</summary><div class="faq-item__body">Yes! Clicking Download on any extracted file saves the actual decompressed file directly.</div></details>
+      <details class="faq-item"><summary>How does FileWorks prevent malicious ZIP Slip attacks?</summary><div class="faq-item__body">FileWorks inspects every internal path in the archive, rejecting directory traversal sequences (../, absolute paths, or root escapes).</div></details>
     </div>
   </section>
 
@@ -121,13 +130,13 @@
 
 <footer class="footer"><div class="container">
   <div class="footer__bottom">
-    <p>© 2026 FileWorks. All rights reserved.</p>
-    <p><a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a> · <a href="/pages/terms.html" style="color:var(--color-primary);">Terms</a></p>
+    <p>© 2026 FileWorks. All rights reserved. 100% Free File Tools.</p>
+    <p><a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a> · <a href="/pages/terms.html" style="color:var(--color-primary);">Terms of Service</a></p>
   </div>
 </div></footer>
 
 <div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
-  <p>We display ads to keep FileWorks free. Files are processed locally. <a href="/pages/privacy.html">Privacy Policy</a></p>
+  <p>We display ads to keep FileWorks 100% free. Files stay local. <a href="/pages/privacy.html">Privacy Policy</a></p>
   <div class="cookie-banner__actions">
     <button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button>
     <button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button>
@@ -137,83 +146,89 @@
 
 <!-- Libraries -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="/js/free-usage.js"></script>
+<script src="/js/preview-modal.js"></script>
+<script src="/js/result-screen.js"></script>
 <script src="/js/app.js"></script>
 <script src="/js/tools/file-tools.js"></script>
+
 <script>
 (function() {
+  const TOOL_FEATURE = 'extractZip';
+  let currentFile = null;
   let extractedEntries = []; // { name, path, blob }
 
   const dropzone = document.getElementById('dropzone');
-  const fileInput = document.getElementById('file-input');
   const dropArea = document.getElementById('drop-area');
-  const processingSection = document.getElementById('processing-section');
-  const extractedSection = document.getElementById('extracted-section');
-  const archiveNameLabel = document.getElementById('archive-name-label');
-  const extractedCountBadge = document.getElementById('extracted-count-badge');
-  const extractedFilesList = document.getElementById('extracted-files-list');
-  const btnExtractAnother = document.getElementById('btn-extract-another');
+  const fileInput = document.getElementById('file-input');
+  const limitMount = document.getElementById('limit-warning-mount');
+  const procSection = document.getElementById('processing-section');
+  const resultMount = document.getElementById('result-mount');
 
   async function handleZip(file) {
     try {
       FW.file.validateSize(file, 200);
       FW.file.validateType(file, ['zip']);
+      currentFile = file;
 
-      archiveNameLabel.textContent = file.name;
       dropArea.classList.add('hidden');
-      processingSection.classList.remove('hidden');
-      FW.analytics.track('processing_started', { tool: 'extract_zip' });
+      procSection.classList.remove('hidden');
+      FW.analytics.track('processing_started', { tool: TOOL_FEATURE });
 
       extractedEntries = await FileToolsLib.extractZip(file);
 
-      processingSection.classList.add('hidden');
-      extractedSection.classList.remove('hidden');
-      extractedCountBadge.textContent = `${extractedEntries.length} file${extractedEntries.length > 1 ? 's' : ''}`;
+      procSection.classList.add('hidden');
 
-      extractedFilesList.innerHTML = '';
-      extractedEntries.forEach((entry, index) => {
-        const item = document.createElement('div');
-        item.className = 'file-item';
-        item.innerHTML = `
-          <span class="file-item__icon">📄</span>
-          <span class="file-item__name" title="${entry.path}">${entry.path}</span>
-          <span class="file-item__size">${FW.file.formatSize(entry.blob.size)}</span>
-          <div class="file-item__actions">
-            <button class="btn btn-ghost btn-sm" data-idx="${index}">⬇ Download</button>
-          </div>
-        `;
-        extractedFilesList.appendChild(item);
+      // Free Limit Check on extracted file count (10 files)
+      const check = FreeUsageManager.checkLimit(TOOL_FEATURE, extractedEntries.length);
+      if (!check.allowed) {
+        FreeUsageManager.renderLimitWarning(limitMount, check);
+        FreeUsageManager.showLimitModal(check);
+        dropArea.classList.remove('hidden');
+        return;
+      }
+
+      FreeUsageManager.clearLimitWarning(limitMount);
+
+      ResultScreen.render(resultMount, {
+        title: 'ZIP Extracted Successfully!',
+        description: `Unpacked ${extractedEntries.length} file${extractedEntries.length > 1 ? 's' : ''} from "${file.name}".`,
+        files: extractedEntries.map(e => ({ name: e.name, blob: e.blob })),
+        toolFeatureId: TOOL_FEATURE,
+        onReset: resetToEmpty,
+        onDownloadAllZip: async () => {
+          const zipBlob = await FileToolsLib.downloadExtractedAsZip(extractedEntries, `extracted_${file.name}`);
+          FW.file.download(zipBlob.blob, zipBlob.name);
+          FW.analytics.track('download_started', { tool: TOOL_FEATURE, type: 'zip_all' });
+        },
       });
 
-      extractedFilesList.querySelectorAll('[data-idx]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const idx = parseInt(btn.dataset.idx);
-          const e = extractedEntries[idx];
-          FW.file.download(e.blob, e.name);
-          FW.analytics.track('download_started', { tool: 'extract_zip' });
-        });
-      });
-
-      FW.analytics.track('processing_completed', { tool: 'extract_zip' });
+      FW.analytics.track('processing_completed', { tool: TOOL_FEATURE });
     } catch(e) {
-      processingSection.classList.add('hidden');
+      procSection.classList.add('hidden');
       dropArea.classList.remove('hidden');
-      FW.toast.error(e.message || 'Failed to extract ZIP archive.');
-      FW.analytics.track('error_occurred', { tool: 'extract_zip' });
+      FW.toast.error(e.message || 'Unable to extract this ZIP file.');
+      FW.analytics.track('error_occurred', { tool: TOOL_FEATURE });
     }
+  }
+
+  function resetToEmpty() {
+    currentFile = null;
+    extractedEntries = [];
+    FreeUsageManager.resetAllowance(TOOL_FEATURE);
+    FreeUsageManager.clearLimitWarning(limitMount);
+    resultMount.classList.add('hidden');
+    resultMount.innerHTML = '';
+    procSection.classList.add('hidden');
+    dropArea.classList.remove('hidden');
+    fileInput.value = '';
   }
 
   FW.dropzone.init(dropzone, fileInput, (files) => {
     if (files.length > 0) handleZip(files[0]);
   }, { accept: '.zip', multiple: false });
 
-  btnExtractAnother.addEventListener('click', () => {
-    extractedEntries = [];
-    extractedSection.classList.add('hidden');
-    dropArea.classList.remove('hidden');
-    fileInput.value = '';
-  });
-
-  FW.analytics.track('tool_open', { tool: 'extract_zip' });
+  FW.analytics.track('tool_open', { tool: TOOL_FEATURE });
 })();
 </script>
 </body>

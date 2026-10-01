@@ -1,165 +1,302 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Compress PDF Online — Reduce PDF Size Free | FileWorks</title>
   <meta name="description" content="Compress PDF files online for free without losing quality. No upload required — processed locally in your browser.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://fileworks.pages.dev/pages/pdf-compress.html">
-  <meta property="og:title" content="Compress PDF Online — FileWorks">
+  <meta property="og:title" content="Compress PDF Online — Reduce PDF File Size | FileWorks">
+  <meta property="og:description" content="Reduce PDF file size locally in your browser without losing quality. 100% free.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://fileworks.pages.dev/pages/pdf-compress.html">
+
+  <!-- Exact Google AdSense Snippet -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7044469500687742"
+     crossorigin="anonymous"></script>
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Compress PDF — FileWorks","description":"Compress PDF files online for free, processed client-side.","applicationCategory":"UtilitiesApplication","url":"https://fileworks.pages.dev/pages/pdf-compress.html","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
   <link rel="stylesheet" href="/css/main.css">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 </head>
 <body>
+
 <nav class="nav" role="navigation"><div class="nav__inner">
-  <a href="/" class="nav__logo"><span class="nav__logo-icon">⚡</span>FileWorks</a>
-  <div class="nav__links"><a href="/" class="nav__link">Tools</a><a href="/pages/privacy.html" class="nav__link">Privacy</a><a href="/pages/terms.html" class="nav__link">Terms</a></div>
-  <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Menu"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  <a href="/" class="nav__logo" id="nav-logo"><span class="nav__logo-icon">⚡</span>FileWorks</a>
+  <div class="nav__links">
+    <a href="/" class="nav__link" id="nav-home">Tools</a>
+    <a href="/pages/privacy.html" class="nav__link">Privacy</a>
+    <a href="/pages/terms.html" class="nav__link">Terms</a>
+  </div>
+  <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Menu">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
 </div></nav>
-<nav class="nav-mobile-menu" id="nav-mobile-menu"><a href="/">🔧 Tools</a><a href="/pages/privacy.html">🔒 Privacy</a><a href="/pages/terms.html">📜 Terms</a></nav>
-<main class="tool-page"><div class="container-tool">
+<nav class="nav-mobile-menu" id="nav-mobile-menu">
+  <a href="/">🔧 Tools</a><a href="/pages/privacy.html">🔒 Privacy</a><a href="/pages/terms.html">📜 Terms</a>
+</nav>
+
+<main class="tool-page" id="main-content">
+<div class="container-tool">
+
+  <!-- Header -->
   <div class="tool-header">
-    <a href="/" class="tool-header__back">← All Tools</a>
-    <div class="tool-header__icon" style="background:rgba(124,58,237,0.15);">⚡</div>
-    <h1>Compress PDF Online</h1>
-    <p class="tool-header__desc">Reduce your PDF file size by re-optimizing the file structure. No quality loss. Processed entirely in your browser.</p>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;"><span class="badge badge-privacy">🔒 Files stay local</span><span class="badge badge-primary">Free</span></div>
-  </div>
-  <div class="ad-container ad-container--banner" id="ad-top" style="margin-bottom:28px;" aria-label="Advertisement"><span class="ad-container__label">Advertisement</span></div><div id="input-section">
-  <div class="dropzone" id="dropzone" role="button" aria-label="Drop PDF file">
-    <div class="dropzone__icon">📄</div>
-    <p class="dropzone__title">Drop a PDF file here</p>
-    <p class="dropzone__sub">or click to select — max 200 MB</p>
-    <input type="file" id="file-input" accept=".pdf" aria-label="Select PDF file">
-  </div>
-  <div id="options-section" class="hidden" style="margin-top:20px;">
-    <div class="card" style="margin-bottom:20px;">
-      <h4 id="pdf-name">PDF loaded</h4>
-      <p id="pdf-info" style="font-size:.875rem;color:var(--color-text-muted);margin-top:4px;"></p>
-    </div>
-    <div class="alert alert-info" style="margin-bottom:20px;"><span class="alert__icon">ℹ</span><span>PDF compression re-optimizes the file structure using pdf-lib. Results vary depending on the content — some PDFs are already well-compressed.</span></div>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;">
-      <button class="btn btn-primary" id="btn-compress">⚡ Compress PDF</button>
-      <button class="btn btn-ghost" id="btn-change-file">Change File</button>
+    <a href="/" class="tool-header__back" id="back-link">← All Tools</a>
+    <div class="tool-header__icon" style="background:rgba(124,58,237,0.15);" id="tool-icon">⚡</div>
+    <h1 id="tool-title">Compress PDF Online</h1>
+    <p class="tool-header__desc" id="tool-desc">Reduce PDF file size by optimizing internal streams and structure. Processed entirely in your browser.</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+      <span class="badge badge-privacy" id="badge-privacy">🔒 Files stay local</span>
+      <span class="badge badge-primary" id="badge-free">Free Tier: Up to 10 MB</span>
     </div>
   </div>
-  <div id="processing-section" class="hidden">
-    <div class="processing-overlay"><div class="spinner"></div><p>Compressing PDF...</p></div>
+
+  <!-- Ad slot: Safe top placement -->
+  <div class="ad-container ad-container--banner" id="ad-top" style="margin-bottom:28px;" aria-label="Advertisement">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-7044469500687742"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
   </div>
-  <div id="result-section" class="hidden">
-    <div class="result-section">
-      <div class="result-section__icon">✅</div>
-      <h3>PDF Compressed!</h3>
-      <p id="result-desc"></p>
-      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-        <button class="btn btn-success" id="btn-download">⬇ Download Compressed PDF</button>
-        <button class="btn btn-ghost" id="btn-again">Compress Another</button>
+
+  <!-- Interactive Work Area -->
+  <div id="interactive-area">
+    <div id="limit-warning-mount"></div>
+
+    <!-- Dropzone -->
+    <div id="drop-area">
+      <div class="dropzone" id="dropzone" role="button" aria-label="Drop a PDF file here or click to select">
+        <div class="dropzone__icon">📄</div>
+        <p class="dropzone__title">Drop a PDF file here</p>
+        <p class="dropzone__sub">Free tier: compress PDFs up to 10 MB</p>
+        <input type="file" id="file-input" accept=".pdf" aria-label="Select PDF file">
       </div>
     </div>
+
+    <!-- Options Section -->
+    <div id="options-section" class="hidden" style="margin-top:20px;">
+      <div class="card" style="padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+          <div>
+            <h4 id="pdf-name" style="margin:0 0 4px;">PDF loaded</h4>
+            <p id="pdf-info" style="font-size:.875rem;color:var(--color-text-muted);margin:0;"></p>
+          </div>
+          <button class="btn btn-ghost btn-sm" id="btn-change-file">Change File</button>
+        </div>
+
+        <div class="alert alert-info" style="margin-bottom:20px;">
+          <span class="alert__icon">ℹ</span>
+          <span>Compression optimizes cross-reference tables and defragmented object streams client-side without raster degradation.</span>
+        </div>
+
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-lg" id="btn-compress">⚡ Compress PDF</button>
+          <span id="compress-status-note" style="font-size:.875rem;color:var(--color-text-muted);">Ready to compress</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Processing -->
+    <div id="processing-section" class="hidden" style="margin-top:20px;">
+      <div class="processing-overlay">
+        <div class="spinner"></div>
+        <p id="processing-msg" style="font-weight:600;font-size:1.05rem;">Compressing your PDF locally...</p>
+        <div class="progress-bar" style="width:240px;margin-top:8px;"><div class="progress-bar__fill" style="width:100%"></div></div>
+      </div>
+    </div>
+
+    <!-- Result Mount -->
+    <div id="result-mount" class="hidden" style="margin-top:20px;"></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- How to Use -->
+  <section id="how-to-use">
+    <h2 style="margin-bottom:24px;font-size:1.4rem;">How to Compress a PDF</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step__content"><h4>Select your PDF</h4><p>Choose or drop the PDF file you want to compress (up to 10 MB).</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step__content"><h4>Click Compress</h4><p>FileWorks re-encodes streams and removes redundancy in browser memory.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step__content"><h4>Preview & Compare</h4><p>Check the compressed file size savings and preview the result in browser.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step__content"><h4>Download</h4><p>Save your optimized PDF directly to your device.</p></div></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
+    <div class="faq">
+      <details class="faq-item"><summary>What is the free limit for PDF compression?</summary><div class="faq-item__body">The free tier allows compressing PDF files up to 10 MB, matching the Android application free limits.</div></details>
+      <details class="faq-item"><summary>Will PDF compression decrease text clarity?</summary><div class="faq-item__body">No. Structural object stream compression preserves all vector text, line art, and font glyphs exactly as designed.</div></details>
+      <details class="faq-item"><summary>Are files uploaded anywhere?</summary><div class="faq-item__body">No. All compression operations run locally inside your browser tab.</div></details>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Related Tools -->
+  <section id="related-tools">
+    <h2 style="margin-bottom:20px;font-size:1.4rem;">Related PDF Tools</h2>
+    <div class="related-tools">
+      <a href="/pages/pdf-merge.html" class="related-tool"><span class="related-tool__icon">🔀</span>Merge PDF</a>
+      <a href="/pages/pdf-split.html" class="related-tool"><span class="related-tool__icon">✂️</span>Split PDF</a>
+      <a href="/pages/pdf-rotate.html" class="related-tool"><span class="related-tool__icon">🔄</span>Rotate PDF</a>
+      <a href="/pages/pdf-to-image.html" class="related-tool"><span class="related-tool__icon">🖼️</span>PDF to Image</a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer class="footer"><div class="container">
+  <div class="footer__bottom">
+    <p>© 2026 FileWorks. All rights reserved. 100% Free File Tools.</p>
+    <p><a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a> · <a href="/pages/terms.html" style="color:var(--color-primary);">Terms of Service</a></p>
+  </div>
+</div></footer>
+
+<div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
+  <p>We display ads to keep FileWorks 100% free. Files stay local. <a href="/pages/privacy.html">Privacy Policy</a></p>
+  <div class="cookie-banner__actions">
+    <button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button>
+    <button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button>
   </div>
 </div>
-<div class="divider"></div>
-<section>
-  <h2 style="margin-bottom:24px;font-size:1.4rem;">About PDF Compression</h2>
-  <div class="steps">
-    <div class="step"><div class="step-num">1</div><div class="step__content"><h4>Select your PDF</h4><p>Drop or click to select the PDF you want to compress.</p></div></div>
-    <div class="step"><div class="step-num">2</div><div class="step__content"><h4>Click Compress</h4><p>FileWorks re-saves your PDF with optimized object streams — entirely in your browser.</p></div></div>
-    <div class="step"><div class="step-num">3</div><div class="step__content"><h4>Download</h4><p>The compressed PDF downloads directly to your device. Compare the file size before and after.</p></div></div>
-  </div>
-</section>
-<div class="divider"></div>
-<section>
-  <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
-  <div class="faq">
-    <details class="faq-item"><summary>How much can this compress my PDF?</summary><div class="faq-item__body">Results vary. This tool re-optimizes the PDF file structure and cross-reference streams. PDFs containing large images may not reduce significantly without image re-compression. For image-heavy PDFs, try exporting images at lower quality from the original source.</div></details>
-    <details class="faq-item"><summary>Will compression affect the quality?</summary><div class="faq-item__body">No visual quality is lost. Only the file structure is optimized — text, images, and layout remain identical.</div></details>
-    <details class="faq-item"><summary>Are my files uploaded?</summary><div class="faq-item__body">No. Everything happens in your browser using pdf-lib. Nothing is uploaded to any server.</div></details>
-  </div>
-</section>
-<div class="divider"></div>
-<section><h2 style="margin-bottom:20px;font-size:1.4rem;">Related Tools</h2>
-  <div class="related-tools">
-    <a href="/pages/pdf-merge.html" class="related-tool"><span class="related-tool__icon">🔀</span>Merge PDF</a>
-    <a href="/pages/pdf-split.html" class="related-tool"><span class="related-tool__icon">✂️</span>Split PDF</a>
-    <a href="/pages/pdf-rotate.html" class="related-tool"><span class="related-tool__icon">🔄</span>Rotate PDF</a>
-    <a href="/pages/pdf-to-image.html" class="related-tool"><span class="related-tool__icon">🖼️</span>PDF to Image</a>
-  </div>
-</section>
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<!-- Libraries -->
 <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="/js/free-usage.js"></script>
+<script src="/js/preview-modal.js"></script>
+<script src="/js/result-screen.js"></script>
 <script src="/js/app.js"></script>
 <script src="/js/tools/pdf-tools.js"></script>
+
 <script>
-(function(){
-  let pdfFile = null, resultBlob = null;
+(function() {
+  const TOOL_FEATURE = 'pdfCompress';
+  let pdfFile = null;
+  let resultBlob = null;
+
   const dropzone = document.getElementById('dropzone');
+  const dropArea = document.getElementById('drop-area');
   const fileInput = document.getElementById('file-input');
   const optSection = document.getElementById('options-section');
-  const inputSection = document.getElementById('input-section');
+  const limitMount = document.getElementById('limit-warning-mount');
   const procSection = document.getElementById('processing-section');
-  const resSection = document.getElementById('result-section');
+  const resultMount = document.getElementById('result-mount');
+  const pdfName = document.getElementById('pdf-name');
+  const pdfInfo = document.getElementById('pdf-info');
+  const btnCompress = document.getElementById('btn-compress');
+  const btnChangeFile = document.getElementById('btn-change-file');
+  const compressStatusNote = document.getElementById('compress-status-note');
 
   async function loadFile(files) {
     if (!files.length) return;
     const f = files[0];
     try {
-      FW.file.validateSize(f, 200); FW.file.validateType(f, ['pdf']);
+      FW.file.validateSize(f, 200);
+      FW.file.validateType(f, ['pdf']);
       pdfFile = f;
-      document.getElementById('pdf-name').textContent = f.name;
-      document.getElementById('pdf-info').textContent = `Original size: ${FW.file.formatSize(f.size)}`;
-      dropzone.classList.add('hidden'); optSection.classList.remove('hidden');
-      FW.analytics.track('file_selected', {tool:'pdf_compress'});
-    } catch(e) { FW.toast.error(e.message); }
+
+      pdfName.textContent = f.name;
+      pdfInfo.textContent = `Original size: ${FW.file.formatSize(f.size)}`;
+
+      dropArea.classList.add('hidden');
+      optSection.classList.remove('hidden');
+
+      // Free Limit Check (10 MB)
+      const check = FreeUsageManager.checkLimit(TOOL_FEATURE, f.size);
+      if (!check.allowed) {
+        FreeUsageManager.renderLimitWarning(limitMount, check);
+        btnCompress.disabled = true;
+        compressStatusNote.textContent = `File is ${check.formattedReq} (Free limit: 10 MB). Choose a smaller PDF.`;
+        compressStatusNote.style.color = 'var(--color-danger)';
+      } else {
+        FreeUsageManager.clearLimitWarning(limitMount);
+        btnCompress.disabled = false;
+        compressStatusNote.textContent = `Ready to compress (${check.formattedReq} / 10 MB limit)`;
+        compressStatusNote.style.color = 'var(--color-text-muted)';
+      }
+
+      FW.analytics.track('file_selected', { tool: TOOL_FEATURE });
+    } catch(e) {
+      FW.toast.error(e.message || 'Unable to read this PDF.');
+    }
   }
 
   FW.dropzone.init(dropzone, fileInput, loadFile, { accept: '.pdf', multiple: false });
-  document.getElementById('btn-change-file').addEventListener('click', () => {
-    pdfFile = null; dropzone.classList.remove('hidden'); optSection.classList.add('hidden');
-  });
 
-  document.getElementById('btn-compress').addEventListener('click', async () => {
+  function resetToEmpty() {
+    pdfFile = null;
+    resultBlob = null;
+    FreeUsageManager.resetAllowance(TOOL_FEATURE);
+    FreeUsageManager.clearLimitWarning(limitMount);
+    resultMount.classList.add('hidden');
+    resultMount.innerHTML = '';
+    procSection.classList.add('hidden');
+    optSection.classList.add('hidden');
+    dropArea.classList.remove('hidden');
+    fileInput.value = '';
+  }
+
+  btnChangeFile.addEventListener('click', resetToEmpty);
+
+  btnCompress.addEventListener('click', async () => {
     if (!pdfFile) return;
-    inputSection.classList.add('hidden'); procSection.classList.remove('hidden');
-    FW.analytics.track('processing_started', {tool:'pdf_compress'});
+
+    const check = FreeUsageManager.checkLimit(TOOL_FEATURE, pdfFile.size);
+    if (!check.allowed) {
+      FreeUsageManager.showLimitModal(check);
+      return;
+    }
+
+    optSection.classList.add('hidden');
+    dropArea.classList.add('hidden');
+    procSection.classList.remove('hidden');
+    FW.analytics.track('processing_started', { tool: TOOL_FEATURE });
+
     try {
-      const baseName = pdfFile.name.replace(/\.pdf$/i,'');
-      const result = await PdfTools.compress(pdfFile, `${baseName}_compressed.pdf`);
+      const baseName = pdfFile.name.replace(/\.pdf$/i, '');
+      const outName = `${baseName}_compressed.pdf`;
+      const result = await PdfTools.compress(pdfFile, outName);
       resultBlob = result.blob;
-      procSection.classList.add('hidden'); resSection.classList.remove('hidden');
-      const savings = pdfFile.size - resultBlob.size;
-      const pct = ((savings / pdfFile.size) * 100).toFixed(1);
-      document.getElementById('result-desc').textContent = savings > 0
-        ? `Reduced from ${FW.file.formatSize(pdfFile.size)} to ${FW.file.formatSize(resultBlob.size)} (${pct}% smaller)`
-        : `Result: ${FW.file.formatSize(resultBlob.size)} — PDF was already well-optimized.`;
-      FW.analytics.track('processing_completed', {tool:'pdf_compress'});
+
+      procSection.classList.add('hidden');
+
+      const savedBytes = pdfFile.size - resultBlob.size;
+      const pct = Math.round((savedBytes / pdfFile.size) * 100);
+      const desc = savedBytes > 0
+        ? `Reduced from ${FW.file.formatSize(pdfFile.size)} to ${FW.file.formatSize(resultBlob.size)} (Saved ${pct}%).`
+        : `Optimized document (${FW.file.formatSize(resultBlob.size)}). Stream references defragmented.`;
+
+      ResultScreen.render(resultMount, {
+        title: 'PDF Compressed Successfully!',
+        description: desc,
+        files: [{
+          name: outName,
+          blob: resultBlob,
+          originalSize: pdfFile.size,
+        }],
+        toolFeatureId: TOOL_FEATURE,
+        onReset: resetToEmpty,
+      });
+
+      FW.analytics.track('processing_completed', { tool: TOOL_FEATURE });
     } catch(e) {
-      procSection.classList.add('hidden'); inputSection.classList.remove('hidden');
-      FW.toast.error(e.message);
+      procSection.classList.add('hidden');
+      optSection.classList.remove('hidden');
+      FW.toast.error(e.message || 'Failed to compress PDF.');
+      FW.analytics.track('error_occurred', { tool: TOOL_FEATURE });
     }
   });
 
-  document.getElementById('btn-download').addEventListener('click', () => {
-    if (!resultBlob || !pdfFile) return;
-    FW.file.download(resultBlob, pdfFile.name.replace(/\.pdf$/i,'') + '_compressed.pdf');
-    FW.analytics.track('download_started', {tool:'pdf_compress'});
-  });
-  document.getElementById('btn-again').addEventListener('click', () => {
-    pdfFile = null; resultBlob = null;
-    resSection.classList.add('hidden'); inputSection.classList.remove('hidden');
-    dropzone.classList.remove('hidden'); optSection.classList.add('hidden');
-  });
-  FW.analytics.track('tool_open', {tool:'pdf_compress'});
+  FW.analytics.track('tool_open', { tool: TOOL_FEATURE });
 })();
-</script>  <div class="ad-container ad-container--banner" id="ad-mid" style="margin-top:32px;" aria-label="Advertisement"><span class="ad-container__label">Advertisement</span></div>
-</div></main>
-<footer class="footer"><div class="container"><div class="footer__bottom">
-  <p>© 2026 FileWorks. All rights reserved.</p>
-  <p><a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy</a> · <a href="/pages/terms.html" style="color:var(--color-primary);">Terms</a></p>
-</div></div></footer>
-<div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
-  <p>We display ads to keep FileWorks free. Files stay local. <a href="/pages/privacy.html">Privacy Policy</a></p>
-  <div class="cookie-banner__actions"><button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button><button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button></div>
-</div>
-<div class="toast-container" id="toast-container" aria-live="polite"></div>
+</script>
 </body>
 </html>

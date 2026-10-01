@@ -1,14 +1,14 @@
-﻿// ============================================================
+// ============================================================
 // FileWorks Web App — Core Application Module
 // ============================================================
 
 const FW = {
   // ---- Configuration ----
   config: {
-    siteUrl: (typeof SITE_URL !== 'undefined') ? SITE_URL : window.location.origin,
-    adSensePublisherId: (typeof ADSENSE_ID !== 'undefined') ? ADSENSE_ID : '',
+    siteUrl: 'https://fileworks.pages.dev',
+    adSensePublisherId: 'ca-pub-7044469500687742',
     maxFileSizeMB: 200,
-    maxPdfPagesMerge: 50,
+    maxPdfPagesMerge: 8,
     version: '1.0.0',
   },
 
@@ -174,15 +174,25 @@ const FW = {
     loaded: false,
     loadAds() {
       if (this.loaded) return;
-      if (!FW.config.adSensePublisherId) return; // No ID configured
-      if (!FW.consent.isAccepted()) return;      // Wait for consent
-      // Load AdSense script
-      const s = document.createElement('script');
-      s.async = true;
-      s.crossOrigin = 'anonymous';
-      s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${FW.config.adSensePublisherId}`;
-      document.head.appendChild(s);
+      if (!FW.consent.isAccepted()) return; // Wait for consent
+      // Check if official script is already in DOM
+      const existing = document.querySelector('script[src*="googlesyndication.com/pagead/js/adsbygoogle.js"]');
+      if (!existing && FW.config.adSensePublisherId) {
+        const s = document.createElement('script');
+        s.async = true;
+        s.crossOrigin = 'anonymous';
+        s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${FW.config.adSensePublisherId}`;
+        document.head.appendChild(s);
+      }
       this.loaded = true;
+      // Initialize responsive ad units
+      try {
+        if (typeof window !== 'undefined' && window.adsbygoogle) {
+          document.querySelectorAll('ins.adsbygoogle:not([data-adsbygoogle-status])').forEach(() => {
+            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(_) {}
+          });
+        }
+      } catch(_) {}
     },
   },
 
@@ -193,7 +203,6 @@ const FW = {
       try {
         const allowed = ['tool_open','file_selected','processing_started','processing_completed','download_started','error_occurred'];
         if (!allowed.includes(event)) return;
-        // If GA is loaded (future), send event
         if (typeof gtag === 'function') {
           gtag('event', event, data);
         }
