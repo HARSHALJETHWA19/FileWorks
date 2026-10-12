@@ -196,6 +196,22 @@
   <div class="divider"></div>
 
   <!-- How to Use -->
+  
+  <section id="deep-dive" style="margin-top:30px;">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">In-Depth: Coordinate Systems, Proportional Scaling, and MediaBox Alignment</h2>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      When creating PDF documents from photographs and scanned receipts, naive conversion tools often produce stretched, warped, or inappropriately cropped pages. This happens because images exist in digital pixel space (e.g. 4032 × 3024 px), whereas PDF documents are structured according to typographic points (where 72 points equals exactly one physical inch).
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      FileWorks implements precise aspect-ratio preservation algorithms within <code>pdf-lib</code>. When a target paper size is chosen (such as ISO A4 or North American US Letter), the engine calculates the printable bounding box after subtracting your chosen margin. It then derives a uniform scaling factor: <code>scale = Math.min(availWidth / imgWidth, availHeight / imgHeight)</code>. This ensures the picture fits completely within the page boundaries while maintaining its natural proportions down to the sub-pixel level.
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      Alternatively, selecting <em>"Fit Exact Image Dimensions"</em> dynamically adjusts the PDF <code>/MediaBox</code> to match the photo's native dimensions with zero margin. This is ideal for artwork, infographics, and technical diagrams where preserving full-bleed geometry without arbitrary white letterboxing is critical.
+    </p>
+  </section>
+  
+  <div class="divider"></div>
+
   <section id="how-to-use">
     <h2 style="margin-bottom:24px;font-size:1.4rem;">How to Convert Images to PDF</h2>
     <div class="steps">
@@ -209,6 +225,36 @@
   <div class="divider"></div>
 
   <!-- FAQ -->
+  
+  <section id="best-practices" style="margin-top:30px;">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">Best Practices for Assembling Photo & Document PDFs</h2>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      When combining photographs, receipts, or whiteboard notes into a formal PDF packet:
+    </p>
+    <ul style="line-height:1.8;color:var(--color-text-muted);margin-bottom:16px;padding-left:20px;">
+      <li><strong>Sequence Alignment:</strong> Take advantage of FileWorks' visual drag-and-drop thumbnail cards to verify that pages follow a logical chronological flow (e.g., Cover Sheet, followed by Contract Terms, followed by Invoice Receipts) before clicking Generate.</li>
+      <li><strong>Consistent Page Margins:</strong> Applying a small 20-point margin creates a clean, professional aesthetic reminiscent of printed documents. For full-bleed artwork or edge-to-edge photography, switch the margin setting to <em>"No Margin (Full Bleed)"</em>.</li>
+      <li><strong>Orientation Uniformity:</strong> If mixing landscape photographs with vertical portrait scans, choose <em>"Fit Exact Image Dimensions"</em> so that each page dynamically adapts its MediaBox to the individual photo's geometry, avoiding distracting white borders on mixed collections.</li>
+    </ul>
+  </section>
+  
+  <div class="divider"></div>
+
+  
+  <section id="troubleshooting-tips" style="margin-top:28px;">
+    <h3 style="margin-bottom:12px;font-size:1.25rem;">Troubleshooting Common File Processing Issues</h3>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:12px;">
+      If you experience unexpected behavior or processing pauses, check these standard browser environment factors:
+    </p>
+    <ul style="line-height:1.75;color:var(--color-text-muted);padding-left:20px;margin-bottom:16px;">
+      <li><strong>Hardware Memory Headroom:</strong> Processing very large files in client-side memory requires sufficient available device RAM. Closing unused background browser tabs frees valuable JavaScript heap allocations.</li>
+      <li><strong>Ad-Blocker Script Interference:</strong> While FileWorks welcomes privacy tools, aggressive content blockers occasionally block Web Worker threads or Canvas blob generation. If a conversion fails to trigger, temporarily whitelist the page or test in private browsing.</li>
+      <li><strong>Corrupt Input Headers:</strong> Files truncated during incomplete downloads or encrypted with unsupported proprietary DRM flags will be safely flagged by our input validation engine before memory allocation.</li>
+    </ul>
+  </section>
+  
+  <div class="divider"></div>
+
   <section id="faq">
     <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
     <div class="faq">

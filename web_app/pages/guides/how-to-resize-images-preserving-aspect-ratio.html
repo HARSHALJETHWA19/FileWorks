@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Resize Images Preserving Aspect Ratio | FileWorks Guide</title>
+  <meta name="description" content="Master image resizing without distortion. Learn the formulas for aspect ratio preservation, standard screen resolutions, and interpolation methods.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://fileworks.pages.dev/pages/guides/how-to-resize-images-preserving-aspect-ratio.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="FileWorks">
+  <meta property="og:title" content="How to Resize Images Preserving Aspect Ratio">
+  <meta property="og:description" content="Complete guide on proportional image scaling, aspect ratio formulas, interpolation filtering, and preset dimensions.">
+  <meta property="og:url" content="https://fileworks.pages.dev/pages/guides/how-to-resize-images-preserving-aspect-ratio.html">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "How to Resize Images While Preserving Aspect Ratio: Dimensions & Pixel Density",
+    "description": "Tutorial explaining proportional aspect scaling formulas, pixel interpolation algorithms, and standard display resolutions.",
+    "url": "https://fileworks.pages.dev/pages/guides/how-to-resize-images-preserving-aspect-ratio.html",
+    "author": { "@type": "Organization", "name": "FileWorks Editorial Team" },
+    "publisher": { "@type": "Organization", "name": "FileWorks", "url": "https://fileworks.pages.dev/" },
+    "datePublished": "2026-10-01",
+    "dateModified": "2026-10-12"
+  }
+  </script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7044469500687742" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" id="nav-logo">
+      <span class="nav__logo-icon" aria-hidden="true">⚡</span>
+      FileWorks
+    </a>
+    <div class="nav__links" id="nav-desktop-links">
+      <a href="/" class="nav__link" id="nav-home">Tools</a>
+      <a href="/pages/guides.html" class="nav__link active" id="nav-guides">Learning Center</a>
+      <a href="/pages/about.html" class="nav__link" id="nav-about">About</a>
+      <a href="/pages/contact.html" class="nav__link" id="nav-contact">Contact</a>
+      <a href="/pages/privacy.html" class="nav__link" id="nav-privacy">Privacy</a>
+      <a href="/pages/terms.html" class="nav__link" id="nav-terms">Terms</a>
+    </div>
+    <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Open menu" aria-expanded="false">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+<nav class="nav-mobile-menu" id="nav-mobile-menu" aria-label="Mobile navigation">
+  <a href="/" id="mnav-home">🔧 All Tools</a>
+  <a href="/pages/guides.html" id="mnav-guides">📚 Learning Center</a>
+  <a href="/pages/about.html" id="mnav-about">ℹ️ About FileWorks</a>
+  <a href="/pages/contact.html" id="mnav-contact">✉️ Contact & Support</a>
+  <a href="/pages/privacy.html" id="mnav-privacy">🔒 Privacy Policy</a>
+  <a href="/pages/terms.html" id="mnav-terms">📜 Terms of Service</a>
+</nav>
+
+<main class="container section--sm" id="main-content">
+  <div class="breadcrumbs" aria-label="Breadcrumbs">
+    <a href="/">Home</a>
+    <span class="breadcrumb-separator">/</span>
+    <a href="/pages/guides.html">Learning Center</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="current">Image Resizing & Aspect Ratios</span>
+  </div>
+
+  <article class="guide-container">
+    <header class="guide-header">
+      <span class="guide-header__badge">📐 Pixel Geometry</span>
+      <h1 class="guide-header__title">How to Resize Images While Preserving Aspect Ratio: Dimensions & Pixel Density</h1>
+      <p class="guide-header__lead">
+        Resizing photos without squishing or stretching requires locking the ratio between width and height. Learn how browser canvas scaling algorithms work, how to calculate proportional dimensions, and which standard presets fit modern web and social platforms.
+      </p>
+      <div class="guide-meta">
+        <span class="guide-meta-item">⏱️ 5 min read</span>
+        <span class="guide-meta-item">📅 Updated October 2026</span>
+        <span class="guide-meta-item">🎯 Beginner to Intermediate</span>
+      </div>
+    </header>
+
+    <div class="guide-content">
+      <h2>What is Aspect Ratio?</h2>
+      <p>
+        An image's <strong>aspect ratio</strong> is the proportional relationship between its width and its height, expressed mathematically as a fraction or colon-separated ratio (e.g., <code>16:9</code>, <code>4:3</code>, or <code>1:1</code>):
+      </p>
+      <div class="guide-callout guide-callout--tip">
+        <h4>Aspect Ratio Formula</h4>
+        <p>
+          <code>Aspect Ratio = Width / Height</code>
+        </p>
+        <p>
+          For example, a high-resolution 4000 × 3000 pixel camera capture has an aspect ratio of:<br>
+          <code>4000 / 3000 = 1.3333... (4:3)</code>
+        </p>
+      </div>
+      <p>
+        If you want to downscale that image to an email-friendly width of 1200 pixels while keeping proportions natural, the new height <em>must</em> be calculated using that exact same ratio:
+      </p>
+      <p>
+        <code>New Height = Math.round(1200 / (4000 / 3000)) = Math.round(1200 / 1.3333) = 900 pixels.</code>
+      </p>
+      <p>
+        If you manually entered <code>1200 × 700</code> instead, the image would be squished vertically by over 22%, warping text and making people appear unnaturally wide.
+      </p>
+
+      <h2>Standard Digital Resolution Presets</h2>
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Preset Label</th>
+            <th>Pixel Dimensions</th>
+            <th>Aspect Ratio</th>
+            <th>Common Use Case</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Full HD (1080p)</strong></td>
+            <td>1920 × 1080 px</td>
+            <td>16:9 Widescreen</td>
+            <td>Desktop wallpapers, hero banners, and presentation slides</td>
+          </tr>
+          <tr>
+            <td><strong>HD (720p)</strong></td>
+            <td>1280 × 720 px</td>
+            <td>16:9 Widescreen</td>
+            <td>Fast-loading blog article illustrations and newsletter headers</td>
+          </tr>
+          <tr>
+            <td><strong>Square Social</strong></td>
+            <td>1080 × 1080 px</td>
+            <td>1:1 Square</td>
+            <td>Instagram feed posts, avatars, and e-commerce product grids</td>
+          </tr>
+          <tr>
+            <td><strong>Social Story / Reel</strong></td>
+            <td>1080 × 1920 px</td>
+            <td>9:16 Vertical</td>
+            <td>Mobile vertical stories, shorts, and lock-screen backgrounds</td>
+          </tr>
+          <tr>
+            <td><strong>Ultra HD (4K)</strong></td>
+            <td>3840 × 2160 px</td>
+            <td>16:9 Widescreen</td>
+            <td>High-end graphic design and large-format commercial displays</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Safe Mid-Content Ad Slot -->
+      <div class="ad-container ad-container--banner" id="ad-guide-resize" style="margin:36px 0;" aria-label="Advertisement">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-7044469500687742"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
+
+      <h2>How Browser Interpolation Works During Resizing</h2>
+      <p>
+        When an image is scaled down from 4000 pixels to 1200 pixels, millions of intermediate pixels must be averaged together. Modern HTML5 Canvas 2D contexts utilize <strong>bilinear and bicubic image smoothing filters</strong>:
+      </p>
+      <ul>
+        <li><code>imageSmoothingEnabled = true</code> instructs the GPU to interpolate neighboring color values to avoid jagged pixel staircasing.</li>
+        <li>Downscaling is mathematically cleaner than upscaling. Downscaling discards redundant pixels smoothly. Upscaling, however, cannot invent detail that was never captured, leading to soft or blurry output.</li>
+      </ul>
+
+      <h2>Step-by-Step: Resizing Images in FileWorks</h2>
+      <ol>
+        <li>
+          <strong>Open the Resizer:</strong> Visit the <a href="/pages/image-resize.html">FileWorks Image Resize Tool</a>.
+        </li>
+        <li>
+          <strong>Select Your Photo:</strong> Drop your image into the workspace. The tool instantly displays the detected original pixel width and height.
+        </li>
+        <li>
+          <strong>Keep Aspect Ratio Locked:</strong> Ensure the <em>"Maintain aspect ratio"</em> checkbox is checked (active by default).
+        </li>
+        <li>
+          <strong>Input New Dimensions or Pick a Preset:</strong> Enter your target width (e.g., <code>1920</code>) or click a quick preset button like <em>1080p</em>. The corresponding height input recalculates automatically.
+        </li>
+        <li>
+          <strong>Download:</strong> Click <strong>Resize Image</strong>. The hardware-accelerated canvas executes the resampling in memory and outputs a downloadable file immediately.
+        </li>
+      </ol>
+
+      <div class="guide-tool-cta">
+        <div class="guide-tool-cta__text">
+          <h4>Resize Your Images Instantly</h4>
+          <p>Proportionally scale images to custom dimensions with instant preview.</p>
+        </div>
+        <a href="/pages/image-resize.html" class="btn btn-primary btn-sm">Open Image Resizer →</a>
+      </div>
+
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq" style="margin-top:20px;">
+        <details class="faq-item">
+          <summary>Does reducing an image's pixel dimensions also reduce its file size?</summary>
+          <div class="faq-item__body">
+            Yes, substantially. An uncompressed 4000 × 3000 image contains 12 million pixels. Reducing it to 1200 × 900 reduces the total pixel count to 1.08 million pixels—a 91% reduction in raw pixel data—slashing byte size dramatically.
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I resize PNGs with transparent backgrounds?</summary>
+          <div class="faq-item__body">
+            Yes. When resizing a PNG, FileWorks preserves the full 8-bit alpha transparency channel without filling background areas with white or black.
+          </div>
+        </details>
+      </div>
+    </div>
+  </article>
+</main>
+
+<!-- Footer -->
+<footer class="footer" id="main-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <h3>⚡ FileWorks</h3>
+        <p>Free online file utility toolkit for PDFs, images, ZIP files, and everyday file management. Files are processed locally in your browser.</p>
+      </div>
+      <div class="footer__col">
+        <h4>PDF Tools</h4>
+        <a href="/pages/pdf-merge.html">Merge PDF</a>
+        <a href="/pages/pdf-split.html">Split PDF</a>
+        <a href="/pages/pdf-rotate.html">Rotate PDF</a>
+        <a href="/pages/pdf-reorder.html">Reorder PDF</a>
+        <a href="/pages/pdf-compress.html">Compress PDF</a>
+        <a href="/pages/pdf-to-image.html">PDF to Image</a>
+        <a href="/pages/image-to-pdf.html">Image to PDF</a>
+      </div>
+      <div class="footer__col">
+        <h4>Image & ZIP Tools</h4>
+        <a href="/pages/image-compress.html">Compress Image</a>
+        <a href="/pages/image-resize.html">Resize Image</a>
+        <a href="/pages/image-convert.html">Convert Image</a>
+        <a href="/pages/create-zip.html">Create ZIP</a>
+        <a href="/pages/extract-zip.html">Extract ZIP</a>
+        <a href="/pages/batch-rename.html">Batch Rename</a>
+      </div>
+      <div class="footer__col">
+        <h4>Resources & Trust</h4>
+        <a href="/pages/guides.html">Learning Center</a>
+        <a href="/pages/about.html">About FileWorks</a>
+        <a href="/pages/contact.html">Contact & Support</a>
+        <a href="/pages/privacy.html">Privacy Policy</a>
+        <a href="/pages/terms.html">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2026 FileWorks. Maintained by AetherKube. All rights reserved.</p>
+      <p>100% Free · Client-Side Local Processing · <a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a></p>
+    </div>
+  </div>
+</footer>
+
+<div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
+  <p>We use cookies and display ads via Google AdSense to keep FileWorks free. File processing happens locally in your browser. <a href="/pages/privacy.html">Privacy Policy</a></p>
+  <div class="cookie-banner__actions">
+    <button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button>
+    <button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button>
+  </div>
+</div>
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<script src="/js/free-usage.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>

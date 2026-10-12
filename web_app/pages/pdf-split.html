@@ -3,75 +3,111 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Split PDF Online — Extract Pages Free | FileWorks</title>
-  <meta name="description" content="Split a PDF into individual pages or custom page ranges online for free. No upload — processed locally in your browser. Fast and private.">
+  <title>Split PDF Online Free — Extract Pages & Custom Ranges | FileWorks</title>
+  <meta name="description" content="Split PDF files into individual pages or custom page ranges online for free. No file uploads required — 100% private, browser-based PDF page extractor.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://fileworks.pages.dev/pages/pdf-split.html">
-  <meta property="og:title" content="Split PDF Online — Free PDF Page Extractor | FileWorks">
-  <meta property="og:description" content="Extract pages or split PDF by range. Free, browser-based, no uploads.">
+  <meta property="og:title" content="Split PDF Online Free — Extract Pages & Custom Ranges | FileWorks">
+  <meta property="og:description" content="Extract single pages, custom ranges, or burst all pages into a ZIP archive. Fast, private, and free.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://fileworks.pages.dev/pages/pdf-split.html">
 
-  <!-- Exact Google AdSense Snippet -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7044469500687742"
-     crossorigin="anonymous"></script>
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7044469500687742" crossorigin="anonymous"></script>
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Split PDF — FileWorks","description":"Extract pages or split a PDF into separate files online for free, processed client-side.","applicationCategory":"UtilitiesApplication","url":"https://fileworks.pages.dev/pages/pdf-split.html","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Split PDF — FileWorks",
+    "description": "Split PDF files into individual pages or custom ranges locally in your browser.",
+    "applicationCategory": "UtilitiesApplication",
+    "url": "https://fileworks.pages.dev/pages/pdf-split.html",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <link rel="stylesheet" href="/css/main.css">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 </head>
 <body>
 
-<nav class="nav" role="navigation"><div class="nav__inner">
-  <a href="/" class="nav__logo" id="nav-logo"><span class="nav__logo-icon">⚡</span>FileWorks</a>
-  <div class="nav__links">
-    <a href="/" class="nav__link" id="nav-home">Tools</a>
-    <a href="/pages/privacy.html" class="nav__link">Privacy</a>
-    <a href="/pages/terms.html" class="nav__link">Terms</a>
+<!-- Navigation -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" id="nav-logo">
+      <span class="nav__logo-icon" aria-hidden="true">⚡</span>
+      FileWorks
+    </a>
+    <div class="nav__links" id="nav-desktop-links">
+      <a href="/" class="nav__link" id="nav-home">Tools</a>
+      <a href="/pages/guides.html" class="nav__link" id="nav-guides">Learning Center</a>
+      <a href="/pages/about.html" class="nav__link" id="nav-about">About</a>
+      <a href="/pages/contact.html" class="nav__link" id="nav-contact">Contact</a>
+      <a href="/pages/privacy.html" class="nav__link" id="nav-privacy">Privacy</a>
+      <a href="/pages/terms.html" class="nav__link" id="nav-terms">Terms</a>
+    </div>
+    <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Open menu" aria-expanded="false">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
   </div>
-  <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Menu">
-    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-  </button>
-</div></nav>
-<nav class="nav-mobile-menu" id="nav-mobile-menu">
-  <a href="/">🔧 Tools</a><a href="/pages/privacy.html">🔒 Privacy</a><a href="/pages/terms.html">📜 Terms</a>
+</nav>
+<nav class="nav-mobile-menu" id="nav-mobile-menu" aria-label="Mobile navigation">
+  <a href="/" id="mnav-home">🔧 All Tools</a>
+  <a href="/pages/guides.html" id="mnav-guides">📚 Learning Center</a>
+  <a href="/pages/about.html" id="mnav-about">ℹ️ About FileWorks</a>
+  <a href="/pages/contact.html" id="mnav-contact">✉️ Contact & Support</a>
+  <a href="/pages/privacy.html" id="mnav-privacy">🔒 Privacy Policy</a>
+  <a href="/pages/terms.html" id="mnav-terms">📜 Terms of Service</a>
 </nav>
 
 <main class="tool-page" id="main-content">
 <div class="container-tool">
 
+  <!-- Breadcrumbs -->
+  <div class="breadcrumbs" aria-label="Breadcrumbs">
+    <a href="/">Home</a>
+    <span class="breadcrumb-separator">/</span>
+    <a href="/#pdf-tools">PDF Tools</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="current">Split PDF</span>
+  </div>
+
   <!-- Header -->
   <div class="tool-header">
     <a href="/" class="tool-header__back" id="back-link">← All Tools</a>
     <div class="tool-header__icon" style="background:rgba(2,132,199,0.15);" id="tool-icon">✂️</div>
-    <h1 id="tool-title">Split PDF Online</h1>
-    <p class="tool-header__desc" id="tool-desc">Extract individual pages or split a PDF into custom page ranges. All processing happens in your browser.</p>
+    <h1 id="tool-title">Split PDF Documents Online</h1>
+    <p class="tool-header__desc" id="tool-desc">Extract specific pages or split multi-page PDFs into custom page ranges. All processing executes locally in your browser memory sandbox.</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
-      <span class="badge badge-privacy" id="badge-privacy">🔒 Files stay local</span>
+      <span class="badge badge-privacy" id="badge-privacy">🔒 100% Local In-Browser Processing</span>
       <span class="badge badge-primary" id="badge-free">Free Tier: Up to 5 Pages</span>
     </div>
-  </div>
-
-  <!-- Ad slot: Safe top placement -->
-  <div class="ad-container ad-container--banner" id="ad-top" style="margin-bottom:28px;" aria-label="Advertisement">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-7044469500687742"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
   </div>
 
   <!-- Interactive Work Area -->
   <div id="interactive-area">
     <div id="limit-warning-mount"></div>
 
-    <!-- Dropzone -->
+    <!-- Dropzone Area -->
     <div id="drop-area">
       <div class="dropzone" id="dropzone" role="button" aria-label="Drop PDF file here or click to select">
         <div class="dropzone__icon">📄</div>
-        <p class="dropzone__title">Drop a PDF file here</p>
-        <p class="dropzone__sub">Free tier: extract up to 5 pages / selections (max 200 MB)</p>
+        <p class="dropzone__title">Drop a PDF file here or click to browse</p>
+        <p class="dropzone__sub">Extract up to 5 pages / selections per batch (up to 200 MB). Zero server uploads.</p>
         <input type="file" id="file-input" accept=".pdf" aria-label="Select PDF file">
+      </div>
+
+      <!-- Differentiator Utility Bar -->
+      <div class="tool-utility-bar" id="tool-utility-bar">
+        <div class="tool-utility-bar__item">
+          <span>💡 Need a quick test?</span>
+          <button type="button" class="btn-sample" id="btn-load-sample">⚡ Try with a 4-Page Sample PDF</button>
+        </div>
+        <div class="tool-utility-bar__item">
+          <span style="color:var(--color-text-muted);">🔒 Files never leave your device</span>
+        </div>
       </div>
     </div>
 
@@ -83,21 +119,24 @@
             <h4 id="pdf-info-title" style="margin:0 0 4px;">PDF loaded</h4>
             <p id="pdf-info-desc" style="font-size:.875rem;color:var(--color-text-muted);margin:0;"></p>
           </div>
-          <button class="btn btn-ghost btn-sm" id="btn-change-file">Change File</button>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-ghost btn-sm" id="btn-inspect-pdf">🔍 Inspect Details</button>
+            <button class="btn btn-ghost btn-sm" id="btn-change-file">Change File</button>
+          </div>
         </div>
 
         <div class="form-group" style="margin-bottom:16px;">
           <label class="form-label" for="split-mode">Split Mode</label>
           <select class="form-select" id="split-mode">
             <option value="pages">Extract specific pages (e.g. 1, 3, 5)</option>
-            <option value="ranges">Split into custom page ranges (e.g. 1-2, 3-5)</option>
+            <option value="ranges">Split into custom page ranges (e.g. 1-2, 3-4)</option>
             <option value="all">Split every page into a separate PDF</option>
           </select>
         </div>
 
         <div id="mode-pages" class="form-group">
           <label class="form-label" for="pages-input">Page numbers to extract (Free tier: max 5 pages)</label>
-          <input type="text" class="form-input" id="pages-input" placeholder="e.g. 1, 2, 4, 5">
+          <input type="text" class="form-input" id="pages-input" placeholder="e.g. 1, 2, 4">
           <p style="font-size:.8125rem;color:var(--color-text-muted);margin-top:4px;">Use commas to separate page numbers (up to 5 pages total).</p>
         </div>
 
@@ -118,7 +157,7 @@
       </div>
     </div>
 
-    <!-- Processing -->
+    <!-- Processing Overlay -->
     <div id="processing-section" class="hidden" style="margin-top:20px;">
       <div class="processing-overlay">
         <div class="spinner"></div>
@@ -134,26 +173,122 @@
 
   <div class="divider"></div>
 
-  <!-- How to Use -->
+  <!-- Educational Section: How to Split -->
   <section id="how-to-use">
-    <h2 style="margin-bottom:24px;font-size:1.4rem;">How to Split a PDF</h2>
+    <h2 style="margin-bottom:24px;font-size:1.4rem;">How to Split a PDF Document</h2>
     <div class="steps">
-      <div class="step"><div class="step-num">1</div><div class="step__content"><h4>Select your PDF</h4><p>Click or drag a PDF document into the drop area above.</p></div></div>
-      <div class="step"><div class="step-num">2</div><div class="step__content"><h4>Choose split mode</h4><p>Extract specific pages, define custom ranges, or extract all pages.</p></div></div>
-      <div class="step"><div class="step-num">3</div><div class="step__content"><h4>Click Split PDF</h4><p>FileWorks processes the extraction locally in your browser sandbox.</p></div></div>
-      <div class="step"><div class="step-num">4</div><div class="step__content"><h4>Preview & Download</h4><p>Preview each extracted page or download all files individually or as a ZIP.</p></div></div>
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step__content">
+          <h4>Select Your Source PDF</h4>
+          <p>Drop your PDF file into the box above or click to select from your files. You can also click <em>"Try with a 4-Page Sample PDF"</em> to test immediately.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step__content">
+          <h4>Choose Split Mode</h4>
+          <p>Extract discrete pages (e.g. <code>1, 3, 4</code>), custom continuous ranges (e.g. <code>1-2, 3-4</code>), or burst all pages into standalone files.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step__content">
+          <h4>Click Split PDF</h4>
+          <p>FileWorks extracts the selected page trees directly in your browser's memory sandbox without uploading to any server.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step__content">
+          <h4>Download Files or ZIP</h4>
+          <p>Download individual extracted pages directly, or click <strong>Download All as ZIP</strong> to receive an organized archive.</p>
+        </div>
+      </div>
     </div>
   </section>
 
   <div class="divider"></div>
 
-  <!-- FAQ -->
+  <!-- Technical Specifications Table -->
+  <section id="tech-specs">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">Technical Specifications & Extraction Rules</h2>
+    <p style="color:var(--color-text-muted);margin-bottom:20px;line-height:1.6;">
+      When extracting pages from a PDF, FileWorks traverses the document's <code>/Pages</code> catalog and copies only the fonts, color profiles, and image dictionaries referenced by the extracted pages:
+    </p>
+
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Extraction Mode</th>
+          <th>Input Syntax Example</th>
+          <th>Output Structure</th>
+          <th>Resource Handling</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Specific Pages</strong></td>
+          <td><code>1, 3, 5</code></td>
+          <td>Individual 1-page PDF files</td>
+          <td>Only embedded fonts and images on pages 1, 3, and 5 are cloned.</td>
+        </tr>
+        <tr>
+          <td><strong>Custom Ranges</strong></td>
+          <td><code>1-3&#10;4-6</code></td>
+          <td>Separate multi-page section PDFs</td>
+          <td>Section-level object stream preservation without font duplication.</td>
+        </tr>
+        <tr>
+          <td><strong>Burst All Pages</strong></td>
+          <td>Automatic (Every Page)</td>
+          <td>Complete numbered ZIP bundle</td>
+          <td>Every page becomes a standalone self-contained document.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Editorial Deep Guide Callout -->
+  <div class="guide-tool-cta" style="margin:36px 0;">
+    <div class="guide-tool-cta__text">
+      <h4>📖 Deep-Dive Editorial Guide</h4>
+      <p>Read our full tutorial on PDF page range formatting rules, physical index vs printed page numbers, and page tree extraction.</p>
+    </div>
+    <a href="/pages/guides/how-to-split-pdf-by-page-ranges.html" class="btn btn-outline btn-sm">Read the Full Technical Guide →</a>
+  </div>
+
+  <!-- Safe Editorial Ad Unit -->
+  <div class="ad-container ad-container--banner" id="ad-content-split" style="margin:40px 0;" aria-label="Advertisement">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-7044469500687742"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+  </div>
+
+  <!-- Tool FAQ -->
   <section id="faq">
     <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
     <div class="faq">
-      <details class="faq-item"><summary>What is the free limit for splitting PDFs?</summary><div class="faq-item__body">The free tier allows extracting up to 5 pages or 5 selections per operation.</div></details>
-      <details class="faq-item"><summary>Are extracted files re-compressed or modified?</summary><div class="faq-item__body">No. All original vectors, fonts, resolutions, and formatting are completely preserved by pdf-lib.</div></details>
-      <details class="faq-item"><summary>Can I download individual pages?</summary><div class="faq-item__body">Yes, every split output has its own Preview and Download button, and there is also a Download All as ZIP button.</div></details>
+      <details class="faq-item">
+        <summary>Are physical page numbers the same as printed page numbers?</summary>
+        <div class="faq-item__body">
+          PDF tools operate on physical sheet sequence (where page 1 is the front cover). If a book or report has introductory Roman numerals (e.g. pages i–iv) before chapter 1, specify physical sheet indices rather than the printed page number in the footer.
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>Will extracted pages lose font formatting or image quality?</summary>
+        <div class="faq-item__body">
+          No. FileWorks extracts the raw vector drawing instructions and embedded font dictionaries without re-encoding or rasterizing. Every extracted page is 100% identical in quality to the original.
+        </div>
+      </details>
+      <details class="faq-item">
+        <summary>What is the free limit for splitting?</summary>
+        <div class="faq-item__body">
+          The free tier supports extracting up to 5 pages/selections per operation. You can process consecutive batches without limits or payment walls.
+        </div>
+      </details>
     </div>
   </section>
 
@@ -174,15 +309,51 @@
 </div>
 </main>
 
-<footer class="footer"><div class="container">
-  <div class="footer__bottom">
-    <p>© 2026 FileWorks. All rights reserved. 100% Free File Tools.</p>
-    <p><a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a> · <a href="/pages/terms.html" style="color:var(--color-primary);">Terms of Service</a></p>
+<!-- Footer -->
+<footer class="footer" id="main-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <h3>⚡ FileWorks</h3>
+        <p>Free online file utility toolkit for PDFs, images, ZIP files, and everyday file management. Files are processed locally in your browser.</p>
+      </div>
+      <div class="footer__col">
+        <h4>PDF Tools</h4>
+        <a href="/pages/pdf-merge.html">Merge PDF</a>
+        <a href="/pages/pdf-split.html">Split PDF</a>
+        <a href="/pages/pdf-rotate.html">Rotate PDF</a>
+        <a href="/pages/pdf-reorder.html">Reorder PDF</a>
+        <a href="/pages/pdf-compress.html">Compress PDF</a>
+        <a href="/pages/pdf-to-image.html">PDF to Image</a>
+        <a href="/pages/image-to-pdf.html">Image to PDF</a>
+      </div>
+      <div class="footer__col">
+        <h4>Image & ZIP Tools</h4>
+        <a href="/pages/image-compress.html">Compress Image</a>
+        <a href="/pages/image-resize.html">Resize Image</a>
+        <a href="/pages/image-convert.html">Convert Image</a>
+        <a href="/pages/create-zip.html">Create ZIP</a>
+        <a href="/pages/extract-zip.html">Extract ZIP</a>
+        <a href="/pages/batch-rename.html">Batch Rename</a>
+      </div>
+      <div class="footer__col">
+        <h4>Resources & Trust</h4>
+        <a href="/pages/guides.html">Learning Center</a>
+        <a href="/pages/about.html">About FileWorks</a>
+        <a href="/pages/contact.html">Contact & Support</a>
+        <a href="/pages/privacy.html">Privacy Policy</a>
+        <a href="/pages/terms.html">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2026 FileWorks. Maintained by AetherKube. All rights reserved.</p>
+      <p>100% Free · Client-Side Local Processing · <a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a></p>
+    </div>
   </div>
-</div></footer>
+</footer>
 
 <div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
-  <p>We display ads to keep FileWorks 100% free. Files stay local. <a href="/pages/privacy.html">Privacy Policy</a></p>
+  <p>We use cookies and display ads via Google AdSense to keep FileWorks free. File processing happens locally in your browser. <a href="/pages/privacy.html">Privacy Policy</a></p>
   <div class="cookie-banner__actions">
     <button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button>
     <button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button>
@@ -196,23 +367,29 @@
 <script src="/js/free-usage.js"></script>
 <script src="/js/preview-modal.js"></script>
 <script src="/js/result-screen.js"></script>
+<script src="/js/inspector.js"></script>
+<script src="/js/sample-files.js"></script>
 <script src="/js/app.js"></script>
 <script src="/js/tools/pdf-tools.js"></script>
+<script src="/js/tools/file-tools.js"></script>
 
 <script>
 (function() {
   const TOOL_FEATURE = 'pdfSplit';
   let pdfFile = null;
   let pageCount = 0;
-  let resultFiles = [];
+  let splitResults = [];
 
   const dropzone = document.getElementById('dropzone');
   const dropArea = document.getElementById('drop-area');
   const fileInput = document.getElementById('file-input');
-  const optSection = document.getElementById('options-section');
-  const limitMount = document.getElementById('limit-warning-mount');
-  const procSection = document.getElementById('processing-section');
+  const optionsSection = document.getElementById('options-section');
+  const processingSection = document.getElementById('processing-section');
   const resultMount = document.getElementById('result-mount');
+  const limitMount = document.getElementById('limit-warning-mount');
+
+  const pdfInfoTitle = document.getElementById('pdf-info-title');
+  const pdfInfoDesc = document.getElementById('pdf-info-desc');
   const splitMode = document.getElementById('split-mode');
   const modePages = document.getElementById('mode-pages');
   const modeRanges = document.getElementById('mode-ranges');
@@ -223,104 +400,107 @@
   const btnSplit = document.getElementById('btn-split');
   const btnChangeFile = document.getElementById('btn-change-file');
   const splitStatusNote = document.getElementById('split-status-note');
+  const btnLoadSample = document.getElementById('btn-load-sample');
+  const btnInspectPdf = document.getElementById('btn-inspect-pdf');
 
-  function parsePageNumbers(str, max) {
-    if (!str || !str.trim()) return [];
-    const nums = new Set();
-    str.split(',').forEach(part => {
-      part = part.trim();
-      if (part.includes('-')) {
-        const [a, b] = part.split('-').map(n => parseInt(n.trim()));
-        if (!isNaN(a) && !isNaN(b)) {
-          for (let i = Math.min(a, b); i <= Math.max(a, b); i++) {
-            if (i >= 1 && i <= max) nums.add(i);
-          }
-        }
-      } else {
-        const n = parseInt(part);
-        if (!isNaN(n) && n >= 1 && n <= max) nums.add(n);
-      }
-    });
-    return [...nums].sort((a, b) => a - b);
+  async function handlePdfSelected(file) {
+    try {
+      FW.file.validateSize(file, 200);
+      FW.file.validateType(file, ['pdf']);
+      pdfFile = file;
+      pageCount = await PdfTools.getPageCount(file);
+
+      pdfInfoTitle.textContent = file.name;
+      pdfInfoDesc.textContent = `${pageCount} page${pageCount > 1 ? 's' : ''} • ${FW.file.formatSize(file.size)}`;
+      modeAllNote.textContent = `Extracts all ${pageCount} pages into individual PDF files.`;
+
+      dropArea.classList.add('hidden');
+      optionsSection.classList.remove('hidden');
+
+      updateFormState();
+      FW.analytics.track('file_selected', { tool: TOOL_FEATURE });
+    } catch(e) {
+      FW.toast.error(e.message || 'Cannot open PDF file.');
+    }
   }
 
-  function parseRanges(str, max) {
-    if (!str || !str.trim()) return [];
-    return str.split('\n').map(l => l.trim()).filter(Boolean).map(l => {
-      const parts = l.split('-');
-      const from = parseInt(parts[0]);
-      const to = parseInt(parts[1] || parts[0]);
-      return { from, to };
-    }).filter(r => !isNaN(r.from) && !isNaN(r.to) && r.from <= max);
-  }
+  function updateFormState() {
+    const mode = splitMode.value;
+    let targetCount = 0;
 
-  function updateModeUI() {
-    modePages.classList.toggle('hidden', splitMode.value !== 'pages');
-    modeRanges.classList.toggle('hidden', splitMode.value !== 'ranges');
-    modeAllInfo.classList.toggle('hidden', splitMode.value !== 'all');
+    if (mode === 'pages') {
+      const nums = pagesInput.value.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n) && n >= 1 && n <= pageCount);
+      targetCount = nums.length;
+    } else if (mode === 'ranges') {
+      const lines = rangesInput.value.split('\n').filter(s => s.trim().length > 0);
+      targetCount = lines.length;
+    } else if (mode === 'all') {
+      targetCount = pageCount;
+    }
 
-    if (splitMode.value === 'all') {
-      modeAllNote.textContent = `Document has ${pageCount} pages. Free tier allows up to 5 pages.`;
-      const check = FreeUsageManager.checkLimit(TOOL_FEATURE, pageCount);
-      if (!check.allowed) {
-        FreeUsageManager.renderLimitWarning(limitMount, check);
-        btnSplit.disabled = true;
-        splitStatusNote.textContent = `PDF has ${pageCount} pages (Free limit: 5). Choose specific pages instead.`;
-        splitStatusNote.style.color = 'var(--color-danger)';
-      } else {
-        FreeUsageManager.clearLimitWarning(limitMount);
-        btnSplit.disabled = false;
-        splitStatusNote.textContent = `Ready to extract all ${pageCount} pages`;
-        splitStatusNote.style.color = 'var(--color-text-muted)';
-      }
+    const check = FreeUsageManager.checkLimit(TOOL_FEATURE, targetCount || 1);
+    if (!check.allowed && targetCount > 0) {
+      FreeUsageManager.renderLimitWarning(limitMount, check);
+      btnSplit.disabled = true;
+      splitStatusNote.textContent = `Free tier limit exceeded (${targetCount}/5). Choose fewer pages.`;
+      splitStatusNote.style.color = 'var(--color-danger)';
     } else {
       FreeUsageManager.clearLimitWarning(limitMount);
-      btnSplit.disabled = false;
-      splitStatusNote.textContent = 'Ready to split';
+      btnSplit.disabled = targetCount === 0;
+      splitStatusNote.textContent = targetCount > 0
+        ? `Ready to extract (${targetCount} item${targetCount > 1 ? 's' : ''})`
+        : 'Configure options above';
       splitStatusNote.style.color = 'var(--color-text-muted)';
     }
   }
 
-  splitMode.addEventListener('change', updateModeUI);
+  splitMode.addEventListener('change', () => {
+    modePages.classList.toggle('hidden', splitMode.value !== 'pages');
+    modeRanges.classList.toggle('hidden', splitMode.value !== 'ranges');
+    modeAllInfo.classList.toggle('hidden', splitMode.value !== 'all');
+    updateFormState();
+  });
 
-  async function loadFile(files) {
-    if (!files.length) return;
-    const f = files[0];
+  pagesInput.addEventListener('input', updateFormState);
+  rangesInput.addEventListener('input', updateFormState);
+
+  FW.dropzone.init(dropzone, fileInput, files => {
+    if (files.length) handlePdfSelected(files[0]);
+  }, { accept: '.pdf', multiple: false });
+
+  btnLoadSample?.addEventListener('click', async () => {
     try {
-      FW.file.validateSize(f, 200);
-      FW.file.validateType(f, ['pdf']);
-      pdfFile = f;
-      pageCount = await PdfTools.getPageCount(f);
-
-      document.getElementById('pdf-info-title').textContent = f.name;
-      document.getElementById('pdf-info-desc').textContent = `${pageCount} pages · ${FW.file.formatSize(f.size)}`;
-
-      // Default pages input suggestion
-      pagesInput.value = pageCount <= 5
-        ? Array.from({length: pageCount}, (_, i) => i + 1).join(', ')
-        : '1, 2, 3, 4, 5';
-
-      dropArea.classList.add('hidden');
-      optSection.classList.remove('hidden');
-      updateModeUI();
-      FW.analytics.track('file_selected', { tool: TOOL_FEATURE });
-    } catch(e) {
-      FW.toast.error(e.message || 'Unable to read this PDF.');
+      FW.toast.info('Generating 4-page sample PDF in browser...');
+      const sample = await SampleFiles.createSamplePdf('Sample_Document_4Pages.pdf', 4, 'FileWorks Split Evaluation');
+      await handlePdfSelected(sample);
+      pagesInput.value = '1, 3';
+      updateFormState();
+      FW.toast.success('Loaded sample PDF! Configured to extract pages 1 and 3.');
+    } catch(err) {
+      FW.toast.error('Failed to create sample: ' + err.message);
     }
-  }
+  });
 
-  FW.dropzone.init(dropzone, fileInput, loadFile, { accept: '.pdf', multiple: false });
+  btnInspectPdf?.addEventListener('click', async () => {
+    if (!pdfFile) return;
+    try {
+      const details = await FileInspector.inspectPdf(pdfFile);
+      FileInspector.showModal(details);
+    } catch(err) {
+      FW.toast.error('Inspector error: ' + err.message);
+    }
+  });
 
   function resetToEmpty() {
     pdfFile = null;
     pageCount = 0;
-    resultFiles = [];
+    splitResults = [];
     FreeUsageManager.resetAllowance(TOOL_FEATURE);
     FreeUsageManager.clearLimitWarning(limitMount);
     resultMount.classList.add('hidden');
     resultMount.innerHTML = '';
-    procSection.classList.add('hidden');
-    optSection.classList.add('hidden');
+    processingSection.classList.add('hidden');
+    optionsSection.classList.add('hidden');
     dropArea.classList.remove('hidden');
     fileInput.value = '';
     pagesInput.value = '';
@@ -331,73 +511,63 @@
 
   btnSplit.addEventListener('click', async () => {
     if (!pdfFile) return;
+    const mode = splitMode.value;
 
     let targetCount = 0;
-    let selectedPages = [];
-    let selectedRanges = [];
-
-    if (splitMode.value === 'pages') {
-      selectedPages = parsePageNumbers(pagesInput.value, pageCount);
-      if (!selectedPages.length) {
-        FW.toast.warning('Please enter at least one valid page number.');
-        return;
-      }
-      targetCount = selectedPages.length;
-    } else if (splitMode.value === 'ranges') {
-      selectedRanges = parseRanges(rangesInput.value, pageCount);
-      if (!selectedRanges.length) {
-        FW.toast.warning('Please define at least one valid page range (e.g. 1-2).');
-        return;
-      }
-      targetCount = selectedRanges.length;
-    } else {
+    if (mode === 'pages') {
+      const nums = pagesInput.value.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n) && n >= 1 && n <= pageCount);
+      targetCount = nums.length;
+    } else if (mode === 'ranges') {
+      targetCount = rangesInput.value.split('\n').filter(s => s.trim().length > 0).length;
+    } else if (mode === 'all') {
       targetCount = pageCount;
     }
 
-    // Limit Check
     const check = FreeUsageManager.checkLimit(TOOL_FEATURE, targetCount);
     if (!check.allowed) {
-      FreeUsageManager.renderLimitWarning(limitMount, check);
       FreeUsageManager.showLimitModal(check);
       return;
     }
 
-    optSection.classList.add('hidden');
-    dropArea.classList.add('hidden');
-    procSection.classList.remove('hidden');
+    optionsSection.classList.add('hidden');
+    processingSection.classList.remove('hidden');
     FW.analytics.track('processing_started', { tool: TOOL_FEATURE, count: targetCount });
 
     try {
-      if (splitMode.value === 'pages') {
-        resultFiles = await PdfTools.split(pdfFile, selectedPages);
-      } else if (splitMode.value === 'ranges') {
-        resultFiles = await PdfTools.splitRanges(pdfFile, selectedRanges);
-      } else {
-        const allPages = Array.from({ length: pageCount }, (_, i) => i + 1);
-        resultFiles = await PdfTools.split(pdfFile, allPages);
+      if (mode === 'pages') {
+        const nums = pagesInput.value.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n) && n >= 1 && n <= pageCount);
+        splitResults = await PdfTools.split(pdfFile, nums);
+      } else if (mode === 'ranges') {
+        const lines = rangesInput.value.split('\n').map(s => s.trim()).filter(Boolean);
+        const ranges = lines.map(line => {
+          const parts = line.split('-').map(p => parseInt(p.trim()));
+          return { from: parts[0] || 1, to: parts[1] || parts[0] || 1 };
+        });
+        splitResults = await PdfTools.splitRanges(pdfFile, ranges);
+      } else if (mode === 'all') {
+        const allNums = Array.from({ length: pageCount }, (_, i) => i + 1);
+        splitResults = await PdfTools.split(pdfFile, allNums);
       }
 
-      procSection.classList.add('hidden');
+      processingSection.classList.add('hidden');
 
       ResultScreen.render(resultMount, {
         title: 'PDF Split Successfully!',
-        description: `Created ${resultFiles.length} PDF file${resultFiles.length > 1 ? 's' : ''} from "${pdfFile.name}".`,
-        files: resultFiles.map(r => ({ name: r.name, blob: r.blob })),
+        description: `Generated ${splitResults.length} extracted file${splitResults.length > 1 ? 's' : ''}.`,
+        files: splitResults,
         toolFeatureId: TOOL_FEATURE,
         onReset: resetToEmpty,
         onDownloadAllZip: async () => {
-          const zip = new JSZip();
-          resultFiles.forEach(r => zip.file(r.name, r.blob));
-          const zipBlob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
-          FW.file.download(zipBlob, `${pdfFile.name.replace(/\.pdf$/i, '')}_split_pages.zip`);
+          const { blob, name } = await FileToolsLib.downloadExtractedAsZip(splitResults, 'split_pages.zip');
+          FW.file.download(blob, name);
           FW.analytics.track('download_started', { tool: TOOL_FEATURE, type: 'zip_all' });
         },
       });
 
       FW.analytics.track('processing_completed', { tool: TOOL_FEATURE });
     } catch(e) {
-      procSection.classList.add('hidden');
-      optSection.classList.remove('hidden');
+      processingSection.classList.add('hidden');
+      optionsSection.classList.remove('hidden');
       FW.toast.error(e.message || 'Failed to split PDF.');
       FW.analytics.track('error_occurred', { tool: TOOL_FEATURE });
     }

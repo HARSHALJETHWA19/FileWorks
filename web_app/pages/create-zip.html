@@ -117,6 +117,22 @@
   <div class="divider"></div>
 
   <!-- How to Use -->
+  
+  <section id="deep-dive" style="margin-top:30px;">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">In-Depth: The PKZIP Archive Format and Client-Side DEFLATE Streams</h2>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      Originally introduced by Phil Katz in 1989, the ZIP file format (PKZIP) remains the world’s most universally supported archive specification. A ZIP file is structured as a sequence of local file entries followed by a central directory record positioned at the end of the byte stream. This central directory acts as a master index, cataloging file names, compressed byte sizes, uncompressed CRC-32 checksums, and relative byte offsets for rapid random access.
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      FileWorks uses <code>JSZip</code> to execute the DEFLATE algorithm (RFC 1951) purely inside JavaScript TypedArrays. By analyzing repetitive byte patterns using sliding dictionary window techniques, the engine compresses text files, documents, and source code by up to 70% while packing already-compressed binaries (like JPEGs or MP3s) cleanly without data corruption.
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      Crucially, because this archive generation runs within your local browser sandbox, zero network packets leave your computer. You can bundle proprietary spreadsheets, confidential contracts, and personal photos with total confidence that no third party or cloud host has access to your files.
+    </p>
+  </section>
+  
+  <div class="divider"></div>
+
   <section id="how-to-use">
     <h2 style="margin-bottom:24px;font-size:1.4rem;">How to Create a ZIP Archive</h2>
     <div class="steps">
@@ -130,6 +146,36 @@
   <div class="divider"></div>
 
   <!-- FAQ -->
+  
+  <section id="best-practices" style="margin-top:30px;">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">Best Practices for Cross-Platform ZIP Archiving</h2>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      When generating archives intended for distribution across mixed operating system environments (such as sharing between Windows, macOS, Linux, and Android), several common pitfalls can cause decompression failures or corrupted files:
+    </p>
+    <ul style="line-height:1.8;color:var(--color-text-muted);margin-bottom:16px;padding-left:20px;">
+      <li><strong>Character Encoding Compatibility:</strong> FileWorks enforces UTF-8 character encoding across all central directory headers, preventing distorted filenames when archives containing accent marks, umlauts, or non-Latin alphabets are unpacked on non-native systems.</li>
+      <li><strong>Avoiding Hidden File Pollution:</strong> Operating systems often generate hidden desktop metadata files (such as macOS <code>.DS_Store</code> or Windows <code>Thumbs.db</code>). When bundling files on FileWorks, only explicitly selected user files are packed into the stream.</li>
+      <li><strong>Pre-Compressed File Considerations:</strong> Packaging files that are already compressed (such as JPEG photos, MP4 videos, or existing ZIP archives) with high-level compression yields minimal additional byte reduction while consuming device battery. For media assets, the primary benefit of ZIP packaging is bundling multiple items into a single portable container.</li>
+    </ul>
+  </section>
+  
+  <div class="divider"></div>
+
+  
+  <section id="troubleshooting-tips" style="margin-top:28px;">
+    <h3 style="margin-bottom:12px;font-size:1.25rem;">Troubleshooting Common File Processing Issues</h3>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:12px;">
+      If you experience unexpected behavior or processing pauses, check these standard browser environment factors:
+    </p>
+    <ul style="line-height:1.75;color:var(--color-text-muted);padding-left:20px;margin-bottom:16px;">
+      <li><strong>Hardware Memory Headroom:</strong> Processing very large files in client-side memory requires sufficient available device RAM. Closing unused background browser tabs frees valuable JavaScript heap allocations.</li>
+      <li><strong>Ad-Blocker Script Interference:</strong> While FileWorks welcomes privacy tools, aggressive content blockers occasionally block Web Worker threads or Canvas blob generation. If a conversion fails to trigger, temporarily whitelist the page or test in private browsing.</li>
+      <li><strong>Corrupt Input Headers:</strong> Files truncated during incomplete downloads or encrypted with unsupported proprietary DRM flags will be safely flagged by our input validation engine before memory allocation.</li>
+    </ul>
+  </section>
+  
+  <div class="divider"></div>
+
   <section id="faq">
     <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
     <div class="faq">

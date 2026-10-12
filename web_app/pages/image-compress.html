@@ -132,6 +132,22 @@
   <div class="divider"></div>
 
   <!-- How to Use -->
+  
+  <section id="deep-dive" style="margin-top:30px;">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">In-Depth: Discrete Cosine Transform, VP8 Wavelets, and Perceptual Quantization</h2>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      Digital images captured by modern smartphones regularly exceed 5 to 15 megabytes, which slows page load speeds, exhausts email attachment limits, and clogs local storage. However, human visual perception is far less sensitive to subtle chrominance changes in high-frequency visual regions than to luminance boundaries. Lossy compression algorithms exploit this biological trait to discard imperceptible visual data.
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      JPEG compression applies a Discrete Cosine Transform (DCT) across 8×8 pixel macroblocks, dividing spatial frequencies into quantization tables. Higher compression values apply coarser quantization to high frequencies, shedding significant bytes with minimal perceptible distortion. WebP improves on this by using VP8 intra-frame block prediction, which predicts pixel values based on adjacent blocks before encoding residuals—delivering 25% to 35% smaller files than JPEG at equal visual quality.
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      FileWorks puts precise control in your hands with real-time browser canvas re-encoding. You can dial in the exact compression percentage (with 82% being the mathematically balanced sweet spot for web delivery) and inspect the byte reduction immediately before downloading.
+    </p>
+  </section>
+  
+  <div class="divider"></div>
+
   <section id="how-to-use">
     <h2 style="margin-bottom:24px;font-size:1.4rem;">How to Compress Images</h2>
     <div class="steps">
@@ -145,6 +161,21 @@
   <div class="divider"></div>
 
   <!-- FAQ -->
+  
+  <section id="best-practices" style="margin-top:30px;">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">Best Practices for Image Compression & Web Optimization</h2>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      Achieving professional-quality image optimization requires balancing visual quality against bandwidth constraints:
+    </p>
+    <ul style="line-height:1.8;color:var(--color-text-muted);margin-bottom:16px;padding-left:20px;">
+      <li><strong>The 80-85% Sweet Spot:</strong> Compression curves for lossy JPEG and WebP are non-linear. Decreasing quality from 100% to 85% typically reduces file size by 60% to 75% with zero human-perceptible degradation. Dropping below 70%, however, begins introducing visible blockiness around high-contrast edges.</li>
+      <li><strong>Resize Before Compressing:</strong> Compressing a 4000 × 3000 pixel camera snapshot down to 50% quality is far less efficient than resizing the image to its intended display dimensions (such as 1600 × 1200 px) and applying gentle 85% compression. Always downscale first for maximum performance gains.</li>
+      <li><strong>Transparency Preservation:</strong> If your graphics rely on transparent backgrounds, select WebP or keep PNG. Converting transparent PNGs to JPEG replaces the alpha channel with a solid white background matte.</li>
+    </ul>
+  </section>
+  
+  <div class="divider"></div>
+
   <section id="faq">
     <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
     <div class="faq">

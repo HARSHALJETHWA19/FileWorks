@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Split a PDF by Page Ranges: Step-by-Step Guide | FileWorks</title>
+  <meta name="description" content="Learn the formatting rules and techniques for splitting large PDF files into custom page ranges, single pages, or organized ZIP archives without losing formatting.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://fileworks.pages.dev/pages/guides/how-to-split-pdf-by-page-ranges.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="FileWorks">
+  <meta property="og:title" content="How to Split a PDF by Page Ranges: Step-by-Step Guide">
+  <meta property="og:description" content="Practical guide for extracting specific pages and custom ranges from multi-page PDF documents with complete vector preservation.">
+  <meta property="og:url" content="https://fileworks.pages.dev/pages/guides/how-to-split-pdf-by-page-ranges.html">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "How to Split a PDF by Page Ranges: Step-by-Step Guide & Formatting Rules",
+    "description": "Comprehensive tutorial on extracting custom page ranges, isolating individual chapters, and managing PDF object dictionaries during split operations.",
+    "url": "https://fileworks.pages.dev/pages/guides/how-to-split-pdf-by-page-ranges.html",
+    "author": { "@type": "Organization", "name": "FileWorks Editorial Team" },
+    "publisher": { "@type": "Organization", "name": "FileWorks", "url": "https://fileworks.pages.dev/" },
+    "datePublished": "2026-10-01",
+    "dateModified": "2026-10-12"
+  }
+  </script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7044469500687742" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" id="nav-logo">
+      <span class="nav__logo-icon" aria-hidden="true">⚡</span>
+      FileWorks
+    </a>
+    <div class="nav__links" id="nav-desktop-links">
+      <a href="/" class="nav__link" id="nav-home">Tools</a>
+      <a href="/pages/guides.html" class="nav__link active" id="nav-guides">Learning Center</a>
+      <a href="/pages/about.html" class="nav__link" id="nav-about">About</a>
+      <a href="/pages/contact.html" class="nav__link" id="nav-contact">Contact</a>
+      <a href="/pages/privacy.html" class="nav__link" id="nav-privacy">Privacy</a>
+      <a href="/pages/terms.html" class="nav__link" id="nav-terms">Terms</a>
+    </div>
+    <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Open menu" aria-expanded="false">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+<nav class="nav-mobile-menu" id="nav-mobile-menu" aria-label="Mobile navigation">
+  <a href="/" id="mnav-home">🔧 All Tools</a>
+  <a href="/pages/guides.html" id="mnav-guides">📚 Learning Center</a>
+  <a href="/pages/about.html" id="mnav-about">ℹ️ About FileWorks</a>
+  <a href="/pages/contact.html" id="mnav-contact">✉️ Contact & Support</a>
+  <a href="/pages/privacy.html" id="mnav-privacy">🔒 Privacy Policy</a>
+  <a href="/pages/terms.html" id="mnav-terms">📜 Terms of Service</a>
+</nav>
+
+<main class="container section--sm" id="main-content">
+  <div class="breadcrumbs" aria-label="Breadcrumbs">
+    <a href="/">Home</a>
+    <span class="breadcrumb-separator">/</span>
+    <a href="/pages/guides.html">Learning Center</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="current">Splitting PDF by Ranges</span>
+  </div>
+
+  <article class="guide-container">
+    <header class="guide-header">
+      <span class="guide-header__badge">✂️ Document Workflow</span>
+      <h1 class="guide-header__title">How to Split a PDF by Page Ranges: Step-by-Step Guide & Formatting Rules</h1>
+      <p class="guide-header__lead">
+        Extracting chapters, invoices, or specific legal exhibits from large multi-page PDF documents requires understanding range syntax, page numbering discrepancies, and resource tree separation.
+      </p>
+      <div class="guide-meta">
+        <span class="guide-meta-item">⏱️ 5 min read</span>
+        <span class="guide-meta-item">📅 Updated October 2026</span>
+        <span class="guide-meta-item">🎯 Beginner to Intermediate</span>
+      </div>
+    </header>
+
+    <div class="guide-content">
+      <h2>Why Split PDFs?</h2>
+      <p>
+        Multi-page PDFs frequently bundle dozens or hundreds of pages into a single monolithic document. Common scenarios where splitting is essential include:
+      </p>
+      <ul>
+        <li><strong>Email File Size Limits:</strong> Isolating only the 3-page executive summary from an 80 MB annual report so it fits within standard 20 MB email attachment limits.</li>
+        <li><strong>Privacy and Confidentiality:</strong> Extracting non-sensitive pages to share with contractors while omitting internal financial appendices.</li>
+        <li><strong>Invoice and Receipt Batching:</strong> Dividing monthly scanned statement bundles into individual single-page accounting records.</li>
+      </ul>
+
+      <h2>Page Range Syntax & Formatting Rules</h2>
+      <p>
+        When specifying pages to extract, modern PDF processors use standard comma-delimited and hyphen-delimited syntax:
+      </p>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Syntax Example</th>
+            <th>Type</th>
+            <th>Pages Extracted</th>
+            <th>Resulting Output</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>1, 3, 5</code></td>
+            <td>Discrete List</td>
+            <td>Pages 1, 3, and 5</td>
+            <td>Individual files or a 3-page consolidated extract</td>
+          </tr>
+          <tr>
+            <td><code>1-4, 8-10</code></td>
+            <td>Compound Ranges</td>
+            <td>Pages 1, 2, 3, 4 and 8, 9, 10</td>
+            <td>Two separate section PDFs or combined extract</td>
+          </tr>
+          <tr>
+            <td><code>5-</code></td>
+            <td>Open-Ended Range</td>
+            <td>Page 5 through the final document page</td>
+            <td>Remaining document excluding preamble</td>
+          </tr>
+          <tr>
+            <td><code>All</code></td>
+            <td>Burst Extraction</td>
+            <td>Every single page (1, 2, 3... N)</td>
+            <td>A structured ZIP archive of 1-page PDFs</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="guide-callout guide-callout--warning">
+        <h4>⚠️ The "Printed Page Number" vs. "Physical Page Index" Trap</h4>
+        <p>
+          Books and corporate reports often include Roman numeral preambles (e.g., pages i–iv) before page 1 officially begins on sheet 5. PDF splitting tools operate strictly on <strong>physical sheet order</strong>, meaning sheet 1 is the front cover, not printed page 1. Always check physical page count before specifying ranges.
+        </p>
+      </div>
+
+      <!-- Safe Mid-Content Ad Slot -->
+      <div class="ad-container ad-container--banner" id="ad-guide-split" style="margin:36px 0;" aria-label="Advertisement">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-7044469500687742"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
+
+      <h2>How PDF Engines Extract Pages Internally</h2>
+      <p>
+        In a raw PDF file, pages are organized in a hierarchical tree structure defined by the <code>/Pages</code> catalog dictionary. Each page node contains references to shared resources:
+      </p>
+      <ul>
+        <li><strong>Font Subsets:</strong> Embedded vector typefaces used across the entire document.</li>
+        <li><strong>Color Spaces:</strong> DeviceCMYK, DeviceRGB, or ICC profile definitions.</li>
+        <li><strong>XObject Images:</strong> Raster photos and logos referenced in page content streams.</li>
+      </ul>
+      <p>
+        When FileWorks splits a PDF using <code>pdf-lib</code>, it creates a new target <code>PDFDocument</code>, traverses the page array, and copies only the specific page indices requested. Crucially, the engine automatically copies over only the fonts and images actually referenced by those extracted pages, keeping the new extracted file lightweight and fully self-contained.
+      </p>
+
+      <h2>Step-by-Step: Splitting a PDF in FileWorks</h2>
+      <ol>
+        <li>
+          <strong>Open the Split Tool:</strong> Visit the <a href="/pages/pdf-split.html">FileWorks PDF Splitter</a>.
+        </li>
+        <li>
+          <strong>Select Your PDF:</strong> Click the dropzone or drag and drop your document. FileWorks displays the total detected page count immediately.
+        </li>
+        <li>
+          <strong>Select Split Mode:</strong>
+          <ul>
+            <li><em>Extract Single Pages:</em> Select discrete pages (e.g. page 2, page 4).</li>
+            <li><em>Extract Custom Range:</em> Input a continuous range like <code>1-5</code>.</li>
+            <li><em>Split Every Page:</em> Bursts all pages into separate standalone files.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Click Split PDF:</strong> The browser parses the byte stream, creates new document catalogs, and generates your output in memory.
+        </li>
+        <li>
+          <strong>Download:</strong> Download individual extracted pages directly or click <strong>Download All as ZIP</strong> to receive an organized archive.
+        </li>
+      </ol>
+
+      <div class="guide-tool-cta">
+        <div class="guide-tool-cta__text">
+          <h4>Need to Extract Pages Now?</h4>
+          <p>Extract custom page ranges or burst all pages into individual PDFs locally in your browser.</p>
+        </div>
+        <a href="/pages/pdf-split.html" class="btn btn-primary btn-sm">Open PDF Splitter →</a>
+      </div>
+
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq" style="margin-top:20px;">
+        <details class="faq-item">
+          <summary>Does splitting a PDF damage the original file?</summary>
+          <div class="faq-item__body">
+            Never. FileWorks reads your original file as a read-only binary ArrayBuffer in your browser's RAM. The original file stored on your computer or phone remains completely untouched.
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>What is the free limit for splitting pages?</summary>
+          <div class="faq-item__body">
+            The free tier allows extracting up to 5 pages/selections per operation. For multi-part documents, you can run multiple extraction operations consecutively for free.
+          </div>
+        </details>
+      </div>
+    </div>
+  </article>
+</main>
+
+<!-- Footer -->
+<footer class="footer" id="main-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <h3>⚡ FileWorks</h3>
+        <p>Free online file utility toolkit for PDFs, images, ZIP files, and everyday file management. Files are processed locally in your browser.</p>
+      </div>
+      <div class="footer__col">
+        <h4>PDF Tools</h4>
+        <a href="/pages/pdf-merge.html">Merge PDF</a>
+        <a href="/pages/pdf-split.html">Split PDF</a>
+        <a href="/pages/pdf-rotate.html">Rotate PDF</a>
+        <a href="/pages/pdf-reorder.html">Reorder PDF</a>
+        <a href="/pages/pdf-compress.html">Compress PDF</a>
+        <a href="/pages/pdf-to-image.html">PDF to Image</a>
+        <a href="/pages/image-to-pdf.html">Image to PDF</a>
+      </div>
+      <div class="footer__col">
+        <h4>Image & ZIP Tools</h4>
+        <a href="/pages/image-compress.html">Compress Image</a>
+        <a href="/pages/image-resize.html">Resize Image</a>
+        <a href="/pages/image-convert.html">Convert Image</a>
+        <a href="/pages/create-zip.html">Create ZIP</a>
+        <a href="/pages/extract-zip.html">Extract ZIP</a>
+        <a href="/pages/batch-rename.html">Batch Rename</a>
+      </div>
+      <div class="footer__col">
+        <h4>Resources & Trust</h4>
+        <a href="/pages/guides.html">Learning Center</a>
+        <a href="/pages/about.html">About FileWorks</a>
+        <a href="/pages/contact.html">Contact & Support</a>
+        <a href="/pages/privacy.html">Privacy Policy</a>
+        <a href="/pages/terms.html">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2026 FileWorks. Maintained by AetherKube. All rights reserved.</p>
+      <p>100% Free · Client-Side Local Processing · <a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a></p>
+    </div>
+  </div>
+</footer>
+
+<div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
+  <p>We use cookies and display ads via Google AdSense to keep FileWorks free. File processing happens locally in your browser. <a href="/pages/privacy.html">Privacy Policy</a></p>
+  <div class="cookie-banner__actions">
+    <button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button>
+    <button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button>
+  </div>
+</div>
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<script src="/js/free-usage.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>

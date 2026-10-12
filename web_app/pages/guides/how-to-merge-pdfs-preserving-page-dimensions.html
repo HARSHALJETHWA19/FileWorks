@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Merge PDFs While Preserving Page Dimensions & Orientations | FileWorks Guide</title>
+  <meta name="description" content="Learn how to combine PDF documents with mixed page sizes (A4, US Letter, landscape tables) without clipping, distortion, or unwanted page scaling.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://fileworks.pages.dev/pages/guides/how-to-merge-pdfs-preserving-page-dimensions.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="FileWorks">
+  <meta property="og:title" content="How to Merge PDFs While Preserving Page Dimensions & Orientations">
+  <meta property="og:description" content="Detailed guide on combining PDFs with mixed page sizes and landscape/portrait orientations while maintaining vector precision and ISO dimensions.">
+  <meta property="og:url" content="https://fileworks.pages.dev/pages/guides/how-to-merge-pdfs-preserving-page-dimensions.html">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "How to Merge PDFs While Preserving Page Dimensions & Orientations",
+    "description": "A technical guide to combining PDF files with differing page dimensions and orientations without clipping content or forcing uniform scaling.",
+    "url": "https://fileworks.pages.dev/pages/guides/how-to-merge-pdfs-preserving-page-dimensions.html",
+    "author": { "@type": "Organization", "name": "FileWorks Editorial Team" },
+    "publisher": { "@type": "Organization", "name": "FileWorks", "url": "https://fileworks.pages.dev/" },
+    "datePublished": "2026-10-01",
+    "dateModified": "2026-10-12"
+  }
+  </script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7044469500687742" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" id="nav-logo">
+      <span class="nav__logo-icon" aria-hidden="true">⚡</span>
+      FileWorks
+    </a>
+    <div class="nav__links" id="nav-desktop-links">
+      <a href="/" class="nav__link" id="nav-home">Tools</a>
+      <a href="/pages/guides.html" class="nav__link active" id="nav-guides">Learning Center</a>
+      <a href="/pages/about.html" class="nav__link" id="nav-about">About</a>
+      <a href="/pages/contact.html" class="nav__link" id="nav-contact">Contact</a>
+      <a href="/pages/privacy.html" class="nav__link" id="nav-privacy">Privacy</a>
+      <a href="/pages/terms.html" class="nav__link" id="nav-terms">Terms</a>
+    </div>
+    <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Open menu" aria-expanded="false">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+<nav class="nav-mobile-menu" id="nav-mobile-menu" aria-label="Mobile navigation">
+  <a href="/" id="mnav-home">🔧 All Tools</a>
+  <a href="/pages/guides.html" id="mnav-guides">📚 Learning Center</a>
+  <a href="/pages/about.html" id="mnav-about">ℹ️ About FileWorks</a>
+  <a href="/pages/contact.html" id="mnav-contact">✉️ Contact & Support</a>
+  <a href="/pages/privacy.html" id="mnav-privacy">🔒 Privacy Policy</a>
+  <a href="/pages/terms.html" id="mnav-terms">📜 Terms of Service</a>
+</nav>
+
+<main class="container section--sm" id="main-content">
+  <div class="breadcrumbs" aria-label="Breadcrumbs">
+    <a href="/">Home</a>
+    <span class="breadcrumb-separator">/</span>
+    <a href="/pages/guides.html">Learning Center</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="current">Preserving PDF Page Dimensions</span>
+  </div>
+
+  <article class="guide-container">
+    <header class="guide-header">
+      <span class="guide-header__badge">📄 PDF Architecture & Standards</span>
+      <h1 class="guide-header__title">How to Merge PDFs While Preserving Page Dimensions & Orientations</h1>
+      <p class="guide-header__lead">
+        Combining documents generated from different software often results in mixed dimensions—such as portrait A4 reports merged with widescreen landscape spreadsheets. Learn how PDF coordinate systems work and how to merge them seamlessly without clipping or distorting content.
+      </p>
+      <div class="guide-meta">
+        <span class="guide-meta-item">⏱️ 6 min read</span>
+        <span class="guide-meta-item">📅 Updated October 2026</span>
+        <span class="guide-meta-item">🎯 Intermediate</span>
+      </div>
+    </header>
+
+    <div class="guide-content">
+      <h2>The Core Challenge: Mixed PDF Page Geometries</h2>
+      <p>
+        In an ideal workflow, all documents would use the exact same paper standard. In real business environments, however, you frequently need to combine:
+      </p>
+      <ul>
+        <li>A portrait-oriented cover letter authored in Microsoft Word (usually <strong>US Letter</strong> or <strong>ISO A4</strong>).</li>
+        <li>Financial ledger sheets exported from Microsoft Excel in <strong>widescreen landscape</strong> (11 × 17 in or landscape A3).</li>
+        <li>Architectural schematics, legal exhibits, or scanned receipts with arbitrary aspect ratios.</li>
+      </ul>
+      <p>
+        Naïve PDF merging utilities frequently force all pages into the dimension of the first page. When a landscape spreadsheet is forcibly compressed into an A4 portrait bounding box, the content either gets heavily scaled down (leaving massive white margins), clipped off at the margins, or distorted.
+      </p>
+
+      <h2>Understanding PDF Coordinate Systems: MediaBox vs. CropBox</h2>
+      <p>
+        According to the <strong>ISO 32000-1 specification</strong> (the international standard for PDF), a PDF page does not have a physical size in inches or millimeters. Instead, it is defined in <em>user space units</em>, where <strong>1 point = 1/72 of an inch</strong>.
+      </p>
+      <p>
+        Every page object in a PDF dictionary contains rectangular boundary definitions:
+      </p>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>PDF Boundary Box</th>
+            <th>Purpose</th>
+            <th>Typical Dimension (A4)</th>
+            <th>Typical Dimension (Letter)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>/MediaBox</strong></td>
+            <td>Defines the physical boundaries of the medium onto which the page is intended to be printed.</td>
+            <td><code>[0, 0, 595.28, 841.89]</code> pt</td>
+            <td><code>[0, 0, 612.00, 792.00]</code> pt</td>
+          </tr>
+          <tr>
+            <td><strong>/CropBox</strong></td>
+            <td>Defines the region to which page contents are clipped when displayed or printed. Defaults to MediaBox.</td>
+            <td>Matches MediaBox unless trimmed</td>
+            <td>Matches MediaBox unless trimmed</td>
+          </tr>
+          <tr>
+            <td><strong>/BleedBox</strong></td>
+            <td>Defines the region to which page contents should be clipped in production print environments.</td>
+            <td>Slightly larger than TrimBox</td>
+            <td>Slightly larger than TrimBox</td>
+          </tr>
+          <tr>
+            <td><strong>/Rotate</strong></td>
+            <td>Specifies the number of degrees by which the page should be rotated clockwise upon viewing (0, 90, 180, 270).</td>
+            <td><code>0</code> (Portrait) or <code>90</code></td>
+            <td><code>0</code> (Portrait) or <code>90</code></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="guide-callout guide-callout--tip">
+        <h4>💡 Key Takeaway on PDF Geometry</h4>
+        <p>
+          A single PDF file can legally contain 100 pages where each individual page has a completely independent <code>/MediaBox</code> and <code>/Rotate</code> value. True page merging preserves each page's native dictionary instead of resampling the coordinate matrix.
+        </p>
+      </div>
+
+      <!-- Safe Mid-Content Ad Slot -->
+      <div class="ad-container ad-container--banner" id="ad-guide-merge" style="margin:36px 0;" aria-label="Advertisement">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-7044469500687742"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
+
+      <h2>Step-by-Step: How to Merge Mixed PDFs Using FileWorks</h2>
+      <p>
+        FileWorks uses client-side document cloning via <code>pdf-lib</code>. When pages are copied from source documents into the output document, their exact <code>/MediaBox</code>, <code>/CropBox</code>, font resources, and vector drawing streams are preserved verbatim:
+      </p>
+
+      <ol>
+        <li>
+          <strong>Open the Merge Tool:</strong> Navigate to the <a href="/pages/pdf-merge.html">FileWorks PDF Merge Tool</a>.
+        </li>
+        <li>
+          <strong>Upload or Drag Source Files:</strong> Select your files (up to the free tier limit of 3 PDFs). You can also click the <em>"Inspect File Details"</em> button to view the exact dimensions and page counts of each document before merging.
+        </li>
+        <li>
+          <strong>Arrange the Document Sequence:</strong> Drag and drop the cards in the file list to ensure the chapters, attachments, and appendices appear in the exact order you need.
+        </li>
+        <li>
+          <strong>Execute the Merge:</strong> Click <strong>Merge PDF</strong>. The tool loads both documents into browser memory, iterates through the page trees, extracts each page object with its original geometry intact, and produces a consolidated document in seconds.
+        </li>
+        <li>
+          <strong>Verify with Preview:</strong> Click <strong>Preview</strong> on the result screen. Notice that scrolling from an A4 portrait page to a widescreen landscape page maintains the natural orientation of each page without letterboxing.
+        </li>
+      </ol>
+
+      <div class="guide-tool-cta">
+        <div class="guide-tool-cta__text">
+          <h4>Try It Right Now</h4>
+          <p>Merge multiple PDF documents directly in your browser with complete dimension preservation.</p>
+        </div>
+        <a href="/pages/pdf-merge.html" class="btn btn-primary btn-sm">Open PDF Merger →</a>
+      </div>
+
+      <h2>Troubleshooting Common Merge Issues</h2>
+      <h3>1. Landscape Pages Appearing Sideways in Viewers</h3>
+      <p>
+        If a landscape page displays vertically, check whether the document was designed with a rotated coordinate system (e.g. <code>MediaBox [0, 0, 842, 595]</code> with <code>Rotate 0</code>) or an upright box with a viewing rotation flag (e.g. <code>MediaBox [0, 0, 595, 842]</code> with <code>Rotate 90</code>). If it appears sideways, use the <a href="/pages/pdf-rotate.html">FileWorks PDF Rotate Tool</a> to adjust the rotation flag by 90° or 270°.
+      </p>
+
+      <h3>2. Password-Protected or Encrypted Source Documents</h3>
+      <p>
+        PDF files protected with an Owner Password or User Password restrict programmatic copying of page content. If FileWorks displays an error stating that the file is encrypted, decrypt the document using your PDF reader before initiating the merge.
+      </p>
+
+      <h3>3. Mixed Standard Formats (A4 vs. US Letter)</h3>
+      <p>
+        US Letter (8.5 × 11 in / 612 × 792 pt) is slightly wider and shorter than ISO A4 (8.27 × 11.69 in / 595.28 × 841.89 pt). When merged, both page types will exist side by side. When printing, select <em>"Choose paper source by PDF page size"</em> in your printer dialog to allow the printer to pull from the appropriate paper tray automatically.
+      </p>
+
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq" style="margin-top:20px;">
+        <details class="faq-item">
+          <summary>Does merging PDFs reduce vector graphic or text sharpness?</summary>
+          <div class="faq-item__body">
+            No. Merging PDFs in FileWorks does not rasterize your pages into bitmaps. Text characters remain scalable vector glyphs, and CAD/vector illustrations retain 100% of their original mathematical curves and sharpness.
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Will hyperlinks and bookmarks survive the merge?</summary>
+          <div class="faq-item__body">
+            External web hyperlinks embedded within page annotation dictionaries are preserved. However, document-level hierarchical bookmark trees (the outline catalog) are rebuilt to prevent broken intra-document link references.
+          </div>
+        </details>
+      </div>
+    </div>
+  </article>
+</main>
+
+<!-- Footer -->
+<footer class="footer" id="main-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <h3>⚡ FileWorks</h3>
+        <p>Free online file utility toolkit for PDFs, images, ZIP files, and everyday file management. Files are processed locally in your browser.</p>
+      </div>
+      <div class="footer__col">
+        <h4>PDF Tools</h4>
+        <a href="/pages/pdf-merge.html">Merge PDF</a>
+        <a href="/pages/pdf-split.html">Split PDF</a>
+        <a href="/pages/pdf-rotate.html">Rotate PDF</a>
+        <a href="/pages/pdf-reorder.html">Reorder PDF</a>
+        <a href="/pages/pdf-compress.html">Compress PDF</a>
+        <a href="/pages/pdf-to-image.html">PDF to Image</a>
+        <a href="/pages/image-to-pdf.html">Image to PDF</a>
+      </div>
+      <div class="footer__col">
+        <h4>Image & ZIP Tools</h4>
+        <a href="/pages/image-compress.html">Compress Image</a>
+        <a href="/pages/image-resize.html">Resize Image</a>
+        <a href="/pages/image-convert.html">Convert Image</a>
+        <a href="/pages/create-zip.html">Create ZIP</a>
+        <a href="/pages/extract-zip.html">Extract ZIP</a>
+        <a href="/pages/batch-rename.html">Batch Rename</a>
+      </div>
+      <div class="footer__col">
+        <h4>Resources & Trust</h4>
+        <a href="/pages/guides.html">Learning Center</a>
+        <a href="/pages/about.html">About FileWorks</a>
+        <a href="/pages/contact.html">Contact & Support</a>
+        <a href="/pages/privacy.html">Privacy Policy</a>
+        <a href="/pages/terms.html">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2026 FileWorks. Maintained by AetherKube. All rights reserved.</p>
+      <p>100% Free · Client-Side Local Processing · <a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a></p>
+    </div>
+  </div>
+</footer>
+
+<div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
+  <p>We use cookies and display ads via Google AdSense to keep FileWorks free. File processing happens locally in your browser. <a href="/pages/privacy.html">Privacy Policy</a></p>
+  <div class="cookie-banner__actions">
+    <button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button>
+    <button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button>
+  </div>
+</div>
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<script src="/js/free-usage.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>

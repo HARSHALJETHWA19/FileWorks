@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Combine Images into a PDF Without Distortion | FileWorks</title>
+  <meta name="description" content="Learn how to convert multiple JPG, PNG, and WebP images into a clean PDF document while preserving original aspect ratios, page margins, and visual proportions.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://fileworks.pages.dev/pages/guides/how-to-combine-images-into-pdf-without-distortion.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="FileWorks">
+  <meta property="og:title" content="How to Combine Images into a PDF Without Distortion">
+  <meta property="og:description" content="Step-by-step guide to converting images to PDF without stretching: aspect ratio math, margins, and page orientation calculations.">
+  <meta property="og:url" content="https://fileworks.pages.dev/pages/guides/how-to-combine-images-into-pdf-without-distortion.html">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "How to Combine Images into a PDF Without Stretching or Distorting",
+    "description": "Technical tutorial explaining proportional bounding box calculations, margin offsets, and vector page embedding when converting images to PDF.",
+    "url": "https://fileworks.pages.dev/pages/guides/how-to-combine-images-into-pdf-without-distortion.html",
+    "author": { "@type": "Organization", "name": "FileWorks Editorial Team" },
+    "publisher": { "@type": "Organization", "name": "FileWorks", "url": "https://fileworks.pages.dev/" },
+    "datePublished": "2026-10-01",
+    "dateModified": "2026-10-12"
+  }
+  </script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7044469500687742" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" id="nav-logo">
+      <span class="nav__logo-icon" aria-hidden="true">⚡</span>
+      FileWorks
+    </a>
+    <div class="nav__links" id="nav-desktop-links">
+      <a href="/" class="nav__link" id="nav-home">Tools</a>
+      <a href="/pages/guides.html" class="nav__link active" id="nav-guides">Learning Center</a>
+      <a href="/pages/about.html" class="nav__link" id="nav-about">About</a>
+      <a href="/pages/contact.html" class="nav__link" id="nav-contact">Contact</a>
+      <a href="/pages/privacy.html" class="nav__link" id="nav-privacy">Privacy</a>
+      <a href="/pages/terms.html" class="nav__link" id="nav-terms">Terms</a>
+    </div>
+    <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Open menu" aria-expanded="false">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+<nav class="nav-mobile-menu" id="nav-mobile-menu" aria-label="Mobile navigation">
+  <a href="/" id="mnav-home">🔧 All Tools</a>
+  <a href="/pages/guides.html" id="mnav-guides">📚 Learning Center</a>
+  <a href="/pages/about.html" id="mnav-about">ℹ️ About FileWorks</a>
+  <a href="/pages/contact.html" id="mnav-contact">✉️ Contact & Support</a>
+  <a href="/pages/privacy.html" id="mnav-privacy">🔒 Privacy Policy</a>
+  <a href="/pages/terms.html" id="mnav-terms">📜 Terms of Service</a>
+</nav>
+
+<main class="container section--sm" id="main-content">
+  <div class="breadcrumbs" aria-label="Breadcrumbs">
+    <a href="/">Home</a>
+    <span class="breadcrumb-separator">/</span>
+    <a href="/pages/guides.html">Learning Center</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="current">Images to PDF Without Distortion</span>
+  </div>
+
+  <article class="guide-container">
+    <header class="guide-header">
+      <span class="guide-header__badge">🖼️ Geometry & Scaling</span>
+      <h1 class="guide-header__title">How to Combine Images into a PDF Without Stretching or Distorting</h1>
+      <p class="guide-header__lead">
+        Converting photos, scanned receipts, and graphics into a consolidated PDF often results in ugly stretched images or awkward black bars. Learn the math behind aspect-ratio-preserving page fitting.
+      </p>
+      <div class="guide-meta">
+        <span class="guide-meta-item">⏱️ 5 min read</span>
+        <span class="guide-meta-item">📅 Updated October 2026</span>
+        <span class="guide-meta-item">🎯 Intermediate</span>
+      </div>
+    </header>
+
+    <div class="guide-content">
+      <h2>The Distortion Problem: Fixed Page Bounding Boxes</h2>
+      <p>
+        Most images have non-standard aspect ratios. A smartphone photo may have a 4:3 or 16:9 ratio, while a panoramic photo might be 21:9, and a scanned document might be approximately 1:1.414 (the square root of 2, standard for ISO paper).
+      </p>
+      <p>
+        When you combine these disparate images into a PDF with a fixed paper size (such as standard A4: 595.28 × 841.89 points), basic conversion tools make a critical mistake: they force the image width to equal <code>pageWidth</code> and the image height to equal <code>pageHeight</code>. This immediately stretches or squashes the image, making text unreadable and faces distorted.
+      </p>
+
+      <h2>The Mathematical Solution: Aspect-Preserving Containment</h2>
+      <p>
+        To render an image naturally on a PDF page without distortion, the conversion engine must calculate an <strong>aspect-ratio-locked bounding box</strong>:
+      </p>
+
+      <div class="guide-callout guide-callout--tip">
+        <h4>Bounding Box Calculation Formula</h4>
+        <p>
+          Let available printable width be <code>W<sub>avail</sub> = PageWidth - 2 × Margin</code> and printable height be <code>H<sub>avail</sub> = PageHeight - 2 × Margin</code>.
+        </p>
+        <p>
+          <code>ImageAspect = ImageWidth / ImageHeight</code><br>
+          <code>PageAspect = W<sub>avail</sub> / H<sub>avail</sub></code>
+        </p>
+        <p>
+          • If <code>ImageAspect &gt; PageAspect</code> (image is wider than page):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<code>DrawWidth = W<sub>avail</sub></code><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<code>DrawHeight = W<sub>avail</sub> / ImageAspect</code><br>
+          • Else (image is taller than page):<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<code>DrawHeight = H<sub>avail</sub></code><br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<code>DrawWidth = H<sub>avail</sub> × ImageAspect</code>
+        </p>
+        <p>
+          Centering offsets: <code>X = Margin + (W<sub>avail</sub> - DrawWidth) / 2</code>, <code>Y = Margin + (H<sub>avail</sub> - DrawHeight) / 2</code>.
+        </p>
+      </div>
+
+      <!-- Safe Mid-Content Ad Slot -->
+      <div class="ad-container ad-container--banner" id="ad-guide-img-pdf" style="margin:36px 0;" aria-label="Advertisement">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-7044469500687742"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
+
+      <h2>Choosing Your Page Layout Options</h2>
+      <p>
+        Depending on your document's final destination, you have three primary formatting choices in FileWorks:
+      </p>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Page Size Mode</th>
+            <th>Dimensions (pt)</th>
+            <th>Visual Result</th>
+            <th>Ideal Use Case</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>ISO A4</strong></td>
+            <td>595.28 × 841.89 pt</td>
+            <td>Uniform international letterhead with clean margins.</td>
+            <td>Formal business reports, school assignments, and international submissions.</td>
+          </tr>
+          <tr>
+            <td><strong>US Letter</strong></td>
+            <td>612 × 792 pt</td>
+            <td>North American standard format.</td>
+            <td>US/Canada office documentation, tax forms, and domestic filings.</td>
+          </tr>
+          <tr>
+            <td><strong>Fit Image (Original Size)</strong></td>
+            <td>Matches image pixels 1:1</td>
+            <td>Each PDF page size matches the exact dimensions of that specific image. Zero margins.</td>
+            <td>Photo albums, portfolio archives, and digital comics.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Step-by-Step: Converting Images to PDF in FileWorks</h2>
+      <ol>
+        <li>
+          <strong>Open the Tool:</strong> Navigate to the <a href="/pages/image-to-pdf.html">FileWorks Image to PDF Tool</a>.
+        </li>
+        <li>
+          <strong>Select Your Photos:</strong> Drag and drop up to 5 images (JPG, PNG, WebP, GIF, or BMP).
+        </li>
+        <li>
+          <strong>Arrange the Sequence:</strong> Drag the thumbnails to arrange the exact page sequence.
+        </li>
+        <li>
+          <strong>Configure Page Layout:</strong>
+          <ul>
+            <li>Select your paper size: <em>A4</em>, <em>US Letter</em>, or <em>Fit to image</em>.</li>
+            <li>Select orientation: <em>Portrait</em> or <em>Landscape</em>.</li>
+            <li>Select margins: <em>No margin</em>, <em>Small (10 pt)</em>, or <em>Normal (20 pt)</em>.</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Generate PDF:</strong> Click <strong>Convert to PDF</strong>. The tool compiles your images into a single vector-framed PDF directly in your browser.
+        </li>
+      </ol>
+
+      <div class="guide-tool-cta">
+        <div class="guide-tool-cta__text">
+          <h4>Convert Your Images Now</h4>
+          <p>Combine multiple JPG, PNG, or WebP images into a perfectly formatted PDF.</p>
+        </div>
+        <a href="/pages/image-to-pdf.html" class="btn btn-primary btn-sm">Open Image to PDF Tool →</a>
+      </div>
+
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq" style="margin-top:20px;">
+        <details class="faq-item">
+          <summary>Does converting images to PDF re-compress and degrade quality?</summary>
+          <div class="faq-item__body">
+            PNG files are embedded natively as lossless flate-encoded image streams without any re-compression. JPEG files are embedded using their native DCT bytes directly, preserving 100% of the original photo quality without generational loss.
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I combine mixed formats (e.g. 2 JPEGs and 1 PNG)?</summary>
+          <div class="faq-item__body">
+            Yes. FileWorks handles heterogeneous image batches seamlessly, applying the proper container embedding for each individual file format.
+          </div>
+        </details>
+      </div>
+    </div>
+  </article>
+</main>
+
+<!-- Footer -->
+<footer class="footer" id="main-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <h3>⚡ FileWorks</h3>
+        <p>Free online file utility toolkit for PDFs, images, ZIP files, and everyday file management. Files are processed locally in your browser.</p>
+      </div>
+      <div class="footer__col">
+        <h4>PDF Tools</h4>
+        <a href="/pages/pdf-merge.html">Merge PDF</a>
+        <a href="/pages/pdf-split.html">Split PDF</a>
+        <a href="/pages/pdf-rotate.html">Rotate PDF</a>
+        <a href="/pages/pdf-reorder.html">Reorder PDF</a>
+        <a href="/pages/pdf-compress.html">Compress PDF</a>
+        <a href="/pages/pdf-to-image.html">PDF to Image</a>
+        <a href="/pages/image-to-pdf.html">Image to PDF</a>
+      </div>
+      <div class="footer__col">
+        <h4>Image & ZIP Tools</h4>
+        <a href="/pages/image-compress.html">Compress Image</a>
+        <a href="/pages/image-resize.html">Resize Image</a>
+        <a href="/pages/image-convert.html">Convert Image</a>
+        <a href="/pages/create-zip.html">Create ZIP</a>
+        <a href="/pages/extract-zip.html">Extract ZIP</a>
+        <a href="/pages/batch-rename.html">Batch Rename</a>
+      </div>
+      <div class="footer__col">
+        <h4>Resources & Trust</h4>
+        <a href="/pages/guides.html">Learning Center</a>
+        <a href="/pages/about.html">About FileWorks</a>
+        <a href="/pages/contact.html">Contact & Support</a>
+        <a href="/pages/privacy.html">Privacy Policy</a>
+        <a href="/pages/terms.html">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2026 FileWorks. Maintained by AetherKube. All rights reserved.</p>
+      <p>100% Free · Client-Side Local Processing · <a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a></p>
+    </div>
+  </div>
+</footer>
+
+<div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
+  <p>We use cookies and display ads via Google AdSense to keep FileWorks free. File processing happens locally in your browser. <a href="/pages/privacy.html">Privacy Policy</a></p>
+  <div class="cookie-banner__actions">
+    <button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button>
+    <button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button>
+  </div>
+</div>
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<script src="/js/free-usage.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>

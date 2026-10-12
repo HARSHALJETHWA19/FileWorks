@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Create & Extract ZIP Archives Safely | FileWorks Guide</title>
+  <meta name="description" content="Understand ZIP archive architecture, the Zip Slip directory traversal vulnerability, and how client-side browser extraction protects your system.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://fileworks.pages.dev/pages/guides/how-to-create-and-extract-zip-archives-safely.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="FileWorks">
+  <meta property="og:title" content="How to Create & Extract ZIP Archives Safely">
+  <meta property="og:description" content="Technical analysis of ZIP central directories, DEFLATE algorithms, path traversal defenses, and browser-based archive sandboxing.">
+  <meta property="og:url" content="https://fileworks.pages.dev/pages/guides/how-to-create-and-extract-zip-archives-safely.html">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "How to Create and Extract ZIP Archives Safely: Avoiding Zip Slip & Path Traversal",
+    "description": "Technical analysis of ZIP file architecture, DEFLATE compression levels, and defensive path validation against Zip Slip exploits.",
+    "url": "https://fileworks.pages.dev/pages/guides/how-to-create-and-extract-zip-archives-safely.html",
+    "author": { "@type": "Organization", "name": "FileWorks Editorial Team" },
+    "publisher": { "@type": "Organization", "name": "FileWorks", "url": "https://fileworks.pages.dev/" },
+    "datePublished": "2026-10-01",
+    "dateModified": "2026-10-12"
+  }
+  </script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7044469500687742" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" id="nav-logo">
+      <span class="nav__logo-icon" aria-hidden="true">⚡</span>
+      FileWorks
+    </a>
+    <div class="nav__links" id="nav-desktop-links">
+      <a href="/" class="nav__link" id="nav-home">Tools</a>
+      <a href="/pages/guides.html" class="nav__link active" id="nav-guides">Learning Center</a>
+      <a href="/pages/about.html" class="nav__link" id="nav-about">About</a>
+      <a href="/pages/contact.html" class="nav__link" id="nav-contact">Contact</a>
+      <a href="/pages/privacy.html" class="nav__link" id="nav-privacy">Privacy</a>
+      <a href="/pages/terms.html" class="nav__link" id="nav-terms">Terms</a>
+    </div>
+    <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Open menu" aria-expanded="false">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+<nav class="nav-mobile-menu" id="nav-mobile-menu" aria-label="Mobile navigation">
+  <a href="/" id="mnav-home">🔧 All Tools</a>
+  <a href="/pages/guides.html" id="mnav-guides">📚 Learning Center</a>
+  <a href="/pages/about.html" id="mnav-about">ℹ️ About FileWorks</a>
+  <a href="/pages/contact.html" id="mnav-contact">✉️ Contact & Support</a>
+  <a href="/pages/privacy.html" id="mnav-privacy">🔒 Privacy Policy</a>
+  <a href="/pages/terms.html" id="mnav-terms">📜 Terms of Service</a>
+</nav>
+
+<main class="container section--sm" id="main-content">
+  <div class="breadcrumbs" aria-label="Breadcrumbs">
+    <a href="/">Home</a>
+    <span class="breadcrumb-separator">/</span>
+    <a href="/pages/guides.html">Learning Center</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="current">ZIP Architecture & Security</span>
+  </div>
+
+  <article class="guide-container">
+    <header class="guide-header">
+      <span class="guide-header__badge">🗜️ Archive Security</span>
+      <h1 class="guide-header__title">How to Create & Extract ZIP Archives Safely: Avoiding Zip Slip Exploits</h1>
+      <p class="guide-header__lead">
+        ZIP files are the foundation of digital archiving and data bundling, but unpacking unfamiliar archives can expose your system to critical path traversal attacks. Learn how ZIP binary structures work and why in-browser extraction provides a security advantage.
+      </p>
+      <div class="guide-meta">
+        <span class="guide-meta-item">⏱️ 6 min read</span>
+        <span class="guide-meta-item">📅 Updated October 2026</span>
+        <span class="guide-meta-item">🎯 Advanced</span>
+      </div>
+    </header>
+
+    <div class="guide-content">
+      <h2>The Internal Architecture of a ZIP File</h2>
+      <p>
+        Standardized by Phil Katz in 1989 (the PKZIP format), a ZIP archive is composed of three consecutive sections:
+      </p>
+      <ol>
+        <li><strong>Local File Entries:</strong> Each stored file begins with a <code>Local File Header</code> (signature <code>0x04034b50</code>), containing file metadata, followed immediately by the compressed DEFLATE byte payload.</li>
+        <li><strong>The Central Directory:</strong> Positioned near the end of the file, this catalog lists every single file in the archive, its byte offset, uncompressed size, CRC32 checksum, and directory path.</li>
+        <li><strong>End of Central Directory Record (EOCD):</strong> A 22-byte structure (signature <code>0x06054b50</code>) that marks where the central directory starts and records the total number of files.</li>
+      </ol>
+
+      <h2>The Major Vulnerability: "Zip Slip" (Path Traversal)</h2>
+      <p>
+        When you create an archive containing a file inside a subfolder, the file name entry inside the Central Directory is stored as a relative string (e.g., <code>documents/contract.pdf</code>).
+      </p>
+      <p>
+        A malicious actor can craft a weaponized ZIP file where the file name contains parent directory navigation tokens:
+      </p>
+      <div class="guide-callout guide-callout--warning">
+        <h4>⚠️ Malicious ZIP Path Traversal Example</h4>
+        <p>
+          <code>../../../../../../Windows/System32/evil.dll</code><br>
+          <code>../../../../../../home/user/.bashrc</code>
+        </p>
+        <p>
+          If an unpatched desktop extraction tool or server script extracts this archive without sanitizing the path, the file writes <em>outside the designated target folder</em> and overwrites critical operating system files or executable startup scripts. This vulnerability is formally tracked as <strong>Zip Slip</strong>.
+        </p>
+      </div>
+
+      <!-- Safe Mid-Content Ad Slot -->
+      <div class="ad-container ad-container--banner" id="ad-guide-zip" style="margin:36px 0;" aria-label="Advertisement">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-7044469500687742"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
+
+      <h2>How FileWorks Enforces Anti-Zip-Slip Protection</h2>
+      <p>
+        FileWorks executes all extraction in the browser via <code>JSZip</code>, and strictly validates every archive entry before exposing it to the user via <code>FileToolsLib._validateZipPath</code>:
+      </p>
+      <ul>
+        <li><strong>Leading Slash Rejection:</strong> Any path starting with <code>/</code> or <code>\</code> is blocked immediately.</li>
+        <li><strong>Dot-Dot Token Rejection:</strong> The path is split by directory separators. If any segment matches <code>..</code>, an immediate security exception is thrown.</li>
+        <li><strong>Absolute Drive Letter Rejection:</strong> Paths attempting to target Windows drives (e.g. <code>C:\</code>) are rejected.</li>
+        <li><strong>Browser Sandboxing:</strong> Furthermore, browser JavaScript does not have direct write access to your computer's filesystem. When you download a file, the browser prompts you through your operating system's standard safe download sandbox.</li>
+      </ul>
+
+      <h2>Step-by-Step: Creating and Extracting ZIPs in FileWorks</h2>
+      <h3>Creating an Archive:</h3>
+      <ol>
+        <li>Navigate to <a href="/pages/create-zip.html">FileWorks Create ZIP</a>.</li>
+        <li>Drag and drop up to 10 files (documents, pictures, spreadsheets).</li>
+        <li>Enter your preferred archive filename (e.g. <code>Project-Assets.zip</code>).</li>
+        <li>Click <strong>Create ZIP Archive</strong>. FileWorks applies level 6 DEFLATE compression in memory and serves the bundle instantly.</li>
+      </ol>
+
+      <h3>Extracting an Archive:</h3>
+      <ol>
+        <li>Navigate to <a href="/pages/extract-zip.html">FileWorks Extract ZIP</a>.</li>
+        <li>Drop your ZIP archive into the workspace.</li>
+        <li>Inspect the contents table showing individual file sizes and extensions.</li>
+        <li>Click <strong>Download</strong> on any specific file you need, or click <strong>Download All</strong>.</li>
+      </ol>
+
+      <div class="guide-tool-cta">
+        <div class="guide-tool-cta__text">
+          <h4>Manage Archives Safely</h4>
+          <p>Create and extract ZIP archives with built-in path traversal protection.</p>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <a href="/pages/create-zip.html" class="btn btn-primary btn-sm">Create ZIP →</a>
+          <a href="/pages/extract-zip.html" class="btn btn-outline btn-sm">Extract ZIP →</a>
+        </div>
+      </div>
+
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq" style="margin-top:20px;">
+        <details class="faq-item">
+          <summary>Does creating a ZIP archive compress files that are already compressed?</summary>
+          <div class="faq-item__body">
+            Files that are already compressed (like JPEG photos, MP3 audio, or modern MP4 video) will experience negligible size reduction inside a ZIP because their entropy is already near maximum. Text documents, HTML, CSVs, and raw bitmaps, however, will compress by 50% to 80%.
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Can FileWorks open password-protected or AES-encrypted ZIPs?</summary>
+          <div class="faq-item__body">
+            FileWorks supports standard unencrypted PKZIP archives. Archives protected with proprietary WinRAR encryption or proprietary 256-bit AES ZIP passwords must be decrypted using desktop archive managers.
+          </div>
+        </details>
+      </div>
+    </div>
+  </article>
+</main>
+
+<!-- Footer -->
+<footer class="footer" id="main-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <h3>⚡ FileWorks</h3>
+        <p>Free online file utility toolkit for PDFs, images, ZIP files, and everyday file management. Files are processed locally in your browser.</p>
+      </div>
+      <div class="footer__col">
+        <h4>PDF Tools</h4>
+        <a href="/pages/pdf-merge.html">Merge PDF</a>
+        <a href="/pages/pdf-split.html">Split PDF</a>
+        <a href="/pages/pdf-rotate.html">Rotate PDF</a>
+        <a href="/pages/pdf-reorder.html">Reorder PDF</a>
+        <a href="/pages/pdf-compress.html">Compress PDF</a>
+        <a href="/pages/pdf-to-image.html">PDF to Image</a>
+        <a href="/pages/image-to-pdf.html">Image to PDF</a>
+      </div>
+      <div class="footer__col">
+        <h4>Image & ZIP Tools</h4>
+        <a href="/pages/image-compress.html">Compress Image</a>
+        <a href="/pages/image-resize.html">Resize Image</a>
+        <a href="/pages/image-convert.html">Convert Image</a>
+        <a href="/pages/create-zip.html">Create ZIP</a>
+        <a href="/pages/extract-zip.html">Extract ZIP</a>
+        <a href="/pages/batch-rename.html">Batch Rename</a>
+      </div>
+      <div class="footer__col">
+        <h4>Resources & Trust</h4>
+        <a href="/pages/guides.html">Learning Center</a>
+        <a href="/pages/about.html">About FileWorks</a>
+        <a href="/pages/contact.html">Contact & Support</a>
+        <a href="/pages/privacy.html">Privacy Policy</a>
+        <a href="/pages/terms.html">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2026 FileWorks. Maintained by AetherKube. All rights reserved.</p>
+      <p>100% Free · Client-Side Local Processing · <a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a></p>
+    </div>
+  </div>
+</footer>
+
+<div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
+  <p>We use cookies and display ads via Google AdSense to keep FileWorks free. File processing happens locally in your browser. <a href="/pages/privacy.html">Privacy Policy</a></p>
+  <div class="cookie-banner__actions">
+    <button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button>
+    <button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button>
+  </div>
+</div>
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<script src="/js/free-usage.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>

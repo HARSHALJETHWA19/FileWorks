@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Convert PDF to Images: JPG vs. PNG & DPI Explained | FileWorks</title>
+  <meta name="description" content="Learn how to rasterize PDF documents into high-resolution JPG or PNG images, calculate rendering scale, and choose the right format for text clarity or small file sizes.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://fileworks.pages.dev/pages/guides/how-to-convert-pdf-to-images-jpg-vs-png.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="FileWorks">
+  <meta property="og:title" content="How to Convert PDF to Images: JPG vs. PNG & DPI Explained">
+  <meta property="og:description" content="Detailed guide on rasterizing PDF pages into crisp images: 2x retina rendering, scale factors, and choosing between PNG and JPG.">
+  <meta property="og:url" content="https://fileworks.pages.dev/pages/guides/how-to-convert-pdf-to-images-jpg-vs-png.html">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "How to Convert PDF Pages to Images: Resolution, DPI, and JPG vs. PNG Trade-Offs",
+    "description": "Engineering guide on PDF rasterization pipelines, canvas viewport scaling, and image format optimization for digital documents.",
+    "url": "https://fileworks.pages.dev/pages/guides/how-to-convert-pdf-to-images-jpg-vs-png.html",
+    "author": { "@type": "Organization", "name": "FileWorks Editorial Team" },
+    "publisher": { "@type": "Organization", "name": "FileWorks", "url": "https://fileworks.pages.dev/" },
+    "datePublished": "2026-10-01",
+    "dateModified": "2026-10-12"
+  }
+  </script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7044469500687742" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" id="nav-logo">
+      <span class="nav__logo-icon" aria-hidden="true">⚡</span>
+      FileWorks
+    </a>
+    <div class="nav__links" id="nav-desktop-links">
+      <a href="/" class="nav__link" id="nav-home">Tools</a>
+      <a href="/pages/guides.html" class="nav__link active" id="nav-guides">Learning Center</a>
+      <a href="/pages/about.html" class="nav__link" id="nav-about">About</a>
+      <a href="/pages/contact.html" class="nav__link" id="nav-contact">Contact</a>
+      <a href="/pages/privacy.html" class="nav__link" id="nav-privacy">Privacy</a>
+      <a href="/pages/terms.html" class="nav__link" id="nav-terms">Terms</a>
+    </div>
+    <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Open menu" aria-expanded="false">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+<nav class="nav-mobile-menu" id="nav-mobile-menu" aria-label="Mobile navigation">
+  <a href="/" id="mnav-home">🔧 All Tools</a>
+  <a href="/pages/guides.html" id="mnav-guides">📚 Learning Center</a>
+  <a href="/pages/about.html" id="mnav-about">ℹ️ About FileWorks</a>
+  <a href="/pages/contact.html" id="mnav-contact">✉️ Contact & Support</a>
+  <a href="/pages/privacy.html" id="mnav-privacy">🔒 Privacy Policy</a>
+  <a href="/pages/terms.html" id="mnav-terms">📜 Terms of Service</a>
+</nav>
+
+<main class="container section--sm" id="main-content">
+  <div class="breadcrumbs" aria-label="Breadcrumbs">
+    <a href="/">Home</a>
+    <span class="breadcrumb-separator">/</span>
+    <a href="/pages/guides.html">Learning Center</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="current">PDF to Image Conversion</span>
+  </div>
+
+  <article class="guide-container">
+    <header class="guide-header">
+      <span class="guide-header__badge">🖼️ Rasterization Science</span>
+      <h1 class="guide-header__title">How to Convert PDF Pages to Images: Resolution, DPI, and JPG vs. PNG Trade-Offs</h1>
+      <p class="guide-header__lead">
+        Converting a vector PDF document into a raster image file involves rendering mathematical geometry onto a discrete pixel grid. Here is how DPI scaling works and when to pick PNG over JPG.
+      </p>
+      <div class="guide-meta">
+        <span class="guide-meta-item">⏱️ 6 min read</span>
+        <span class="guide-meta-item">📅 Updated October 2026</span>
+        <span class="guide-meta-item">🎯 Intermediate</span>
+      </div>
+    </header>
+
+    <div class="guide-content">
+      <h2>The Core Difference: Vectors vs. Pixels</h2>
+      <p>
+        A native PDF document contains mathematical descriptions of shapes, curves, and font outlines. When you zoom into a PDF by 800%, the letters remain sharp because the vector engine recalculates the curves at runtime.
+      </p>
+      <p>
+        An image (JPEG or PNG), by contrast, is a fixed matrix of colored square pixels. When you convert a PDF into an image (a process called <strong>rasterization</strong>), you must choose two critical parameters:
+      </p>
+      <ol>
+        <li><strong>Resolution (Scale Factor / DPI):</strong> How many pixels wide and tall each page should be.</li>
+        <li><strong>Output Encoding Format:</strong> Whether to use lossy JPEG or lossless PNG.</li>
+      </ol>
+
+      <h2>Understanding Resolution: DPI and Canvas Scale Factors</h2>
+      <p>
+        PDF user units default to 72 points per inch. If a standard ISO A4 page (595.28 × 841.89 points) is rasterized at a 1.0× scale (72 DPI), the resulting image is only <strong>595 × 842 pixels</strong>. On modern smartphone screens or high-DPI desktop monitors, small 10 pt text will appear pixelated and unreadable.
+      </p>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Raster Scale Factor</th>
+            <th>Effective DPI</th>
+            <th>A4 Pixel Dimensions</th>
+            <th>Best For</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>scale: 1.0</code></td>
+            <td>72 DPI</td>
+            <td>595 × 842 px</td>
+            <td>Quick low-bandwidth thumbnail generation</td>
+          </tr>
+          <tr>
+            <td><code>scale: 2.0 (FileWorks default)</code></td>
+            <td>144 DPI (Retina)</td>
+            <td><strong>1190 × 1684 px</strong></td>
+            <td>Clear, razor-sharp on-screen reading and presentations</td>
+          </tr>
+          <tr>
+            <td><code>scale: 3.0</code></td>
+            <td>216 DPI</td>
+            <td>1786 × 2526 px</td>
+            <td>Detailed schematics, architectural line art, or OCR processing</td>
+          </tr>
+          <tr>
+            <td><code>scale: 4.16</code></td>
+            <td>300 DPI</td>
+            <td>2480 × 3508 px</td>
+            <td>Commercial high-resolution physical printing</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Safe Mid-Content Ad Slot -->
+      <div class="ad-container ad-container--banner" id="ad-guide-pdf-image" style="margin:36px 0;" aria-label="Advertisement">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-7044469500687742"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
+
+      <h2>JPG vs. PNG: Which Output Format Should You Select?</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:24px 0;">
+        <div class="card" style="padding:20px;">
+          <h3 style="color:#60a5fa;margin-top:0;">When to Choose PNG</h3>
+          <p style="font-size:0.9rem;line-height:1.6;color:var(--color-text-muted);">
+            PNG uses lossless DEFLATE compression. It is ideal for text documents, black-and-white forms, line diagrams, and screenshots. PNG guarantees <strong>zero compression artifacts</strong> around text characters, preserving perfectly sharp edges.
+          </p>
+        </div>
+        <div class="card" style="padding:20px;">
+          <h3 style="color:#34d399;margin-top:0;">When to Choose JPG</h3>
+          <p style="font-size:0.9rem;line-height:1.6;color:var(--color-text-muted);">
+            JPG uses lossy Discrete Cosine Transform (DCT) compression. It is ideal for scanned magazines, brochures, and photo-heavy pages. JPG typically produces files that are <strong>60% to 80% smaller</strong> than PNG at equivalent visual clarity.
+          </p>
+        </div>
+      </div>
+
+      <h2>How FileWorks Converts PDF to Images in the Browser</h2>
+      <p>
+        The <a href="/pages/pdf-to-image.html">FileWorks PDF to Image Tool</a> leverages Mozilla's official <code>PDF.js</code> rendering engine:
+      </p>
+      <ol>
+        <li>The PDF file is loaded into an in-memory typed array.</li>
+        <li>For each selected page, an off-screen HTML5 <code>&lt;canvas&gt;</code> element is allocated with a <code>scale: 2.0</code> viewport matrix (144 DPI retina quality).</li>
+        <li>The PDF vector drawing stream executes on the 2D canvas context using hardware-accelerated browser rasterization.</li>
+        <li>The canvas is serialized into a high-quality JPEG or PNG Blob using <code>canvas.toBlob()</code>.</li>
+        <li>The canvas memory is immediately released to prevent browser tab crashes on mobile devices.</li>
+      </ol>
+
+      <div class="guide-tool-cta">
+        <div class="guide-tool-cta__text">
+          <h4>Convert Your PDF to Images</h4>
+          <p>Render high-definition 2x retina images from any PDF locally in your browser.</p>
+        </div>
+        <a href="/pages/pdf-to-image.html" class="btn btn-primary btn-sm">Open PDF to Image Tool →</a>
+      </div>
+
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq" style="margin-top:20px;">
+        <details class="faq-item">
+          <summary>Can I convert a 50-page PDF at once?</summary>
+          <div class="faq-item__body">
+            The free web tier allows converting up to 5 pages per batch (or 10 with allowance) to ensure browser memory safety. For large multi-chapter documents, you can run successive extraction passes or use the native FileWorks Android app.
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Can I download all converted pages as a single ZIP?</summary>
+          <div class="faq-item__body">
+            Yes. On the FileWorks result screen, click "Download All as ZIP" to download an organized archive containing every rendered page cleanly numbered in order.
+          </div>
+        </details>
+      </div>
+    </div>
+  </article>
+</main>
+
+<!-- Footer -->
+<footer class="footer" id="main-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <h3>⚡ FileWorks</h3>
+        <p>Free online file utility toolkit for PDFs, images, ZIP files, and everyday file management. Files are processed locally in your browser.</p>
+      </div>
+      <div class="footer__col">
+        <h4>PDF Tools</h4>
+        <a href="/pages/pdf-merge.html">Merge PDF</a>
+        <a href="/pages/pdf-split.html">Split PDF</a>
+        <a href="/pages/pdf-rotate.html">Rotate PDF</a>
+        <a href="/pages/pdf-reorder.html">Reorder PDF</a>
+        <a href="/pages/pdf-compress.html">Compress PDF</a>
+        <a href="/pages/pdf-to-image.html">PDF to Image</a>
+        <a href="/pages/image-to-pdf.html">Image to PDF</a>
+      </div>
+      <div class="footer__col">
+        <h4>Image & ZIP Tools</h4>
+        <a href="/pages/image-compress.html">Compress Image</a>
+        <a href="/pages/image-resize.html">Resize Image</a>
+        <a href="/pages/image-convert.html">Convert Image</a>
+        <a href="/pages/create-zip.html">Create ZIP</a>
+        <a href="/pages/extract-zip.html">Extract ZIP</a>
+        <a href="/pages/batch-rename.html">Batch Rename</a>
+      </div>
+      <div class="footer__col">
+        <h4>Resources & Trust</h4>
+        <a href="/pages/guides.html">Learning Center</a>
+        <a href="/pages/about.html">About FileWorks</a>
+        <a href="/pages/contact.html">Contact & Support</a>
+        <a href="/pages/privacy.html">Privacy Policy</a>
+        <a href="/pages/terms.html">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2026 FileWorks. Maintained by AetherKube. All rights reserved.</p>
+      <p>100% Free · Client-Side Local Processing · <a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a></p>
+    </div>
+  </div>
+</footer>
+
+<div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
+  <p>We use cookies and display ads via Google AdSense to keep FileWorks free. File processing happens locally in your browser. <a href="/pages/privacy.html">Privacy Policy</a></p>
+  <div class="cookie-banner__actions">
+    <button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button>
+    <button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button>
+  </div>
+</div>
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<script src="/js/free-usage.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>

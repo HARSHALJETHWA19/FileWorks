@@ -192,6 +192,22 @@
   <div class="divider"></div>
 
   <!-- How to Use -->
+  
+  <section id="deep-dive" style="margin-top:30px;">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">In-Depth: Bi-Cubic Resampling, Anti-Aliasing, and Pixel Density Control</h2>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      Resizing an image is not merely a matter of changing display coordinates in CSS; it involves mathematically recalculating the continuous color grid across an altered pixel matrix. If an image is scaled down using primitive nearest-neighbor sampling, high-frequency patterns produce distracting moiré artifacts and jagged diagonal lines.
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      The HTML5 Canvas API employed by FileWorks utilizes hardware-accelerated bi-cubic interpolation algorithms. When downsampling a 4000 × 3000 photo to a 1920 × 1080 display size, the engine computes a weighted average of the surrounding 16 pixels for each output destination pixel. This preserves smooth color gradients, eliminates stair-stepping aliasing, and keeps fine details readable.
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      Furthermore, FileWorks provides one-click presets for standardized web viewports—including Full HD (1080p), social media preview cards (1200 × 630 px), and quarter-scale previews. Locking the aspect ratio guarantees that vertical and horizontal proportions remain in strict harmony, ensuring your subjects never look distorted or disproportionate.
+    </p>
+  </section>
+  
+  <div class="divider"></div>
+
   <section id="how-to-use">
     <h2 style="margin-bottom:24px;font-size:1.4rem;">How to Resize an Image</h2>
     <div class="steps">
@@ -205,6 +221,36 @@
   <div class="divider"></div>
 
   <!-- FAQ -->
+  
+  <section id="best-practices" style="margin-top:30px;">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">Best Practices for Precision Dimension Scaling</h2>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      To maintain visual sharpness and correct layout formatting when resizing graphics:
+    </p>
+    <ul style="line-height:1.8;color:var(--color-text-muted);margin-bottom:16px;padding-left:20px;">
+      <li><strong>Always Keep Aspect Ratio Locked:</strong> Unconstrained scaling alters the proportional ratio between width and height, causing facial portraits to appear unnaturally flattened or text graphics to distort. Keep "Lock Aspect Ratio" checked unless intentionally compensating for anamorphic display hardware.</li>
+      <li><strong>Downscaling vs Upscaling:</strong> Downscaling an image combines redundant pixel information into a denser, crisper canvas. Upscaling an image beyond its native resolution requires the browser to invent missing pixel data, which inevitably softens sharp edges. For best results, capture or export images at the maximum resolution you anticipate needing.</li>
+      <li><strong>Matching Standard Social & Web Viewports:</strong> Use our preset buttons (such as Full HD 1080p or Social Card 1200×630) to ensure your shared links display cleanly across Twitter, Open Graph, and LinkedIn feeds without awkward automatic platform cropping.</li>
+    </ul>
+  </section>
+  
+  <div class="divider"></div>
+
+  
+  <section id="troubleshooting-tips" style="margin-top:28px;">
+    <h3 style="margin-bottom:12px;font-size:1.25rem;">Troubleshooting Common File Processing Issues</h3>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:12px;">
+      If you experience unexpected behavior or processing pauses, check these standard browser environment factors:
+    </p>
+    <ul style="line-height:1.75;color:var(--color-text-muted);padding-left:20px;margin-bottom:16px;">
+      <li><strong>Hardware Memory Headroom:</strong> Processing very large files in client-side memory requires sufficient available device RAM. Closing unused background browser tabs frees valuable JavaScript heap allocations.</li>
+      <li><strong>Ad-Blocker Script Interference:</strong> While FileWorks welcomes privacy tools, aggressive content blockers occasionally block Web Worker threads or Canvas blob generation. If a conversion fails to trigger, temporarily whitelist the page or test in private browsing.</li>
+      <li><strong>Corrupt Input Headers:</strong> Files truncated during incomplete downloads or encrypted with unsupported proprietary DRM flags will be safely flagged by our input validation engine before memory allocation.</li>
+    </ul>
+  </section>
+  
+  <div class="divider"></div>
+
   <section id="faq">
     <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
     <div class="faq">

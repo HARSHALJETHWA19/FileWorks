@@ -138,8 +138,31 @@ const FreeUsageConfig = {
     },
   },
 
+  _aliases: {
+    'mergePdf': 'pdfMerge',
+    'splitPdf': 'pdfSplit',
+    'rotatePdf': 'pdfRotate',
+    'reorderPdf': 'pdfReorder',
+    'compressPdf': 'pdfCompress',
+    'pdf-merge': 'pdfMerge',
+    'pdf-split': 'pdfSplit',
+    'pdf-rotate': 'pdfRotate',
+    'pdf-reorder': 'pdfReorder',
+    'pdf-compress': 'pdfCompress',
+    'pdf-to-image': 'pdfToImage',
+    'image-to-pdf': 'imageToPdf',
+    'image-compress': 'imageCompress',
+    'image-resize': 'imageResize',
+    'image-convert': 'imageConvert',
+    'create-zip': 'createZip',
+    'extract-zip': 'extractZip',
+    'batch-rename': 'batchRename',
+  },
+
   getConfig(featureId) {
-    const cfg = this.tools[featureId];
+    if (!featureId) throw new Error('[FreeUsageConfig] featureId is required');
+    const normalizedKey = this._aliases[featureId] || featureId;
+    const cfg = this.tools[normalizedKey];
     if (!cfg) {
       throw new Error(`[FreeUsageConfig] Unknown tool feature "${featureId}"`);
     }

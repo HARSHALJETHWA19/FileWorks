@@ -114,6 +114,22 @@
   <div class="divider"></div>
 
   <!-- How to Use -->
+  
+  <section id="deep-dive" style="margin-top:30px;">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">In-Depth: Defragmentation, Object Streams, and Lossless PDF Optimization</h2>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      Document bloat in PDF files commonly stems from incremental revisions, unreferenced object nodes, and outdated cross-reference tables rather than raw text volume. Whenever a PDF document is repeatedly edited, annotated, or saved in standard office suites, modern software frequently appends changes to the end of the file rather than rebuilding the internal dictionary tree—a process known as <em>incremental updating</em>. Over time, documents accumulate orphan objects, duplicate font metrics, and fragmented metadata.
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      FileWorks applies clean structural defragmentation directly inside client-side JavaScript. By parsing the document into an abstracted object graph, the engine identifies unreferenced indirect objects, cleans orphaned annotation nodes, and flattens fragmented revisions into a compact cross-reference stream. Furthermore, uncompressed content streams are compressed using standard zlib/Deflate algorithms.
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      Crucially, this structural optimization approach leaves high-resolution vector geometry, TrueType/OpenType font definitions, and mathematical line art untouched. Unlike aggressive cloud compressors that downscale embedded graphics to blurry 72 DPI artifacts, FileWorks preserves text readability and vector precision while maximizing byte efficiency.
+    </p>
+  </section>
+  
+  <div class="divider"></div>
+
   <section id="how-to-use">
     <h2 style="margin-bottom:24px;font-size:1.4rem;">How to Compress a PDF</h2>
     <div class="steps">
@@ -127,6 +143,36 @@
   <div class="divider"></div>
 
   <!-- FAQ -->
+  
+  <section id="best-practices" style="margin-top:30px;">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">Best Practices for PDF Size Reduction & Optimization</h2>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      Understanding where PDF file weight originates helps you optimize files cleanly:
+    </p>
+    <ul style="line-height:1.8;color:var(--color-text-muted);margin-bottom:16px;padding-left:20px;">
+      <li><strong>Vector Documents vs Scanned Bitmaps:</strong> Vector PDFs (such as documents exported from Word, Excel, or Google Docs) contain scalable math curves and font subsets. Structural defragmentation strips unneeded revision logs and redundant xref tables without degrading vector quality in the slightest.</li>
+      <li><strong>Embedded Image Heavy Documents:</strong> In PDFs consisting primarily of raw scanner bitmaps, the majority of file size is occupied by embedded image streams. Defragmenting cleans up stream containers, while future FileWorks updates will support client-side image re-quantization.</li>
+      <li><strong>Pre-Optimization Checks:</strong> Before compressing, inspect whether your file contains digital signatures. Re-serializing a cryptographically signed PDF can invalidate signature hash digests; always compress draft documents prior to formal cryptographic signing.</li>
+    </ul>
+  </section>
+  
+  <div class="divider"></div>
+
+  
+  <section id="troubleshooting-tips" style="margin-top:28px;">
+    <h3 style="margin-bottom:12px;font-size:1.25rem;">Troubleshooting Common File Processing Issues</h3>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:12px;">
+      If you experience unexpected behavior or processing pauses, check these standard browser environment factors:
+    </p>
+    <ul style="line-height:1.75;color:var(--color-text-muted);padding-left:20px;margin-bottom:16px;">
+      <li><strong>Hardware Memory Headroom:</strong> Processing very large files in client-side memory requires sufficient available device RAM. Closing unused background browser tabs frees valuable JavaScript heap allocations.</li>
+      <li><strong>Ad-Blocker Script Interference:</strong> While FileWorks welcomes privacy tools, aggressive content blockers occasionally block Web Worker threads or Canvas blob generation. If a conversion fails to trigger, temporarily whitelist the page or test in private browsing.</li>
+      <li><strong>Corrupt Input Headers:</strong> Files truncated during incomplete downloads or encrypted with unsupported proprietary DRM flags will be safely flagged by our input validation engine before memory allocation.</li>
+    </ul>
+  </section>
+  
+  <div class="divider"></div>
+
   <section id="faq">
     <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
     <div class="faq">

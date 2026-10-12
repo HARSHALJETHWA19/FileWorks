@@ -118,6 +118,25 @@
   <div class="divider"></div>
 
   <!-- How to Use -->
+  
+  <section id="deep-dive" style="margin-top:30px;">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">In-Depth: Comparing WebP, PNG, and JPEG Container Architectures</h2>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      Choosing the optimal image container format is one of the most critical decisions in digital asset management, directly impacting website rendering speed, bandwidth consumption, and visual accuracy. Each modern format addresses distinct architectural priorities:
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      <strong>Portable Network Graphics (PNG)</strong> relies on the Deflate algorithm (combining LZ77 and Huffman coding) to achieve 100% lossless compression. It includes an 8-bit alpha channel capable of 256 levels of transparency, making it the undisputed standard for logos, user interface icons, and typography where edge artifacts cannot be tolerated.
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      <strong>Joint Photographic Experts Group (JPEG)</strong> excels at continuous-tone photography. However, JPEG does not support transparency; when a transparent graphic is saved as JPEG, transparent pixels must be composited against an opaque matte (which FileWorks renders cleanly in pure white).
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      <strong>WebP</strong> bridges this divide by supporting both lossy and lossless modes alongside full 8-bit alpha channel transparency. WebP assets load up to 30% faster on modern browsers, making conversion to WebP the single highest-yield optimization for web publishers seeking faster Core Web Vitals.
+    </p>
+  </section>
+  
+  <div class="divider"></div>
+
   <section id="how-to-use">
     <h2 style="margin-bottom:24px;font-size:1.4rem;">How to Convert Images</h2>
     <div class="steps">
@@ -131,6 +150,36 @@
   <div class="divider"></div>
 
   <!-- FAQ -->
+  
+  <section id="best-practices" style="margin-top:30px;">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">Format Selection Best Practices & Codec Considerations</h2>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      Selecting the correct image container format directly influences rendering speed and graphic fidelity across digital platforms:
+    </p>
+    <ul style="line-height:1.8;color:var(--color-text-muted);margin-bottom:16px;padding-left:20px;">
+      <li><strong>When to Choose WebP:</strong> WebP is universally supported in all modern browsers (Chrome, Safari, Firefox, Edge) and operating systems. It is the gold standard for online storefronts, blog heroes, and mobile applications where page speed directly influences user retention and SEO ranking.</li>
+      <li><strong>When to Choose PNG:</strong> Use PNG for vector illustrations, brand logos, technical schematics, and screenshots featuring sharp UI text. Lossless Deflate ensures lines stay razor-sharp without compression ringing or chromatic fringing.</li>
+      <li><strong>When to Choose JPG:</strong> Use JPG for traditional digital photography portfolios, legacy email client distribution, and printing where CMYK prepress or legacy hardware compatibility is paramount.</li>
+    </ul>
+  </section>
+  
+  <div class="divider"></div>
+
+  
+  <section id="troubleshooting-tips" style="margin-top:28px;">
+    <h3 style="margin-bottom:12px;font-size:1.25rem;">Troubleshooting Common File Processing Issues</h3>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:12px;">
+      If you experience unexpected behavior or processing pauses, check these standard browser environment factors:
+    </p>
+    <ul style="line-height:1.75;color:var(--color-text-muted);padding-left:20px;margin-bottom:16px;">
+      <li><strong>Hardware Memory Headroom:</strong> Processing very large files in client-side memory requires sufficient available device RAM. Closing unused background browser tabs frees valuable JavaScript heap allocations.</li>
+      <li><strong>Ad-Blocker Script Interference:</strong> While FileWorks welcomes privacy tools, aggressive content blockers occasionally block Web Worker threads or Canvas blob generation. If a conversion fails to trigger, temporarily whitelist the page or test in private browsing.</li>
+      <li><strong>Corrupt Input Headers:</strong> Files truncated during incomplete downloads or encrypted with unsupported proprietary DRM flags will be safely flagged by our input validation engine before memory allocation.</li>
+    </ul>
+  </section>
+  
+  <div class="divider"></div>
+
   <section id="faq">
     <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
     <div class="faq">

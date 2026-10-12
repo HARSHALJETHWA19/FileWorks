@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How Image Compression Affects Size & Quality | FileWorks Guide</title>
+  <meta name="description" content="Discover how lossy image compression quantization algorithms reduce file sizes, identify the 80–85% quality sweet spot, and avoid generational re-compression degradation.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://fileworks.pages.dev/pages/guides/how-image-compression-affects-file-size-and-quality.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="FileWorks">
+  <meta property="og:title" content="How Image Compression Affects Size & Quality">
+  <meta property="og:description" content="Technical guide on image compression curves, quantization matrices, and optimizing photos for web performance without visible artifacts.">
+  <meta property="og:url" content="https://fileworks.pages.dev/pages/guides/how-image-compression-affects-file-size-and-quality.html">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "How Image Compression Changes File Size & Quality: Lossy vs. Lossless Explained",
+    "description": "Technical analysis of quantization matrices, perceptual visual thresholds, and file size reduction curves in modern lossy encoders.",
+    "url": "https://fileworks.pages.dev/pages/guides/how-image-compression-affects-file-size-and-quality.html",
+    "author": { "@type": "Organization", "name": "FileWorks Editorial Team" },
+    "publisher": { "@type": "Organization", "name": "FileWorks", "url": "https://fileworks.pages.dev/" },
+    "datePublished": "2026-10-01",
+    "dateModified": "2026-10-12"
+  }
+  </script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7044469500687742" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" id="nav-logo">
+      <span class="nav__logo-icon" aria-hidden="true">⚡</span>
+      FileWorks
+    </a>
+    <div class="nav__links" id="nav-desktop-links">
+      <a href="/" class="nav__link" id="nav-home">Tools</a>
+      <a href="/pages/guides.html" class="nav__link active" id="nav-guides">Learning Center</a>
+      <a href="/pages/about.html" class="nav__link" id="nav-about">About</a>
+      <a href="/pages/contact.html" class="nav__link" id="nav-contact">Contact</a>
+      <a href="/pages/privacy.html" class="nav__link" id="nav-privacy">Privacy</a>
+      <a href="/pages/terms.html" class="nav__link" id="nav-terms">Terms</a>
+    </div>
+    <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Open menu" aria-expanded="false">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+<nav class="nav-mobile-menu" id="nav-mobile-menu" aria-label="Mobile navigation">
+  <a href="/" id="mnav-home">🔧 All Tools</a>
+  <a href="/pages/guides.html" id="mnav-guides">📚 Learning Center</a>
+  <a href="/pages/about.html" id="mnav-about">ℹ️ About FileWorks</a>
+  <a href="/pages/contact.html" id="mnav-contact">✉️ Contact & Support</a>
+  <a href="/pages/privacy.html" id="mnav-privacy">🔒 Privacy Policy</a>
+  <a href="/pages/terms.html" id="mnav-terms">📜 Terms of Service</a>
+</nav>
+
+<main class="container section--sm" id="main-content">
+  <div class="breadcrumbs" aria-label="Breadcrumbs">
+    <a href="/">Home</a>
+    <span class="breadcrumb-separator">/</span>
+    <a href="/pages/guides.html">Learning Center</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="current">Image Compression Science</span>
+  </div>
+
+  <article class="guide-container">
+    <header class="guide-header">
+      <span class="guide-header__badge">🔬 Compression Science</span>
+      <h1 class="guide-header__title">How Image Compression Changes File Size & Quality: Lossy vs. Lossless Explained</h1>
+      <p class="guide-header__lead">
+        When you slide a quality slider from 90% down to 70%, what actually happens to your image's pixels? Explore the mathematics of lossy quantization, the diminishing returns of high-quality settings, and how to find the optimal sweet spot.
+      </p>
+      <div class="guide-meta">
+        <span class="guide-meta-item">⏱️ 6 min read</span>
+        <span class="guide-meta-item">📅 Updated October 2026</span>
+        <span class="guide-meta-item">🎯 Advanced</span>
+      </div>
+    </header>
+
+    <div class="guide-content">
+      <h2>The Core Mathematics: Quantization Matrices</h2>
+      <p>
+        In lossy compression algorithms (like JPEG and lossy WebP), images are converted from spatial pixels into frequency coefficients using the <strong>Discrete Cosine Transform (DCT)</strong> in 8 × 8 pixel blocks.
+      </p>
+      <p>
+        The step that actually eliminates file bytes is <strong>quantization</strong>:
+      </p>
+      <div class="guide-callout guide-callout--tip">
+        <h4>The Quantization Equation</h4>
+        <p>
+          <code>Quantized Value = Round( DCT Coefficient / Quantization Table Value )</code>
+        </p>
+        <p>
+          When you lower the "Quality" slider, the numbers in the divisor table increase. Higher divisors force smaller high-frequency numbers to round down to <strong>zero</strong>.
+        </p>
+        <p>
+          Long sequences of zeroes are extraordinarily cheap to compress using Huffman or arithmetic entropy coding. That is why lower quality settings result in dramatically smaller file sizes.
+        </p>
+      </div>
+
+      <h2>The Non-Linear Sweet Spot Curve</h2>
+      <p>
+        The relationship between the Quality percentage setting and file size is <strong>not linear</strong>. It follows a steep exponential curve:
+      </p>
+
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Quality Setting</th>
+            <th>Typical File Size (12 MP Photo)</th>
+            <th>Visual Perception (Human Eye)</th>
+            <th>Recommended Use</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>100%</strong></td>
+            <td>8.5 MB</td>
+            <td>Identical to source; quantization tables set to minimal division.</td>
+            <td>Archival masters; highly inefficient for web delivery.</td>
+          </tr>
+          <tr>
+            <td><strong>90%</strong></td>
+            <td>3.2 MB (62% reduction)</td>
+            <td>Imperceptible difference even at 200% magnification.</td>
+            <td>Photography portfolios and print brochures.</td>
+          </tr>
+          <tr>
+            <td><strong>80% (Sweet Spot)</strong></td>
+            <td><strong>1.1 MB (87% reduction)</strong></td>
+            <td>Completely sharp to human eyes on desktop and mobile screens.</td>
+            <td><strong>General web publishing, blogs, e-commerce.</strong></td>
+          </tr>
+          <tr>
+            <td><strong>60%</strong></td>
+            <td>520 KB (94% reduction)</td>
+            <td>Minor blockiness in high-frequency foliage or fine text.</td>
+            <td>Thumbnails, mobile news feeds.</td>
+          </tr>
+          <tr>
+            <td><strong>30%</strong></td>
+            <td>210 KB (97% reduction)</td>
+            <td>Obvious 8x8 macroblock grid artifacts and color banding.</td>
+            <td>Extreme bandwidth-constrained environments.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Safe Mid-Content Ad Slot -->
+      <div class="ad-container ad-container--banner" id="ad-guide-quality" style="margin:36px 0;" aria-label="Advertisement">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-7044469500687742"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
+
+      <h2>Generational Degradation (The Re-compression Trap)</h2>
+      <p>
+        One of the most destructive mistakes users make is repeatedly saving a lossy image.
+      </p>
+      <div class="guide-callout guide-callout--warning">
+        <h4>⚠️ Generational Loss in Action</h4>
+        <p>
+          If you open a JPEG, rotate it, save it, open it again tomorrow, crop it, and save it again at 80%, each generation recalculates the DCT and rounds new coefficients to zero. By generation 4 or 5, smooth skin tones develop harsh color stepping, and sharp edges blur into noticeable halo rings.
+        </p>
+        <p>
+          <strong>Best Practice:</strong> Always perform editing operations on your raw or lossless source image, and perform lossy compression only as the very final export step.
+        </p>
+      </div>
+
+      <h2>Step-by-Step: Compressing Images with FileWorks</h2>
+      <ol>
+        <li>
+          <strong>Open the Compressor:</strong> Go to the <a href="/pages/image-compress.html">FileWorks Image Compression Tool</a>.
+        </li>
+        <li>
+          <strong>Drop Your Images:</strong> Drag and drop up to 10 MB total of JPG, PNG, or WebP files.
+        </li>
+        <li>
+          <strong>Tune the Quality Slider:</strong> Use the interactive slider (set by default to 80%, the optimal sweet spot). FileWorks calculates savings in real time.
+        </li>
+        <li>
+          <strong>Compress & Inspect:</strong> Click <strong>Compress Images</strong>. Compare the before and after byte sizes directly on the result card.
+        </li>
+        <li>
+          <strong>Download:</strong> Download individual compressed files or grab the entire batch as an organized ZIP.
+        </li>
+      </ol>
+
+      <div class="guide-tool-cta">
+        <div class="guide-tool-cta__text">
+          <h4>Optimize Your Photos Now</h4>
+          <p>Interactive quality tuning with live file savings calculations in your browser.</p>
+        </div>
+        <a href="/pages/image-compress.html" class="btn btn-primary btn-sm">Open Image Compressor →</a>
+      </div>
+
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq" style="margin-top:20px;">
+        <details class="faq-item">
+          <summary>Does FileWorks compression upload my photos to the cloud?</summary>
+          <div class="faq-item__body">
+            No. FileWorks encodes images entirely inside an off-screen HTML5 Canvas context in your browser's local memory. Your photos never touch a network server.
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Why didn't my PNG file shrink when using the quality slider?</summary>
+          <div class="faq-item__body">
+            PNG is a strictly lossless format and does not use DCT quality quantization. To compress PNGs aggressively, convert them to modern WebP using the <a href="/pages/image-convert.html">Image Convert Tool</a>, which achieves 70%+ size reductions while preserving full transparency.
+          </div>
+        </details>
+      </div>
+    </div>
+  </article>
+</main>
+
+<!-- Footer -->
+<footer class="footer" id="main-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <h3>⚡ FileWorks</h3>
+        <p>Free online file utility toolkit for PDFs, images, ZIP files, and everyday file management. Files are processed locally in your browser.</p>
+      </div>
+      <div class="footer__col">
+        <h4>PDF Tools</h4>
+        <a href="/pages/pdf-merge.html">Merge PDF</a>
+        <a href="/pages/pdf-split.html">Split PDF</a>
+        <a href="/pages/pdf-rotate.html">Rotate PDF</a>
+        <a href="/pages/pdf-reorder.html">Reorder PDF</a>
+        <a href="/pages/pdf-compress.html">Compress PDF</a>
+        <a href="/pages/pdf-to-image.html">PDF to Image</a>
+        <a href="/pages/image-to-pdf.html">Image to PDF</a>
+      </div>
+      <div class="footer__col">
+        <h4>Image & ZIP Tools</h4>
+        <a href="/pages/image-compress.html">Compress Image</a>
+        <a href="/pages/image-resize.html">Resize Image</a>
+        <a href="/pages/image-convert.html">Convert Image</a>
+        <a href="/pages/create-zip.html">Create ZIP</a>
+        <a href="/pages/extract-zip.html">Extract ZIP</a>
+        <a href="/pages/batch-rename.html">Batch Rename</a>
+      </div>
+      <div class="footer__col">
+        <h4>Resources & Trust</h4>
+        <a href="/pages/guides.html">Learning Center</a>
+        <a href="/pages/about.html">About FileWorks</a>
+        <a href="/pages/contact.html">Contact & Support</a>
+        <a href="/pages/privacy.html">Privacy Policy</a>
+        <a href="/pages/terms.html">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2026 FileWorks. Maintained by AetherKube. All rights reserved.</p>
+      <p>100% Free · Client-Side Local Processing · <a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a></p>
+    </div>
+  </div>
+</footer>
+
+<div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
+  <p>We use cookies and display ads via Google AdSense to keep FileWorks free. File processing happens locally in your browser. <a href="/pages/privacy.html">Privacy Policy</a></p>
+  <div class="cookie-banner__actions">
+    <button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button>
+    <button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button>
+  </div>
+</div>
+<div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+<script src="/js/free-usage.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>

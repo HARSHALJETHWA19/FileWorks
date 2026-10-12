@@ -134,6 +134,22 @@
   <div class="divider"></div>
 
   <!-- How to Use -->
+  
+  <section id="deep-dive" style="margin-top:30px;">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">In-Depth: High-Resolution Canvas Rasterization & 144 DPI Retina Rendering</h2>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      Converting a PDF into bitmap images presents a fundamental challenge: PDF documents are resolution-independent vector descriptions, whereas digital images (JPG and PNG) are fixed grids of discrete pixels. In standard PDF rendering implementations, the viewport is calibrated to 72 points per inch (the classic PostScript typographic point standard). If rendered directly at 1.0x scale, an A4 page produces an image of just 595 × 842 pixels—resulting in blurry text, jagged curves, and illegible small print.
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      FileWorks overcomes this through high-fidelity 2.0x retina supersampling via the Mozilla PDF.js rendering pipeline. By scaling the coordinate matrix by a factor of 2.0 (equivalent to 144 DPI), an A4 page is rasterized onto an HTML5 canvas at 1190 × 1684 pixels. This provides sufficient pixel density for razor-sharp typography, barcode scanning, and fine architectural diagrams while avoiding excessive memory allocation that could crash mobile browser sandboxes.
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      Users can tailor output encoding to their specific document type: select PNG for diagrams, tables, and documents where crisp edges and lossless alpha channels are mandatory, or select JPG for photographic portfolios, brochures, and scanned imagery where compact byte sizes are needed for email attachments.
+    </p>
+  </section>
+  
+  <div class="divider"></div>
+
   <section id="how-to-use">
     <h2 style="margin-bottom:24px;font-size:1.4rem;">How to Convert PDF to Image</h2>
     <div class="steps">
@@ -147,6 +163,21 @@
   <div class="divider"></div>
 
   <!-- FAQ -->
+  
+  <section id="best-practices" style="margin-top:30px;">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">Best Practices for PDF to Image Extraction</h2>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      When extracting raster images from PDF pages for use in presentations, websites, or reports:
+    </p>
+    <ul style="line-height:1.8;color:var(--color-text-muted);margin-bottom:16px;padding-left:20px;">
+      <li><strong>Targeting Specific Pages:</strong> If you only need a single chart or infographic from a 20-page financial report, select <em>"Custom Page Numbers"</em> and enter the exact page number (e.g. <code>4</code>). This saves device memory and generates only the exact asset you require.</li>
+      <li><strong>Format Selection:</strong> Choose PNG if the converted page contains charts, tables, fine text, or schematics where compression artifacts could obscure numerical data. Choose JPG for photography-heavy brochures where small file sizes are preferred.</li>
+      <li><strong>Retina Scale Utilization:</strong> FileWorks renders pages at 2.0x scale (144 DPI equivalent), producing crisp, presentation-ready graphics suitable for 4K displays and PowerPoint decks.</li>
+    </ul>
+  </section>
+  
+  <div class="divider"></div>
+
   <section id="faq">
     <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
     <div class="faq">

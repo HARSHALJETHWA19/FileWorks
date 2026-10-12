@@ -3,57 +3,209 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rotate PDF Online — Free PDF Rotation Tool | FileWorks</title>
-  <meta name="description" content="Rotate PDF pages online for free. Rotate all pages or specific pages by 90°, 180°, or 270°. No upload required — browser-based and private.">
+  <title>Rotate PDF Online Free — Permanent Page Orientation | FileWorks</title>
+  <meta name="description" content="Rotate PDF pages 90, 180, or 270 degrees online for free. Permanently update orientation flags for specific pages or entire documents with zero server uploads.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://fileworks.pages.dev/pages/pdf-rotate.html">
-  <meta property="og:title" content="Rotate PDF Online — Free PDF Rotation | FileWorks">
-  <meta property="og:description" content="Rotate PDF pages 90, 180, or 270 degrees. 100% free and in-browser.">
+  <meta property="og:title" content="Rotate PDF Online Free — Permanent Page Orientation | FileWorks">
+  <meta property="og:description" content="Rotate individual PDF pages or entire documents permanently. 100% private in-browser processing.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://fileworks.pages.dev/pages/pdf-rotate.html">
 
-  <!-- Exact Google AdSense Snippet -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7044469500687742"
-     crossorigin="anonymous"></script>
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7044469500687742" crossorigin="anonymous"></script>
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Rotate PDF — FileWorks","description":"Rotate PDF pages by 90, 180, or 270 degrees online for free, processed client-side.","applicationCategory":"UtilitiesApplication","url":"https://fileworks.pages.dev/pages/pdf-rotate.html","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Rotate PDF — FileWorks",
+    "description": "Rotate PDF pages online permanently in your web browser.",
+    "applicationCategory": "UtilitiesApplication",
+    "url": "https://fileworks.pages.dev/pages/pdf-rotate.html",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
   <link rel="stylesheet" href="/css/main.css">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 </head>
 <body>
 
-<nav class="nav" role="navigation"><div class="nav__inner">
-  <a href="/" class="nav__logo" id="nav-logo"><span class="nav__logo-icon">⚡</span>FileWorks</a>
-  <div class="nav__links">
-    <a href="/" class="nav__link" id="nav-home">Tools</a>
-    <a href="/pages/privacy.html" class="nav__link">Privacy</a>
-    <a href="/pages/terms.html" class="nav__link">Terms</a>
+<!-- Navigation -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo" id="nav-logo">
+      <span class="nav__logo-icon" aria-hidden="true">⚡</span>
+      FileWorks
+    </a>
+    <div class="nav__links" id="nav-desktop-links">
+      <a href="/" class="nav__link" id="nav-home">Tools</a>
+      <a href="/pages/guides.html" class="nav__link" id="nav-guides">Learning Center</a>
+      <a href="/pages/about.html" class="nav__link" id="nav-about">About</a>
+      <a href="/pages/contact.html" class="nav__link" id="nav-contact">Contact</a>
+      <a href="/pages/privacy.html" class="nav__link" id="nav-privacy">Privacy</a>
+      <a href="/pages/terms.html" class="nav__link" id="nav-terms">Terms</a>
+    </div>
+    <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Open menu" aria-expanded="false">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
   </div>
-  <button class="nav__menu-btn" id="nav-menu-btn" aria-label="Menu">
-    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-  </button>
-</div></nav>
-<nav class="nav-mobile-menu" id="nav-mobile-menu">
-  <a href="/">🔧 Tools</a><a href="/pages/privacy.html">🔒 Privacy</a><a href="/pages/terms.html">📜 Terms</a>
+</nav>
+<nav class="nav-mobile-menu" id="nav-mobile-menu" aria-label="Mobile navigation">
+  <a href="/" id="mnav-home">🔧 All Tools</a>
+  <a href="/pages/guides.html" id="mnav-guides">📚 Learning Center</a>
+  <a href="/pages/about.html" id="mnav-about">ℹ️ About FileWorks</a>
+  <a href="/pages/contact.html" id="mnav-contact">✉️ Contact & Support</a>
+  <a href="/pages/privacy.html" id="mnav-privacy">🔒 Privacy Policy</a>
+  <a href="/pages/terms.html" id="mnav-terms">📜 Terms of Service</a>
 </nav>
 
 <main class="tool-page" id="main-content">
 <div class="container-tool">
 
-  <!-- Header -->
+  <div class="breadcrumbs" aria-label="Breadcrumbs">
+    <a href="/">Home</a>
+    <span class="breadcrumb-separator">/</span>
+    <a href="/#pdf-tools">PDF Tools</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="current">Rotate PDF</span>
+  </div>
+
   <div class="tool-header">
     <a href="/" class="tool-header__back" id="back-link">← All Tools</a>
-    <div class="tool-header__icon" style="background:rgba(13,148,136,0.15);" id="tool-icon">🔄</div>
-    <h1 id="tool-title">Rotate PDF Online</h1>
-    <p class="tool-header__desc" id="tool-desc">Rotate pages of your PDF document clockwise or counter-clockwise. Processed entirely in your browser.</p>
+    <div class="tool-header__icon" style="background:rgba(99,102,241,0.15);" id="tool-icon">🔄</div>
+    <h1 id="tool-title">Rotate PDF Pages Online</h1>
+    <p class="tool-header__desc" id="tool-desc">Permanently rotate sideways or upside-down pages by 90°, 180°, or 270°. Select individual pages or rotate the entire document.</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
-      <span class="badge badge-privacy" id="badge-privacy">🔒 Files stay local</span>
+      <span class="badge badge-privacy" id="badge-privacy">🔒 100% Local In-Browser Processing</span>
       <span class="badge badge-primary" id="badge-free">Free Tier: Up to 5 Pages</span>
     </div>
   </div>
 
-  <!-- Ad slot: Safe top placement -->
-  <div class="ad-container ad-container--banner" id="ad-top" style="margin-bottom:28px;" aria-label="Advertisement">
+  <div id="interactive-area">
+    <div id="limit-warning-mount"></div>
+
+    <div id="drop-area">
+      <div class="dropzone" id="dropzone" role="button" aria-label="Drop PDF file here or click to select">
+        <div class="dropzone__icon">📄</div>
+        <p class="dropzone__title">Drop a PDF file here or click to browse</p>
+        <p class="dropzone__sub">Rotate up to 5 pages per batch (up to 200 MB). Zero server uploads.</p>
+        <input type="file" id="file-input" accept=".pdf" aria-label="Select PDF file">
+      </div>
+
+      <div class="tool-utility-bar" id="tool-utility-bar">
+        <div class="tool-utility-bar__item">
+          <span>💡 Need a quick test?</span>
+          <button type="button" class="btn-sample" id="btn-load-sample">⚡ Try with a 3-Page Sample PDF</button>
+        </div>
+        <div class="tool-utility-bar__item">
+          <span style="color:var(--color-text-muted);">🔒 Files stay on your device</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="workspace-section" class="hidden" style="margin-top:20px;">
+      <div class="card" style="padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+          <div>
+            <h4 id="pdf-name-label" style="margin:0 0 4px;">PDF loaded</h4>
+            <p id="pdf-meta-label" style="font-size:.875rem;color:var(--color-text-muted);margin:0;"></p>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-ghost btn-sm" id="btn-inspect-pdf">🔍 Inspect Details</button>
+            <button class="btn btn-ghost btn-sm" id="btn-change-file">Change File</button>
+          </div>
+        </div>
+
+        <div style="background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:14px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+          <span style="font-size:0.875rem;font-weight:600;">Rotate All Pages at Once:</span>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-ghost btn-sm" id="btn-rot-all-90">↷ +90° Clockwise</button>
+            <button class="btn btn-ghost btn-sm" id="btn-rot-all-180">↻ 180° Flip</button>
+            <button class="btn btn-ghost btn-sm" id="btn-rot-all-270">↶ +270° (90° CCW)</button>
+            <button class="btn btn-ghost btn-sm" id="btn-rot-reset">Reset</button>
+          </div>
+        </div>
+
+        <p class="section-label" style="margin-bottom:12px;">Individual Page Cards (Click buttons to rotate per page):</p>
+        <div id="page-cards-grid" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));gap:14px;margin-bottom:20px;"></div>
+
+        <div style="display:flex;gap:12px;margin-top:24px;align-items:center;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-lg" id="btn-save-rotation">💾 Apply & Save Rotated PDF</button>
+          <span id="rotation-status-note" style="font-size:.875rem;color:var(--color-text-muted);">Modify page rotations above</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="processing-section" class="hidden" style="margin-top:20px;">
+      <div class="processing-overlay">
+        <div class="spinner"></div>
+        <p id="processing-msg" style="font-weight:600;font-size:1.05rem;">Rewriting PDF rotation dictionaries...</p>
+        <div class="progress-bar" style="width:240px;margin-top:8px;"><div class="progress-bar__fill" style="width:100%"></div></div>
+      </div>
+    </div>
+
+    <div id="result-mount" class="hidden" style="margin-top:20px;"></div>
+  </div>
+
+  <div class="divider"></div>
+
+  
+  <section id="deep-dive" style="margin-top:30px;">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">In-Depth: Permanent Page Rotation vs Temporary Viewer Flipping</h2>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      Many computer users have encountered the frustrating scenario where a PDF rotated in an operating system viewer or browser preview suddenly reverts to sideways orientation when attached to an email, uploaded to a government portal, or sent to a commercial print spooler. This occurs because modern PDF viewers distinguish between <em>ephemeral presentation state</em> and <em>persistent binary document metadata</em>.
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      In the ISO 32000-1 document architecture, each page is represented as a dictionary object node within the hierarchical <code>/Pages</code> tree. This dictionary contains dimensional keys—such as <code>/MediaBox</code>, <code>/CropBox</code>, and optionally a <code>/Rotate</code> integer entry. The <code>/Rotate</code> value must be an exact multiple of 90 degrees (specifically 0, 90, 180, or 270) clockwise. When a user presses a "Rotate" icon in a standard web browser viewer, the application merely adjusts the local CSS or GPU canvas viewport matrix without modifying the underlying PDF binary streams.
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      FileWorks solves this permanently by parsing the document structure using <code>pdf-lib</code>, targeting the exact page dictionary objects, and mutating the actual <code>/Rotate</code> numerical primitive. Because this modification is written directly into the PDF cross-reference table and catalog streams, the orientation is universally honored across all downstream hardware, including laser printers, RIP software, and mobile operating systems. Furthermore, because no vector glyphs or pixel streams are decompressed or re-encoded, the rotation operation executes in milliseconds with zero loss in visual clarity or text searchability.
+    </p>
+  </section>
+  
+  <div class="divider"></div>
+
+  <section id="how-to-use">
+    <h2 style="margin-bottom:20px;font-size:1.4rem;">How to Permanently Rotate PDF Pages</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step__content"><h4>Select or Drop PDF</h4><p>Load your PDF or click <em>"Try with a 3-Page Sample PDF"</em> to evaluate rotation immediately.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step__content"><h4>Select Rotation Angles</h4><p>Use the global buttons to rotate all pages simultaneously, or click individual rotation triggers on specific pages.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step__content"><h4>Apply Binary Updates</h4><p>FileWorks updates the <code>/Rotate</code> dictionary entries in memory without re-compressing or degrading vector content.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step__content"><h4>Download & Open</h4><p>Your resulting PDF opens permanently upright in any viewer or print spooler.</p></div></div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="tech-specs">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">Technical Specifications: How PDF Rotation Works</h2>
+    <p style="color:var(--color-text-muted);margin-bottom:20px;line-height:1.6;">
+      According to ISO 32000-1 § 7.7.3.3, page rotation is stored as a numerical angle modulo 360:
+    </p>
+    <table class="comparison-table">
+      <thead>
+        <tr><th>Angle Parameter</th><th>Dictionary Value</th><th>Transformation Behavior</th><th>Common Scenario</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>+90° Clockwise</strong></td><td><code>/Rotate 90</code></td><td>Rotates coordinate grid 90° right</td><td>Sideways landscape tables</td></tr>
+        <tr><td><strong>180° Flip</strong></td><td><code>/Rotate 180</code></td><td>Inverts page upside-down</td><td>Inverted feeder scanner scans</td></tr>
+        <tr><td><strong>+270° (90° CCW)</strong></td><td><code>/Rotate 270</code></td><td>Rotates coordinate grid 90° left</td><td>Slide presentation pages</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div class="guide-tool-cta" style="margin:36px 0;">
+    <div class="guide-tool-cta__text">
+      <h4>📖 Deep-Dive Editorial Guide</h4>
+      <p>Discover why temporary viewer rotation differs from permanent /Rotate flag updates.</p>
+    </div>
+    <a href="/pages/guides/pdf-rotation-vs-page-orientation-explained.html" class="btn btn-outline btn-sm">Read the Full Technical Guide →</a>
+  </div>
+
+  <div class="ad-container ad-container--banner" id="ad-content-rotate" style="margin:40px 0;" aria-label="Advertisement">
     <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="ca-pub-7044469500687742"
@@ -61,102 +213,17 @@
          data-full-width-responsive="true"></ins>
   </div>
 
-  <!-- Interactive Work Area -->
-  <div id="interactive-area">
-    <div id="limit-warning-mount"></div>
-
-    <!-- Dropzone -->
-    <div id="drop-area">
-      <div class="dropzone" id="dropzone" role="button" aria-label="Drop PDF file here or click to select">
-        <div class="dropzone__icon">📄</div>
-        <p class="dropzone__title">Drop a PDF file here</p>
-        <p class="dropzone__sub">Free tier: rotate PDFs up to 5 pages (max 200 MB)</p>
-        <input type="file" id="file-input" accept=".pdf" aria-label="Select PDF file">
-      </div>
-    </div>
-
-    <!-- Options Section -->
-    <div id="options-section" class="hidden" style="margin-top:20px;">
-      <div class="card" style="padding:20px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
-          <div>
-            <h4 id="pdf-name" style="margin:0 0 4px;">PDF loaded</h4>
-            <p id="pdf-info" style="font-size:.875rem;color:var(--color-text-muted);margin:0;"></p>
-          </div>
-          <button class="btn btn-ghost btn-sm" id="btn-change-file">Change File</button>
-        </div>
-
-        <div class="form-group" style="margin-bottom:16px;">
-          <label class="form-label" for="rotation-select">Rotation Angle</label>
-          <select class="form-select" id="rotation-select">
-            <option value="90">Rotate 90° Clockwise</option>
-            <option value="180">Rotate 180° (Upside down)</option>
-            <option value="270">Rotate 90° Counter-Clockwise (270°)</option>
-          </select>
-        </div>
-
-        <div class="form-group" style="margin-bottom:16px;">
-          <label class="form-label" for="apply-to">Apply Rotation To</label>
-          <select class="form-select" id="apply-to">
-            <option value="all">All pages</option>
-            <option value="specific">Specific page numbers</option>
-          </select>
-        </div>
-
-        <div id="specific-pages-section" class="form-group hidden" style="margin-bottom:20px;">
-          <label class="form-label" for="specific-pages">Page numbers (e.g. 1, 3, 5)</label>
-          <input type="text" class="form-input" id="specific-pages" placeholder="1, 2, 4">
-          <p style="font-size:.8125rem;color:var(--color-text-muted);margin-top:4px;">Comma-separated page numbers to rotate.</p>
-        </div>
-
-        <div style="display:flex;gap:12px;margin-top:24px;align-items:center;flex-wrap:wrap;">
-          <button class="btn btn-primary btn-lg" id="btn-rotate">🔄 Rotate PDF</button>
-          <span id="rotate-status-note" style="font-size:.875rem;color:var(--color-text-muted);">Ready to rotate</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Processing -->
-    <div id="processing-section" class="hidden" style="margin-top:20px;">
-      <div class="processing-overlay">
-        <div class="spinner"></div>
-        <p id="processing-msg" style="font-weight:600;font-size:1.05rem;">Rotating your PDF pages locally...</p>
-        <div class="progress-bar" style="width:240px;margin-top:8px;"><div class="progress-bar__fill" style="width:100%"></div></div>
-      </div>
-    </div>
-
-    <!-- Result Mount -->
-    <div id="result-mount" class="hidden" style="margin-top:20px;"></div>
-  </div>
-
-  <div class="divider"></div>
-
-  <!-- How to Use -->
-  <section id="how-to-use">
-    <h2 style="margin-bottom:24px;font-size:1.4rem;">How to Rotate a PDF</h2>
-    <div class="steps">
-      <div class="step"><div class="step-num">1</div><div class="step__content"><h4>Select your PDF</h4><p>Click or drag your PDF document into the upload area.</p></div></div>
-      <div class="step"><div class="step-num">2</div><div class="step__content"><h4>Choose orientation</h4><p>Select clockwise (90°), 180°, or counter-clockwise (270°) rotation.</p></div></div>
-      <div class="step"><div class="step-num">3</div><div class="step__content"><h4>Select pages</h4><p>Rotate all pages or target specific page numbers in your document.</p></div></div>
-      <div class="step"><div class="step-num">4</div><div class="step__content"><h4>Preview & Download</h4><p>Inspect the rotated document in your browser preview and download the output.</p></div></div>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- FAQ -->
   <section id="faq">
     <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
     <div class="faq">
-      <details class="faq-item"><summary>What is the free limit for PDF rotation?</summary><div class="faq-item__body">The free tier allows rotating PDFs with up to 5 pages per operation, matching the Android application.</div></details>
-      <details class="faq-item"><summary>Does rotating a PDF degrade quality?</summary><div class="faq-item__body">No. The internal PDF rotation flag is adjusted using pdf-lib without re-rasterizing pages, preserving 100% of the vector text and graphics.</div></details>
-      <details class="faq-item"><summary>Is processing private?</summary><div class="faq-item__body">Yes, all rotations happen locally in your browser without transmitting your files across any network.</div></details>
+      <details class="faq-item"><summary>Why did my PDF rotate in my browser viewer but revert when emailed?</summary><div class="faq-item__body">Browser viewers only rotate the local screen viewport without rewriting file bytes. FileWorks rewrites the underlying PDF <code>/Rotate</code> dictionary key so it stays upright anywhere.</div></details>
+      <details class="faq-item"><summary>Does rotating pages reduce quality?</summary><div class="faq-item__body">Zero quality loss. Rotating a PDF updates a single integer flag in the page tree without touching or re-compressing text or images.</div></details>
+      <details class="faq-item"><summary>What is the free tier limit?</summary><div class="faq-item__body">Up to 5 pages per batch (or 10 with allowance), matching mobile parity. You can process consecutive batches 100% free.</div></details>
     </div>
   </section>
 
   <div class="divider"></div>
 
-  <!-- Related Tools -->
   <section id="related-tools">
     <h2 style="margin-bottom:20px;font-size:1.4rem;">Related PDF Tools</h2>
     <div class="related-tools">
@@ -164,21 +231,58 @@
       <a href="/pages/pdf-split.html" class="related-tool"><span class="related-tool__icon">✂️</span>Split PDF</a>
       <a href="/pages/pdf-reorder.html" class="related-tool"><span class="related-tool__icon">↕️</span>Reorder PDF</a>
       <a href="/pages/pdf-compress.html" class="related-tool"><span class="related-tool__icon">⚡</span>Compress PDF</a>
+      <a href="/pages/pdf-to-image.html" class="related-tool"><span class="related-tool__icon">🖼️</span>PDF to Image</a>
     </div>
   </section>
 
 </div>
 </main>
 
-<footer class="footer"><div class="container">
-  <div class="footer__bottom">
-    <p>© 2026 FileWorks. All rights reserved. 100% Free File Tools.</p>
-    <p><a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a> · <a href="/pages/terms.html" style="color:var(--color-primary);">Terms of Service</a></p>
+<!-- Footer -->
+<footer class="footer" id="main-footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <h3>⚡ FileWorks</h3>
+        <p>Free online file utility toolkit for PDFs, images, ZIP files, and everyday file management. Files are processed locally in your browser.</p>
+      </div>
+      <div class="footer__col">
+        <h4>PDF Tools</h4>
+        <a href="/pages/pdf-merge.html">Merge PDF</a>
+        <a href="/pages/pdf-split.html">Split PDF</a>
+        <a href="/pages/pdf-rotate.html">Rotate PDF</a>
+        <a href="/pages/pdf-reorder.html">Reorder PDF</a>
+        <a href="/pages/pdf-compress.html">Compress PDF</a>
+        <a href="/pages/pdf-to-image.html">PDF to Image</a>
+        <a href="/pages/image-to-pdf.html">Image to PDF</a>
+      </div>
+      <div class="footer__col">
+        <h4>Image & ZIP Tools</h4>
+        <a href="/pages/image-compress.html">Compress Image</a>
+        <a href="/pages/image-resize.html">Resize Image</a>
+        <a href="/pages/image-convert.html">Convert Image</a>
+        <a href="/pages/create-zip.html">Create ZIP</a>
+        <a href="/pages/extract-zip.html">Extract ZIP</a>
+        <a href="/pages/batch-rename.html">Batch Rename</a>
+      </div>
+      <div class="footer__col">
+        <h4>Resources & Trust</h4>
+        <a href="/pages/guides.html">Learning Center</a>
+        <a href="/pages/about.html">About FileWorks</a>
+        <a href="/pages/contact.html">Contact & Support</a>
+        <a href="/pages/privacy.html">Privacy Policy</a>
+        <a href="/pages/terms.html">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2026 FileWorks. Maintained by AetherKube. All rights reserved.</p>
+      <p>100% Free · Client-Side Local Processing · <a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a></p>
+    </div>
   </div>
-</div></footer>
+</footer>
 
 <div class="cookie-banner hidden" id="cookie-banner" role="region" aria-label="Cookie consent">
-  <p>We display ads to keep FileWorks 100% free. Files stay local. <a href="/pages/privacy.html">Privacy Policy</a></p>
+  <p>We use cookies and display ads via Google AdSense to keep FileWorks free. File processing happens locally in your browser. <a href="/pages/privacy.html">Privacy Policy</a></p>
   <div class="cookie-banner__actions">
     <button class="btn btn-primary btn-sm" id="cookie-accept">Accept & Continue</button>
     <button class="btn btn-ghost btn-sm" id="cookie-decline">Decline Ads</button>
@@ -191,6 +295,8 @@
 <script src="/js/free-usage.js"></script>
 <script src="/js/preview-modal.js"></script>
 <script src="/js/result-screen.js"></script>
+<script src="/js/inspector.js"></script>
+<script src="/js/sample-files.js"></script>
 <script src="/js/app.js"></script>
 <script src="/js/tools/pdf-tools.js"></script>
 
@@ -199,154 +305,178 @@
   const TOOL_FEATURE = 'pdfRotate';
   let pdfFile = null;
   let pageCount = 0;
-  let resultBlob = null;
+  let pageRotations = {};
 
   const dropzone = document.getElementById('dropzone');
   const dropArea = document.getElementById('drop-area');
   const fileInput = document.getElementById('file-input');
-  const optSection = document.getElementById('options-section');
-  const limitMount = document.getElementById('limit-warning-mount');
-  const procSection = document.getElementById('processing-section');
+  const workspaceSection = document.getElementById('workspace-section');
+  const processingSection = document.getElementById('processing-section');
   const resultMount = document.getElementById('result-mount');
-  const rotationSelect = document.getElementById('rotation-select');
-  const applyTo = document.getElementById('apply-to');
-  const specificPagesSec = document.getElementById('specific-pages-section');
-  const specificPagesInput = document.getElementById('specific-pages');
-  const btnRotate = document.getElementById('btn-rotate');
+  const limitMount = document.getElementById('limit-warning-mount');
+
+  const pdfNameLabel = document.getElementById('pdf-name-label');
+  const pdfMetaLabel = document.getElementById('pdf-meta-label');
+  const pageCardsGrid = document.getElementById('page-cards-grid');
+  const btnSaveRotation = document.getElementById('btn-save-rotation');
   const btnChangeFile = document.getElementById('btn-change-file');
-  const rotateStatusNote = document.getElementById('rotate-status-note');
+  const rotationStatusNote = document.getElementById('rotation-status-note');
+  const btnLoadSample = document.getElementById('btn-load-sample');
+  const btnInspectPdf = document.getElementById('btn-inspect-pdf');
 
-  function parsePageNumbers(str, max) {
-    if (!str || !str.trim()) return [];
-    const nums = new Set();
-    str.split(',').forEach(part => {
-      part = part.trim();
-      const n = parseInt(part);
-      if (!isNaN(n) && n >= 1 && n <= max) nums.add(n);
-    });
-    return [...nums].sort((a, b) => a - b);
-  }
-
-  function validateLimit() {
-    let countToCheck = pageCount;
-    if (applyTo.value === 'specific') {
-      const nums = parsePageNumbers(specificPagesInput.value, pageCount);
-      countToCheck = nums.length || pageCount;
-    }
-
-    const check = FreeUsageManager.checkLimit(TOOL_FEATURE, countToCheck);
-    if (!check.allowed) {
-      FreeUsageManager.renderLimitWarning(limitMount, check);
-      btnRotate.disabled = true;
-      rotateStatusNote.textContent = `Document has ${countToCheck} pages (Free limit: 5). Choose specific pages or fewer pages.`;
-      rotateStatusNote.style.color = 'var(--color-danger)';
-    } else {
-      FreeUsageManager.clearLimitWarning(limitMount);
-      btnRotate.disabled = false;
-      rotateStatusNote.textContent = `Ready to rotate (${countToCheck}/5 pages)`;
-      rotateStatusNote.style.color = 'var(--color-text-muted)';
-    }
-    return check;
-  }
-
-  applyTo.addEventListener('change', () => {
-    specificPagesSec.classList.toggle('hidden', applyTo.value !== 'specific');
-    validateLimit();
-  });
-
-  specificPagesInput.addEventListener('input', validateLimit);
-
-  async function loadFile(files) {
-    if (!files.length) return;
-    const f = files[0];
+  async function handleFileSelected(file) {
     try {
-      FW.file.validateSize(f, 200);
-      FW.file.validateType(f, ['pdf']);
-      pdfFile = f;
-      pageCount = await PdfTools.getPageCount(f);
+      FW.file.validateSize(file, 200);
+      FW.file.validateType(file, ['pdf']);
+      pdfFile = file;
+      pageCount = await PdfTools.getPageCount(file);
 
-      document.getElementById('pdf-name').textContent = f.name;
-      document.getElementById('pdf-info').textContent = `${pageCount} pages · ${FW.file.formatSize(f.size)}`;
+      const check = FreeUsageManager.checkLimit(TOOL_FEATURE, pageCount);
+      if (!check.allowed) {
+        FreeUsageManager.renderLimitWarning(limitMount, check);
+      } else {
+        FreeUsageManager.clearLimitWarning(limitMount);
+      }
 
+      pdfNameLabel.textContent = file.name;
+      pdfMetaLabel.textContent = `${pageCount} page${pageCount > 1 ? 's' : ''} • ${FW.file.formatSize(file.size)}`;
+
+      pageRotations = {};
+      for (let i = 1; i <= Math.min(pageCount, 10); i++) {
+        pageRotations[i] = 0;
+      }
+
+      renderPageCards();
       dropArea.classList.add('hidden');
-      optSection.classList.remove('hidden');
-      validateLimit();
+      workspaceSection.classList.remove('hidden');
+
       FW.analytics.track('file_selected', { tool: TOOL_FEATURE });
     } catch(e) {
-      FW.toast.error(e.message || 'Unable to read this PDF.');
+      FW.toast.error(e.message || 'Cannot open PDF.');
     }
   }
 
-  FW.dropzone.init(dropzone, fileInput, loadFile, { accept: '.pdf', multiple: false });
+  function renderPageCards() {
+    pageCardsGrid.innerHTML = '';
+    const displayCount = Math.min(pageCount, 10);
+
+    for (let i = 1; i <= displayCount; i++) {
+      const rot = pageRotations[i] || 0;
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.cssText = 'padding:14px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;';
+      card.innerHTML = `
+        <div style="width:48px;height:64px;border:2px solid var(--color-primary);border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;background:var(--color-surface-2);transform:rotate(${rot}deg);transition:transform 0.3s ease;">
+          p.${i}
+        </div>
+        <span style="font-size:0.75rem;color:var(--color-text-muted);">${rot}° rotation</span>
+        <button type="button" class="btn btn-ghost btn-sm btn-rot-card" data-page="${i}" style="padding:4px 8px;font-size:0.75rem;width:100%;">
+          ↷ +90°
+        </button>
+      `;
+      pageCardsGrid.appendChild(card);
+    }
+
+    pageCardsGrid.querySelectorAll('.btn-rot-card').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const p = parseInt(btn.dataset.page);
+        pageRotations[p] = ((pageRotations[p] || 0) + 90) % 360;
+        renderPageCards();
+      });
+    });
+
+    const activeChanges = Object.values(pageRotations).some(r => r !== 0);
+    rotationStatusNote.textContent = activeChanges ? 'Ready to apply rotation changes.' : 'No pages rotated yet.';
+  }
+
+  document.getElementById('btn-rot-all-90')?.addEventListener('click', () => {
+    for (const p in pageRotations) pageRotations[p] = (pageRotations[p] + 90) % 360;
+    renderPageCards();
+  });
+  document.getElementById('btn-rot-all-180')?.addEventListener('click', () => {
+    for (const p in pageRotations) pageRotations[p] = (pageRotations[p] + 180) % 360;
+    renderPageCards();
+  });
+  document.getElementById('btn-rot-all-270')?.addEventListener('click', () => {
+    for (const p in pageRotations) pageRotations[p] = (pageRotations[p] + 270) % 360;
+    renderPageCards();
+  });
+  document.getElementById('btn-rot-reset')?.addEventListener('click', () => {
+    for (const p in pageRotations) pageRotations[p] = 0;
+    renderPageCards();
+  });
+
+  FW.dropzone.init(dropzone, fileInput, files => {
+    if (files.length) handleFileSelected(files[0]);
+  }, { accept: '.pdf', multiple: false });
+
+  btnLoadSample?.addEventListener('click', async () => {
+    try {
+      FW.toast.info('Generating 3-page sample PDF in browser...');
+      const sample = await SampleFiles.createSamplePdf('Sample_Document_3Pages.pdf', 3, 'FileWorks Rotation Test');
+      await handleFileSelected(sample);
+      pageRotations[1] = 90;
+      renderPageCards();
+      FW.toast.success('Loaded sample! Page 1 configured with +90° rotation.');
+    } catch(err) {
+      FW.toast.error('Sample generation failed: ' + err.message);
+    }
+  });
+
+  btnInspectPdf?.addEventListener('click', async () => {
+    if (!pdfFile) return;
+    try {
+      const details = await FileInspector.inspectPdf(pdfFile);
+      FileInspector.showModal(details);
+    } catch(err) {
+      FW.toast.error('Inspector error: ' + err.message);
+    }
+  });
 
   function resetToEmpty() {
     pdfFile = null;
     pageCount = 0;
-    resultBlob = null;
+    pageRotations = {};
     FreeUsageManager.resetAllowance(TOOL_FEATURE);
     FreeUsageManager.clearLimitWarning(limitMount);
     resultMount.classList.add('hidden');
     resultMount.innerHTML = '';
-    procSection.classList.add('hidden');
-    optSection.classList.add('hidden');
+    processingSection.classList.add('hidden');
+    workspaceSection.classList.add('hidden');
     dropArea.classList.remove('hidden');
     fileInput.value = '';
-    specificPagesInput.value = '';
   }
 
   btnChangeFile.addEventListener('click', resetToEmpty);
 
-  btnRotate.addEventListener('click', async () => {
+  btnSaveRotation.addEventListener('click', async () => {
     if (!pdfFile) return;
-
-    const check = validateLimit();
+    const check = FreeUsageManager.checkLimit(TOOL_FEATURE, pageCount);
     if (!check.allowed) {
       FreeUsageManager.showLimitModal(check);
       return;
     }
 
-    const angle = parseInt(rotationSelect.value);
-    const rotations = {};
-
-    if (applyTo.value === 'all') {
-      for (let i = 1; i <= pageCount; i++) rotations[i] = angle;
-    } else {
-      const nums = parsePageNumbers(specificPagesInput.value, pageCount);
-      if (!nums.length) {
-        FW.toast.warning('Enter at least one valid page number to rotate.');
-        return;
-      }
-      nums.forEach(n => { rotations[n] = angle; });
-    }
-
-    optSection.classList.add('hidden');
-    dropArea.classList.add('hidden');
-    procSection.classList.remove('hidden');
-    FW.analytics.track('processing_started', { tool: TOOL_FEATURE });
+    workspaceSection.classList.add('hidden');
+    processingSection.classList.remove('hidden');
+    FW.analytics.track('processing_started', { tool: TOOL_FEATURE, count: pageCount });
 
     try {
-      const baseName = pdfFile.name.replace(/\.pdf$/i, '');
-      const outName = `${baseName}_rotated.pdf`;
-      const result = await PdfTools.rotate(pdfFile, rotations, outName);
-      resultBlob = result.blob;
-
-      procSection.classList.add('hidden');
+      const { blob, name } = await PdfTools.rotate(pdfFile, pageRotations, 'rotated_fileworks.pdf');
+      processingSection.classList.add('hidden');
 
       ResultScreen.render(resultMount, {
         title: 'PDF Rotated Successfully!',
-        description: `Rotated pages by ${angle}° in "${pdfFile.name}" (${FW.file.formatSize(resultBlob.size)}).`,
-        files: [{
-          name: outName,
-          blob: resultBlob,
-        }],
+        description: `Permanently applied page orientation changes (${FW.file.formatSize(blob.size)}).`,
+        files: [{ name: 'rotated_fileworks.pdf', blob }],
         toolFeatureId: TOOL_FEATURE,
         onReset: resetToEmpty,
       });
 
       FW.analytics.track('processing_completed', { tool: TOOL_FEATURE });
     } catch(e) {
-      procSection.classList.add('hidden');
-      optSection.classList.remove('hidden');
+      processingSection.classList.add('hidden');
+      workspaceSection.classList.remove('hidden');
       FW.toast.error(e.message || 'Failed to rotate PDF.');
       FW.analytics.track('error_occurred', { tool: TOOL_FEATURE });
     }

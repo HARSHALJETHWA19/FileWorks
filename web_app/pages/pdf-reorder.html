@@ -181,6 +181,22 @@
   <div class="divider"></div>
 
   <!-- How to Use -->
+  
+  <section id="deep-dive" style="margin-top:30px;">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">In-Depth: How PDF Page Trees Manage Indirect Object Pointers</h2>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      Unlike a physical paper binder where reorganizing pages involves simply moving sheets from front to back, a digital PDF file is a structured graph of indirect objects linked together via cross-reference pointers. In the PDF specification (ISO 32000-1 § 7.7.3), pages are arranged in a balanced B-tree structure called the <em>Page Tree</em>, defined by a root <code>/Pages</code> object containing <code>/Kids</code> arrays and a cumulative <code>/Count</code> key.
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      When rearranging pages using FileWorks, the client-side engine does not duplicate or re-render page contents. Instead, it reads the original page tree, identifies the indirect reference IDs (e.g., <code>12 0 R</code>, <code>15 0 R</code>), and constructs a clean new document catalog with the <code>/Kids</code> array ordered according to your visual drag-and-drop sequence. Each page retains its full set of child dictionaries, including embedded font subsets, resource dictionaries, structural form fields, and vector stream content.
+    </p>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      This pointer-based architecture ensures three essential benefits: first, vector precision is 100% preserved because no rasterization takes place; second, file size remains virtually identical to the original source without artificial bloat; and third, confidential text or proprietary drawings remain completely private inside your browser's execution memory without touching a remote cloud server.
+    </p>
+  </section>
+  
+  <div class="divider"></div>
+
   <section id="how-to-use">
     <h2 style="margin-bottom:24px;font-size:1.4rem;">How to Reorder PDF Pages</h2>
     <div class="steps">
@@ -194,6 +210,21 @@
   <div class="divider"></div>
 
   <!-- FAQ -->
+  
+  <section id="best-practices" style="margin-top:30px;">
+    <h2 style="margin-bottom:16px;font-size:1.4rem;">Best Practices for Reorganizing PDF Documents</h2>
+    <p style="line-height:1.7;color:var(--color-text-muted);margin-bottom:14px;">
+      When rearranging multi-page documents, careful organization ensures clean downstream results:
+    </p>
+    <ul style="line-height:1.8;color:var(--color-text-muted);margin-bottom:16px;padding-left:20px;">
+      <li><strong>Handling Inverted Feeder Scans:</strong> Automatic document feeder (ADF) scanners frequently output multi-page documents in reverse order (e.g., page 10 to page 1). Click FileWorks' <em>"Reverse Order"</em> button to flip the entire document sequence end-to-end with a single click.</li>
+      <li><strong>Preserving Hyperlinks & Form Fields:</strong> Because FileWorks operates directly on underlying page object nodes in the PDF graph, internal hyperlinks, bookmarks, and fillable form fields travel seamlessly with their respective pages to their new positions.</li>
+      <li><strong>Verify First and Last Pages:</strong> Always inspect the top and bottom thumbnail cards in our visual workspace before clicking Save to ensure cover pages and appendix summaries are placed in their proper slots.</li>
+    </ul>
+  </section>
+  
+  <div class="divider"></div>
+
   <section id="faq">
     <h2 style="margin-bottom:20px;font-size:1.4rem;">Frequently Asked Questions</h2>
     <div class="faq">

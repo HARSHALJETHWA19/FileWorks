@@ -51,6 +51,9 @@
     </a>
     <div class="nav__links" id="nav-desktop-links">
       <a href="/" class="nav__link active" id="nav-home">Tools</a>
+      <a href="/pages/guides.html" class="nav__link" id="nav-guides">Learning Center</a>
+      <a href="/pages/about.html" class="nav__link" id="nav-about">About</a>
+      <a href="/pages/contact.html" class="nav__link" id="nav-contact">Contact</a>
       <a href="/pages/privacy.html" class="nav__link" id="nav-privacy">Privacy</a>
       <a href="/pages/terms.html" class="nav__link" id="nav-terms">Terms</a>
     </div>
@@ -62,7 +65,10 @@
   </div>
 </nav>
 <nav class="nav-mobile-menu" id="nav-mobile-menu" aria-label="Mobile navigation">
-  <a href="/" id="mnav-home">🔧 Tools</a>
+  <a href="/" id="mnav-home">🔧 All Tools</a>
+  <a href="/pages/guides.html" id="mnav-guides">📚 Learning Center</a>
+  <a href="/pages/about.html" id="mnav-about">ℹ️ About FileWorks</a>
+  <a href="/pages/contact.html" id="mnav-contact">✉️ Contact & Support</a>
   <a href="/pages/privacy.html" id="mnav-privacy">🔒 Privacy Policy</a>
   <a href="/pages/terms.html" id="mnav-terms">📜 Terms of Service</a>
 </nav>
@@ -251,6 +257,52 @@
   </div>
 </div>
 
+<!-- Featured Learning Center Section -->
+<section class="section" id="learning-center-spotlight" style="border-top:1px solid var(--color-border);background:var(--color-surface);">
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px;flex-wrap:wrap;gap:16px;">
+      <div>
+        <div class="privacy-shield" style="margin-bottom:12px;">📚 Knowledge Base</div>
+        <h2 style="margin:0 0 8px;font-size:1.8rem;">Learning Center & Technical Guides</h2>
+        <p style="color:var(--color-text-muted);margin:0;max-width:600px;">Original, in-depth documentation on PDF specifications, image compression codecs, and archive security.</p>
+      </div>
+      <a href="/pages/guides.html" class="btn btn-outline">Explore All 12 Guides →</a>
+    </div>
+
+    <div class="guide-grid">
+      <a href="/pages/guides/how-to-merge-pdfs-preserving-page-dimensions.html" class="guide-card">
+        <span class="guide-card__tag">PDF Architecture</span>
+        <h3 class="guide-card__title">How to Merge PDFs While Preserving Page Dimensions & Vector Quality</h3>
+        <p class="guide-card__excerpt">Explore ISO 32000-1 MediaBox dimensions, mixed page geometry, and why rasterizing reduces text searchability.</p>
+        <div class="guide-card__footer">
+          <span>By AetherKube Engineering</span>
+          <span>Read Guide →</span>
+        </div>
+      </a>
+
+      <a href="/pages/guides/jpg-vs-png-vs-webp-format-comparison.html" class="guide-card">
+        <span class="guide-card__tag">Image Codecs</span>
+        <h3 class="guide-card__title">JPG vs PNG vs WebP: Which Image Format Should You Choose?</h3>
+        <p class="guide-card__excerpt">A comprehensive benchmark of compression ratios, 8-bit alpha transparency, and browser decode performance.</p>
+        <div class="guide-card__footer">
+          <span>By AetherKube Engineering</span>
+          <span>Read Guide →</span>
+        </div>
+      </a>
+
+      <a href="/pages/guides/how-to-create-and-extract-zip-archives-safely.html" class="guide-card">
+        <span class="guide-card__tag">Archive Security</span>
+        <h3 class="guide-card__title">How to Create and Extract ZIP Archives Safely Without Zip-Slip Exploits</h3>
+        <p class="guide-card__excerpt">Understand PKZIP DEFLATE specifications, path traversal defense, and client-side sandboxed archive handling.</p>
+        <div class="guide-card__footer">
+          <span>By AetherKube Engineering</span>
+          <span>Read Guide →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- Privacy Feature Section -->
 <section class="section--sm" id="privacy-section" style="border-top:1px solid var(--color-border);">
   <div class="container">
@@ -295,8 +347,7 @@
     <div class="footer__grid">
       <div class="footer__brand">
         <h3>⚡ FileWorks</h3>
-        <p>Free online file utility toolkit for PDFs, images, ZIP files, and everyday file management.
-           Files are processed locally in your browser.</p>
+        <p>Free online file utility toolkit for PDFs, images, ZIP archives, and everyday file tasks. 100% private in-browser processing with zero server uploads.</p>
       </div>
       <div class="footer__col">
         <h4>PDF Tools</h4>
@@ -309,7 +360,7 @@
         <a href="/pages/image-to-pdf.html">Image to PDF</a>
       </div>
       <div class="footer__col">
-        <h4>Image & File</h4>
+        <h4>Image & ZIP Tools</h4>
         <a href="/pages/image-compress.html">Compress Image</a>
         <a href="/pages/image-resize.html">Resize Image</a>
         <a href="/pages/image-convert.html">Convert Image</a>
@@ -318,15 +369,17 @@
         <a href="/pages/batch-rename.html">Batch Rename</a>
       </div>
       <div class="footer__col">
-        <h4>Company</h4>
+        <h4>Resources & Trust</h4>
+        <a href="/pages/guides.html">Learning Center</a>
+        <a href="/pages/about.html">About FileWorks</a>
+        <a href="/pages/contact.html">Contact & Support</a>
         <a href="/pages/privacy.html">Privacy Policy</a>
         <a href="/pages/terms.html">Terms of Service</a>
-        <a href="mailto:aetherkube@gmail.com">Contact</a>
       </div>
     </div>
     <div class="footer__bottom">
-      <p>© 2026 FileWorks. All rights reserved.</p>
-      <p>Files processed locally. <a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a></p>
+      <p>© 2026 FileWorks. Maintained by AetherKube. All rights reserved.</p>
+      <p>100% Free · Client-Side Local Processing · <a href="/pages/privacy.html" style="color:var(--color-primary);">Privacy Policy</a></p>
     </div>
   </div>
 </footer>
