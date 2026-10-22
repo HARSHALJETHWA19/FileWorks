@@ -169,7 +169,7 @@ const FW = {
     isAccepted() { return localStorage.getItem(this.KEY) === 'accepted'; },
   },
 
-  // ---- AdSense ----
+  // ---- AdSense (Auto Ads) ----
   ads: {
     loaded: false,
     loadAds() {
@@ -185,14 +185,6 @@ const FW = {
         document.head.appendChild(s);
       }
       this.loaded = true;
-      // Initialize responsive ad units
-      try {
-        if (typeof window !== 'undefined' && window.adsbygoogle) {
-          document.querySelectorAll('ins.adsbygoogle:not([data-adsbygoogle-status])').forEach(() => {
-            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(_) {}
-          });
-        }
-      } catch(_) {}
     },
   },
 

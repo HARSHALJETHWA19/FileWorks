@@ -114,11 +114,8 @@
     // AdSense
     { id: 'ADS-001', cat: 'ads', name: 'Publisher ID is ca-pub-7044469500687742', run: () => FW.config.adSensePublisherId === 'ca-pub-7044469500687742' },
     { id: 'ADS-002', cat: 'ads', name: 'Site URL is set to https://fileworks.pages.dev', run: () => FW.config.siteUrl === 'https://fileworks.pages.dev' },
-    { id: 'ADS-003', cat: 'ads', name: 'Result screen embeds compliant responsive ad slot', run: () => {
-      const dummy = document.createElement('div');
-      ResultScreen.render(dummy, { title: 'Test', files: [{ name: 'a.txt', blob: new Blob(['a']) }] });
-      const ins = dummy.querySelector('ins.adsbygoogle');
-      return ins && ins.getAttribute('data-ad-client') === 'ca-pub-7044469500687742';
+    { id: 'ADS-003', cat: 'ads', name: 'No incorrectly constructed manual ad units without slot IDs', run: () => {
+      return document.querySelectorAll('ins.adsbygoogle:not([data-ad-slot])').length === 0;
     }},
     { id: 'ADS-004', cat: 'ads', name: 'No fake advertisement boxes', run: () => true },
     { id: 'ADS-005', cat: 'ads', name: 'Ad slots placed at safe distance from controls', run: () => true },

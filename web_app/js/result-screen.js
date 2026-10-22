@@ -121,18 +121,7 @@ const ResultScreen = {
       </div>
     `;
 
-    // Ad slot: positioned safely below all buttons
-    const adSlotHtml = `
-      <div class="ad-container ad-container--banner" id="ad-result" style="margin-top:28px;" aria-label="Advertisement">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-7044469500687742"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-    `;
-
-    wrapper.innerHTML = headerHtml + filesHtml + actionsHtml + privacyNoticeHtml + adSlotHtml;
+    wrapper.innerHTML = headerHtml + filesHtml + actionsHtml + privacyNoticeHtml;
     containerEl.appendChild(wrapper);
 
     // Bind item buttons
@@ -241,13 +230,6 @@ const ResultScreen = {
       containerEl.classList.add('hidden');
       if (onReset) onReset();
     });
-
-    // Try triggering AdSense in the new container if adsbygoogle is loaded
-    try {
-      if (window.adsbygoogle && Array.isArray(window.adsbygoogle)) {
-        window.adsbygoogle.push({});
-      }
-    } catch(_) {}
   },
 };
 

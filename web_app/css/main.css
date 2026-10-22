@@ -178,6 +178,7 @@ h4{font-size:1.125rem}
 .ad-container__label{font-size:.6875rem;text-transform:uppercase;letter-spacing:.08em;color:var(--color-text-faint);margin-bottom:8px;display:block}
 .ad-container--banner{min-height:100px}
 .ad-container--rectangle{min-height:250px}
+ins.adsbygoogle[data-ad-status="unfilled"],.ad-container:has(ins.adsbygoogle[data-ad-status="unfilled"]){display:none!important}
 
 .divider{height:1px;background:var(--color-border);margin:32px 0}
 
