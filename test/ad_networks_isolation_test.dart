@@ -36,31 +36,35 @@ void main() {
   assertTest('AUDIT-003', 'Monetag module does not reference or modify AdSense objects',
     !appJs.substring(appJs.indexOf('monetag: {'), appJs.indexOf('analytics: {')).contains('adsbygoogle'));
 
-  // 2. SUSPENSION ENFORCEMENT
+  // 2. CAUTIOUS SUSPENSION & FORMAT VERIFICATION ENFORCEMENT
   assertTest('AUDIT-004', 'AdSense is flagged as suspended and disabled to protect account',
     appJs.contains('suspended: true') && appJs.contains('enabled: false'));
 
   assertTest('AUDIT-005', 'loadAds() checks suspension status before attempting any script injection',
     appJs.contains('if (this.suspended || !this.enabled)'));
 
+  assertTest('AUDIT-006', 'Monetag tag is disabled pending dashboard format confirmation',
+    appJs.contains("status: 'pending_dashboard_format_verification'") &&
+    appJs.contains('if (!this.enabled)'));
+
+  assertTest('AUDIT-007', 'Push Service Worker is disabled to prevent unprompted notifications',
+    appJs.contains("status: 'disabled'") &&
+    appJs.contains('sw:') &&
+    appJs.contains('if (!this.enabled)'));
+
+  final consentGrantedIdx = appJs.indexOf('onConsentGranted()');
+  final afterConsentGranted = consentGrantedIdx != -1 ? appJs.substring(consentGrantedIdx) : '';
+  assertTest('AUDIT-008', 'Registration call site is omitted from onConsentGranted()',
+    !afterConsentGranted.contains('FW.sw.init()'));
+
   // 3. CONSENT HANDLING (Essential vs Advertising)
-  assertTest('AUDIT-006', 'isAdConsentGranted() distinguishes explicit ad consent from essential cookies',
+  assertTest('AUDIT-009', 'isAdConsentGranted() distinguishes explicit ad consent from essential cookies',
     appJs.contains('isAdConsentGranted()') && appJs.contains('localStorage.getItem(this.KEY) === \'accepted\''));
-
-  assertTest('AUDIT-007', 'Monetag loading is strictly gated behind isAdConsentGranted()',
-    appJs.contains('if (!FW.consent.isAdConsentGranted()) return;'));
-
-  assertTest('AUDIT-008', 'Push Service Worker is strictly gated behind isAdConsentGranted()',
-    appJs.contains('if (!FW.consent.isAdConsentGranted()) return;'));
-
-  // 4. DUPLICATE & POPUNDER DEFENSE
-  assertTest('AUDIT-009', 'Duplicate Monetag injection check in DOM exists',
-    appJs.contains('script[data-zone='));
 
   assertTest('AUDIT-010', 'Navigation guard blocks unauthorized window.open popunders',
     appJs.contains('installNavigationGuard()') && appJs.contains('Blocked unprompted background window.open'));
 
-  // 5. SERVICE WORKER FILES
+  // 4. SERVICE WORKER FILES
   final swFile = File('e:/FileKit/web_app/sw.js');
   assertTest('AUDIT-011', 'Root web_app/sw.js exists with zone 12147235 and domain 3nbf4.com',
     swFile.existsSync() && swFile.readAsStringSync().contains('3nbf4.com') && swFile.readAsStringSync().contains('12147235'));

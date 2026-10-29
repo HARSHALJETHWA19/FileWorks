@@ -232,6 +232,10 @@ const FW = {
     loaded: false,
     error: null,
     navigationGuarded: false,
+    // Status flag: Zone 303303 format must be confirmed in Monetag dashboard.
+    // Strictly kept disabled until confirmed as non-intrusive (e.g. In-Page Push or Native Banner).
+    enabled: false,
+    status: 'pending_dashboard_format_verification',
     config: {
       zone: '303303',
       src: 'https://quge5.com/88/tag.min.js',
@@ -263,6 +267,11 @@ const FW = {
       };
     },
     load() {
+      // Must not load until explicitly verified as a non-intrusive format in Monetag dashboard
+      if (!this.enabled) {
+        console.info(`[FW.monetag] Monetag tag paused: awaiting dashboard verification that Zone ${this.config.zone} is non-intrusive.`);
+        return;
+      }
       if (this.loaded) return;
 
       // Restrict Monetag to production HTTPS environment only
@@ -318,12 +327,28 @@ const FW = {
     },
   },
 
-  // ---- Service Worker Registration (Production & Consent Gated Only) ----
+  // ---- Service Worker Registration (Disabled for Maximum AdSense Compatibility) ----
   sw: {
     registered: false,
     registering: false,
     error: null,
+    // Push service worker registration is disabled to prevent unprompted notifications
+    enabled: false,
+    status: 'disabled',
     init() {
+      // Strictly do not register service worker while disabled
+      if (!this.enabled) {
+        // Clean up any previously registered service worker on this origin
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistration('/').then(reg => {
+            if (reg) {
+              reg.unregister();
+              console.info('[FW.sw] Unregistered existing push service worker.');
+            }
+          }).catch(() => {});
+        }
+        return;
+      }
       if (this.registered || this.registering) return;
       if (!('serviceWorker' in navigator)) return;
 
@@ -380,7 +405,7 @@ const FW = {
     // Isolated network activations: failure or state in one does not affect the other
     try { FW.ads.loadAds(); } catch (e) { console.error('[FW.ads]', e); }
     try { FW.monetag.load(); } catch (e) { console.error('[FW.monetag]', e); }
-    try { FW.sw.init(); } catch (e) { console.error('[FW.sw]', e); }
+    // Service worker registration call site omitted while disabled
   },
 
   // ---- Init ----

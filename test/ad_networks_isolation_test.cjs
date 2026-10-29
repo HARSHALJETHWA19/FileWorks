@@ -109,7 +109,7 @@ async function runTests() {
       !('zone' in FW.ads.config) && !('zoneId' in FW.ads.config));
   }
 
-  // 2. ADSENSE SUSPENSION GUARD TESTS
+  // 2. ADSENSE & CAUTIOUS SUSPENSION GUARD TESTS
   {
     const { FW, scriptsInHead } = createMockEnvironment({ consent: 'accepted' });
     assert('SUSP-001: FW.ads is marked as suspended and disabled',
@@ -119,6 +119,12 @@ async function runTests() {
     const adSenseScripts = scriptsInHead.filter(s => s.src && s.src.includes('googlesyndication.com'));
     assert('SUSP-002: FW.ads.loadAds() does NOT inject AdSense script while suspended',
       adSenseScripts.length === 0);
+
+    assert('SUSP-003: Monetag push service worker registration is disabled (FW.sw.enabled = false)',
+      FW.sw.enabled === false);
+
+    assert('SUSP-004: Monetag tag is paused pending dashboard format verification (FW.monetag.enabled = false)',
+      FW.monetag.enabled === false && FW.monetag.status === 'pending_dashboard_format_verification');
   }
 
   // 3. CONSENT HANDLING TESTS (Essential vs Advertising)
@@ -140,20 +146,28 @@ async function runTests() {
     assert('CONSENT-004: Service Worker is NOT registered when ad consent is declined',
       regCalls.length === 0);
 
-    // Test with accepted advertising consent
+    // Test with accepted advertising consent (while Monetag tag is pending verification)
     const envAccepted = createMockEnvironment({ consent: 'accepted' });
     assert('CONSENT-005: Accepted consent activates isAdConsentGranted()',
       envAccepted.FW.consent.isAdConsentGranted() === true);
 
     envAccepted.FW.monetag.load();
     const activeMonetag = envAccepted.scriptsInHead.filter(s => s.src && s.src.includes('quge5.com'));
-    assert('CONSENT-006: Monetag script loads only when advertising consent is explicitly granted',
-      activeMonetag.length === 1 && activeMonetag[0].attrs['data-zone'] === '303303');
+    assert('CONSENT-006: Monetag tag does NOT load while pending format verification (Cautious Guard)',
+      activeMonetag.length === 0);
+
+    // Test enabling Monetag tag once format is confirmed
+    envAccepted.FW.monetag.enabled = true;
+    envAccepted.FW.monetag.load();
+    const verifiedMonetag = envAccepted.scriptsInHead.filter(s => s.src && s.src.includes('quge5.com'));
+    assert('CONSENT-007: Monetag tag loads cleanly when both consent is granted AND enabled=true',
+      verifiedMonetag.length === 1 && verifiedMonetag[0].attrs['data-zone'] === '303303');
   }
 
   // 4. DUPLICATE INJECTION PREVENTION
   {
-    const { FW, scriptsInHead, regCalls } = createMockEnvironment({ consent: 'accepted' });
+    const { FW, scriptsInHead } = createMockEnvironment({ consent: 'accepted' });
+    FW.monetag.enabled = true; // simulate verified format
     FW.monetag.load();
     FW.monetag.load();
     FW.monetag.load();
@@ -161,18 +175,19 @@ async function runTests() {
     assert('DUP-001: Multiple Monetag load calls inject at most 1 script element',
       monetagScripts.length === 1);
 
-    FW.sw.init();
+    // SW is disabled
+    const regCalls = [];
     FW.sw.init();
     FW.sw.init();
     await new Promise(r => setTimeout(r, 20));
-    assert('DUP-002: Multiple service worker init calls initiate at most 1 registration',
-      regCalls.length === 1);
+    assert('DUP-002: Service worker init calls perform zero registrations while disabled',
+      regCalls.length === 0);
   }
 
   // 5. DEFENSE AGAINST UNWANTED POPUNDERS & REDIRECTS
   {
     const { FW, window, windowOpenCalls, setActiveElement } = createMockEnvironment({ consent: 'accepted' });
-    FW.monetag.load(); // installs navigation guard
+    FW.monetag.installNavigationGuard(); // installs navigation guard
 
     // Attempt 1: Unprompted background window.open (Popunder attempt from ad script)
     setActiveElement({ tagName: 'DIV' }); // user did NOT click a link or button

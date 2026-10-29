@@ -63,22 +63,28 @@ assert('BUILD-003', 'Monetag zone ID 303303 configured in app.js',
 assert('BUILD-004', 'Monetag script URL https://quge5.com/88/tag.min.js configured in app.js',
   appJs.includes("src: 'https://quge5.com/88/tag.min.js'"));
 
+assert('BUILD-005', 'Monetag tag is disabled pending dashboard format confirmation',
+  appJs.includes("status: 'pending_dashboard_format_verification'"));
+
+assert('BUILD-006', 'Monetag push service worker registration is disabled (FW.sw.enabled = false)',
+  appJs.includes("enabled: false") && appJs.includes("status: 'disabled'"));
+
 const swRootPath = path.join(webAppDir, 'sw.js');
 const swPublicPath = path.join(webAppDir, 'public', 'sw.js');
 const swRoot = fs.readFileSync(swRootPath, 'utf8');
 const swPublic = fs.readFileSync(swPublicPath, 'utf8');
 
-assert('BUILD-005', 'sw.js references domain 3nbf4.com and zone 12147235',
+assert('BUILD-007', 'sw.js references domain 3nbf4.com and zone 12147235',
   swRoot.includes('3nbf4.com') && swRoot.includes('12147235'));
 
-assert('BUILD-006', 'public/sw.js matches root sw.js exactly',
+assert('BUILD-008', 'public/sw.js matches root sw.js exactly',
   swRoot.trim() === swPublic.trim());
 
 // 3. AUDIT BROWSER NETWORK REQUESTS DURING SESSION SIMULATION
 console.log('\n--- 3. Browser Network Log Verification (Google Ad Endpoints) ---');
 let networkRequests = [];
 
-function runSimulation(consentValue) {
+function runSimulation(consentValue, monetagVerified = false) {
   networkRequests = [];
   let scriptNodes = [];
 
@@ -132,6 +138,9 @@ function runSimulation(consentValue) {
 
   const fn = new Function('window', 'navigator', 'document', 'console', 'localStorage', appJs + '; return FW;');
   const FW = fn(window, navigator, document, console, localStorage);
+  if (monetagVerified) {
+    FW.monetag.enabled = true;
+  }
   return { FW, networkRequests };
 }
 
@@ -146,20 +155,35 @@ function runSimulation(consentValue) {
     googleAdRequests.length === 0);
   assert('NET-002', 'Zero requests to Monetag when consent is declined',
     networkRequests.filter(r => r.url.includes('quge5.com')).length === 0);
+  assert('NET-003', 'Zero push service worker registrations when consent is declined',
+    networkRequests.filter(r => r.type === 'sw').length === 0);
 }
 
-// Simulation B: Consent Accepted (AdSense Suspended)
+// Simulation B: Consent Accepted (AdSense Suspended, Monetag Pending Verification)
 {
-  const { FW, networkRequests } = runSimulation('accepted');
+  const { FW, networkRequests } = runSimulation('accepted', false);
   FW.init();
   const googleAdRequests = networkRequests.filter(r =>
     r.url.includes('googlesyndication') || r.url.includes('doubleclick') || r.url.includes('googleadservices')
   );
-  assert('NET-003', 'Zero requests to Google ad-serving endpoints even when consent is ACCEPTED (Suspension Respected)',
+  assert('NET-004', 'Zero requests to Google ad-serving endpoints even when consent is ACCEPTED (Suspension Respected)',
     googleAdRequests.length === 0);
 
   const monetagRequests = networkRequests.filter(r => r.url.includes('quge5.com'));
-  assert('NET-004', 'Monetag loads cleanly and independently when consent is accepted',
+  assert('NET-005', 'Zero requests to Monetag while pending dashboard format verification',
+    monetagRequests.length === 0);
+
+  const swRegistrations = networkRequests.filter(r => r.type === 'sw');
+  assert('NET-006', 'Zero push service worker registrations while disabled',
+    swRegistrations.length === 0);
+}
+
+// Simulation C: Consent Accepted with Monetag Dashboard Verified
+{
+  const { FW, networkRequests } = runSimulation('accepted', true);
+  FW.init();
+  const monetagRequests = networkRequests.filter(r => r.url.includes('quge5.com'));
+  assert('NET-007', 'Monetag tag loads cleanly only when consent is granted AND enabled=true',
     monetagRequests.length === 1);
 }
 
