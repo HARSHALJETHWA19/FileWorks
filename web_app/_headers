@@ -13,7 +13,3 @@
 
 /favicon.svg
   Cache-Control: public, max-age=2592000, immutable
-
-/sw.js
-  Cache-Control: public, max-age=0, must-revalidate
-  Content-Type: application/javascript; charset=utf-8

@@ -917,30 +917,4 @@ details.faq-item[open] summary::after{transform:rotate(45deg)}
   color: white;
 }
 
-/* ==========================================================================
-   Monetag In-Page Push Isolation & Safety Stacking
-   Ensures floating third-party push cards cannot obstruct or overlap:
-   - PDF dropzones & file upload targets
-   - Tool controls, action bars, and processing buttons
-   - Result download triggers and preview modals
-   ========================================================================== */
-.dropzone,
-#drop-area,
-.tool-actions,
-#file-list-section,
-.file-list,
-.result-section,
-.result-screen,
-#result-mount,
-.result-card,
-.preview-modal,
-.cookie-banner,
-#btn-download,
-#btn-result-download-all,
-#btn-result-download-single,
-.btn-download-item {
-  position: relative;
-  z-index: 20;
-}
-
 
