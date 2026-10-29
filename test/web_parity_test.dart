@@ -154,20 +154,21 @@ void main() {
   final exactSnippetNormalized = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7044469500687742';
 
   final indexHtml = File('e:/FileKit/web_app/index.html').readAsStringSync();
-  assertTest('ADS-001', 'Exact Google AdSense script installed in index.html',
-    indexHtml.contains(exactSnippetNormalized));
-  assertTest('ADS-002', 'Correct publisher ID (ca-pub-7044469500687742) in index.html',
-    indexHtml.contains('ca-pub-7044469500687742'));
+  final appJs = File('e:/FileKit/web_app/js/app.js').readAsStringSync();
+  assertTest('ADS-001', 'AdSense script tag temporarily removed from index.html during active suspension',
+    !indexHtml.contains(exactSnippetNormalized));
+  assertTest('ADS-002', 'AdSense paused and suspended in FW.ads configuration',
+    appJs.contains('suspended: true') && appJs.contains('enabled: false'));
 
-  bool allPagesHaveAdSense = true;
+  bool allPagesHaveAdSenseRemoved = true;
   for (final file in toolFiles) {
     final content = File('e:/FileKit/web_app/pages/$file').readAsStringSync();
-    if (!content.contains(exactSnippetNormalized) || !content.contains('ca-pub-7044469500687742')) {
-      allPagesHaveAdSense = false;
-      print('Missing AdSense snippet in $file');
+    if (content.contains(exactSnippetNormalized)) {
+      allPagesHaveAdSenseRemoved = false;
+      print('Unexpected AdSense snippet still in $file');
     }
   }
-  assertTest('ADS-003', 'Script exists in all tool HTML files and head tags', allPagesHaveAdSense);
+  assertTest('ADS-003', 'All tool HTML files have static AdSense scripts removed during suspension', allPagesHaveAdSenseRemoved);
 
   // Check no fake placeholder text exists
   bool hasFakePlaceholder = false;
@@ -224,9 +225,9 @@ void main() {
     adsTxtFile.readAsStringSync().contains('google.com, pub-7044469500687742, DIRECT, f08c47fec0942fa0');
   assertTest('ADS-013', 'ads.txt configured properly at web root with publisher ID', adsTxtValid);
 
-  assertTest('ADS-014', 'Production site structure contains AdSense code and ads.txt',
+  assertTest('ADS-014', 'Production site structure contains ads.txt and paused AdSense architecture',
     File('e:/FileKit/web_app/ads.txt').existsSync() &&
-    File('e:/FileKit/web_app/index.html').readAsStringSync().contains('ca-pub-7044469500687742'));
+    File('e:/FileKit/web_app/js/app.js').readAsStringSync().contains('ca-pub-7044469500687742'));
 
   print('\n================================================================');
   print('SUMMARY: $passed PASSED, $failed FAILED out of ${passed + failed} TESTS');

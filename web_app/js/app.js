@@ -148,42 +148,158 @@ const FW = {
     },
   },
 
-  // ---- Cookie Consent ----
+  // ---- Consent Management (Independent & Granular) ----
   consent: {
     KEY: 'fw_cookie_consent',
+    // Granular categories: Essential is always enabled for site functionality.
+    // Advertising consent requires explicit affirmative opt-in.
     init() {
-      if (localStorage.getItem(this.KEY)) return;
+      if (this.hasUserResponded()) return;
       const banner = document.getElementById('cookie-banner');
       if (!banner) return;
       banner.classList.remove('hidden');
+
       document.getElementById('cookie-accept')?.addEventListener('click', () => {
-        localStorage.setItem(this.KEY, 'accepted');
+        this.setAdvertisingConsent(true);
         banner.classList.add('hidden');
-        FW.ads.loadAds();
+        FW.onConsentGranted();
       });
+
       document.getElementById('cookie-decline')?.addEventListener('click', () => {
-        localStorage.setItem(this.KEY, 'declined');
+        this.setAdvertisingConsent(false);
         banner.classList.add('hidden');
       });
     },
-    isAccepted() { return localStorage.getItem(this.KEY) === 'accepted'; },
+    hasUserResponded() {
+      const val = localStorage.getItem(this.KEY);
+      return val === 'accepted' || val === 'declined';
+    },
+    isAdConsentGranted() {
+      // Essential consent does NOT imply advertising consent.
+      // Advertising scripts only run if explicitly accepted.
+      return localStorage.getItem(this.KEY) === 'accepted';
+    },
+    isEssentialOnly() {
+      return !this.isAdConsentGranted();
+    },
+    isAccepted() {
+      // Backward-compatible alias
+      return this.isAdConsentGranted();
+    },
+    setAdvertisingConsent(granted) {
+      localStorage.setItem(this.KEY, granted ? 'accepted' : 'declined');
+    },
   },
 
-  // ---- AdSense (Auto Ads) ----
+  // ---- Google AdSense Module (Independent & Suspended Guarded) ----
   ads: {
     loaded: false,
+    error: null,
+    // Status flag: AdSense account is currently temporarily suspended.
+    // Strictly set enabled to false to avoid triggering ad calls while under review.
+    enabled: false,
+    suspended: true,
+    config: {
+      publisherId: 'ca-pub-7044469500687742',
+    },
     loadAds() {
+      // Strictly do not load or re-enable AdSense serving while account is suspended
+      if (this.suspended || !this.enabled) {
+        console.info('[FW.ads] Google AdSense serving paused: account currently suspended pending review.');
+        return;
+      }
       if (this.loaded) return;
-      if (!FW.consent.isAccepted()) return; // Wait for consent
-      // Check if official script is already in DOM
+      if (!FW.consent.isAdConsentGranted()) return; // Advertising consent gate
+
       const existing = document.querySelector('script[src*="googlesyndication.com/pagead/js/adsbygoogle.js"]');
-      if (!existing && FW.config.adSensePublisherId) {
+      if (!existing && this.config.publisherId) {
         const s = document.createElement('script');
         s.async = true;
         s.crossOrigin = 'anonymous';
-        s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${FW.config.adSensePublisherId}`;
+        s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${this.config.publisherId}`;
+        s.onerror = (err) => {
+          this.error = err;
+          console.warn('[FW.ads] AdSense script failed to load:', err);
+        };
         document.head.appendChild(s);
       }
+      this.loaded = true;
+    },
+  },
+
+  // ---- Monetag Module (Independent, Isolated, Non-Intrusive Only) ----
+  monetag: {
+    loaded: false,
+    error: null,
+    navigationGuarded: false,
+    config: {
+      zone: '303303',
+      src: 'https://quge5.com/88/tag.min.js',
+      // Prohibited formats under AdSense policy: popunders, forced redirects, smartlinks
+      prohibitedFormats: ['popunder', 'directlink', 'forced_redirect'],
+      allowedFormats: ['in-page-push', 'banner'],
+    },
+    // Defensive navigation guard: blocks unprompted popunders and unwanted page hijacking
+    installNavigationGuard() {
+      if (this.navigationGuarded) return;
+      this.navigationGuarded = true;
+
+      // Wrap window.open to block unauthorized popunders
+      const originalWindowOpen = window.open;
+      window.open = function(url, target, features) {
+        // Allow user-initiated file downloads and internal navigation
+        if (!url || typeof url !== 'string' || url.startsWith('blob:') || url.startsWith('data:') || url.startsWith('/')) {
+          return originalWindowOpen.apply(window, arguments);
+        }
+        // Allow legitimate user clicks on interactive elements
+        const activeEl = document.activeElement;
+        const isUserClick = activeEl && (activeEl.tagName === 'A' || activeEl.tagName === 'BUTTON');
+        if (isUserClick) {
+          return originalWindowOpen.apply(window, arguments);
+        }
+        // Block unprompted popunders or forced background redirects
+        console.warn('[FW.monetag] Blocked unprompted background window.open request:', url);
+        return null;
+      };
+    },
+    load() {
+      if (this.loaded) return;
+
+      // Restrict Monetag to production HTTPS environment only
+      const isProduction = window.location.protocol === 'https:' &&
+        !['localhost', '127.0.0.1', '0.0.0.0'].includes(window.location.hostname) &&
+        !window.location.hostname.endsWith('.local');
+
+      if (!isProduction) return;
+
+      // Consent Gate: Advertising consent required (Essential consent does NOT suffice)
+      if (!FW.consent.isAdConsentGranted()) return;
+
+      // Install popunder & redirect defense guard
+      this.installNavigationGuard();
+
+      // Duplicate prevention (DOM check + internal flag)
+      const existing = document.querySelector(`script[data-zone="${this.config.zone}"]`);
+      if (existing) {
+        this.loaded = true;
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = this.config.src;
+      script.setAttribute('data-zone', this.config.zone);
+      script.async = true;
+      script.setAttribute('data-cfasync', 'false');
+
+      script.onload = () => {
+        this.loaded = true;
+      };
+      script.onerror = (e) => {
+        this.error = e;
+        console.warn('[FW.monetag] Monetag script load error:', e);
+      };
+
+      document.head.appendChild(script);
       this.loaded = true;
     },
   },
@@ -202,11 +318,13 @@ const FW = {
     },
   },
 
-  // ---- Service Worker Registration (Production Only) ----
+  // ---- Service Worker Registration (Production & Consent Gated Only) ----
   sw: {
     registered: false,
+    registering: false,
+    error: null,
     init() {
-      if (this.registered) return;
+      if (this.registered || this.registering) return;
       if (!('serviceWorker' in navigator)) return;
 
       const isProduction = window.location.protocol === 'https:' &&
@@ -215,26 +333,37 @@ const FW = {
 
       if (!isProduction) return;
 
+      // Advertising consent required before registering monetization push worker
+      if (!FW.consent.isAdConsentGranted()) return;
+
+      this.registering = true;
       const register = () => {
         navigator.serviceWorker.getRegistration('/').then(existingReg => {
           if (existingReg) {
             this.registered = true;
+            this.registering = false;
             return;
           }
           navigator.serviceWorker.register('/sw.js', { scope: '/' })
             .then(() => {
               this.registered = true;
+              this.registering = false;
             })
             .catch(err => {
-              console.warn('Service worker registration failed:', err);
+              this.error = err;
+              this.registering = false;
+              console.warn('[FW.sw] Service worker registration failed:', err);
             });
         }).catch(() => {
           navigator.serviceWorker.register('/sw.js', { scope: '/' })
             .then(() => {
               this.registered = true;
+              this.registering = false;
             })
             .catch(err => {
-              console.warn('Service worker registration failed:', err);
+              this.error = err;
+              this.registering = false;
+              console.warn('[FW.sw] Service worker registration fallback failed:', err);
             });
         });
       };
@@ -247,13 +376,21 @@ const FW = {
     },
   },
 
+  onConsentGranted() {
+    // Isolated network activations: failure or state in one does not affect the other
+    try { FW.ads.loadAds(); } catch (e) { console.error('[FW.ads]', e); }
+    try { FW.monetag.load(); } catch (e) { console.error('[FW.monetag]', e); }
+    try { FW.sw.init(); } catch (e) { console.error('[FW.sw]', e); }
+  },
+
   // ---- Init ----
   init() {
     FW.toast.init();
     FW.nav.init();
     FW.consent.init();
-    if (FW.consent.isAccepted()) FW.ads.loadAds();
-    FW.sw.init();
+    if (FW.consent.isAdConsentGranted()) {
+      this.onConsentGranted();
+    }
   },
 };
 
