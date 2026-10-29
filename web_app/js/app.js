@@ -202,12 +202,58 @@ const FW = {
     },
   },
 
+  // ---- Service Worker Registration (Production Only) ----
+  sw: {
+    registered: false,
+    init() {
+      if (this.registered) return;
+      if (!('serviceWorker' in navigator)) return;
+
+      const isProduction = window.location.protocol === 'https:' &&
+        !['localhost', '127.0.0.1', '0.0.0.0'].includes(window.location.hostname) &&
+        !window.location.hostname.endsWith('.local');
+
+      if (!isProduction) return;
+
+      const register = () => {
+        navigator.serviceWorker.getRegistration('/').then(existingReg => {
+          if (existingReg) {
+            this.registered = true;
+            return;
+          }
+          navigator.serviceWorker.register('/sw.js', { scope: '/' })
+            .then(() => {
+              this.registered = true;
+            })
+            .catch(err => {
+              console.warn('Service worker registration failed:', err);
+            });
+        }).catch(() => {
+          navigator.serviceWorker.register('/sw.js', { scope: '/' })
+            .then(() => {
+              this.registered = true;
+            })
+            .catch(err => {
+              console.warn('Service worker registration failed:', err);
+            });
+        });
+      };
+
+      if (document.readyState === 'complete') {
+        register();
+      } else {
+        window.addEventListener('load', register, { once: true });
+      }
+    },
+  },
+
   // ---- Init ----
   init() {
     FW.toast.init();
     FW.nav.init();
     FW.consent.init();
     if (FW.consent.isAccepted()) FW.ads.loadAds();
+    FW.sw.init();
   },
 };
 
