@@ -45,7 +45,8 @@ function createMockEnvironment({ protocol = 'https:', hostname = 'fileworks.page
   };
 
   const document = {
-    readyState: 'complete',
+    readyState: 'loading',
+    addEventListener: () => {},
     get activeElement() { return activeElement; },
     getElementById: (id) => null,
     createElement: (tag) => {
@@ -53,7 +54,11 @@ function createMockEnvironment({ protocol = 'https:', hostname = 'fileworks.page
         tagName: tag.toUpperCase(),
         attrs: {},
         setAttribute: (k, v) => { el.attrs[k] = v; },
-        classList: { add: () => {} }
+        classList: { add: () => {} },
+        set src(val) {
+          el._src = val;
+        },
+        get src() { return el._src; }
       };
       return el;
     },
@@ -65,10 +70,13 @@ function createMockEnvironment({ protocol = 'https:', hostname = 'fileworks.page
     body: { appendChild: () => {} },
     querySelector: (sel) => {
       if (sel.includes('data-zone')) {
-        return scriptsInHead.find(s => s.attrs && s.attrs['data-zone'] === '303303') || null;
+        return scriptsInHead.find(s => s.attrs && s.attrs['data-zone'] === '12147932') || null;
+      }
+      if (sel.includes('nap5k.com')) {
+        return scriptsInHead.find(s => (s.src && s.src.includes('nap5k.com')) || (s.attrs && s.attrs.src && s.attrs.src.includes('nap5k.com'))) || null;
       }
       if (sel.includes('googlesyndication.com')) {
-        return scriptsInHead.find(s => s.src && s.src.includes('googlesyndication.com')) || null;
+        return scriptsInHead.find(s => (s.src && s.src.includes('googlesyndication.com')) || (s.attrs && s.attrs.src && s.attrs.src.includes('googlesyndication.com'))) || null;
       }
       return null;
     },
@@ -99,8 +107,10 @@ async function runTests() {
     assert('ISO-002: FW.ads has dedicated publisherId and configuration',
       FW.ads.config.publisherId === 'ca-pub-7044469500687742');
 
-    assert('ISO-003: FW.monetag has dedicated zone and endpoint configuration',
-      FW.monetag.config.zone === '303303' && FW.monetag.config.src === 'https://quge5.com/88/tag.min.js');
+    assert('ISO-003: FW.monetag has dedicated zone and endpoint configuration for In-Page Push',
+      FW.monetag.config.zone === '12147932' &&
+      FW.monetag.config.src === 'https://nap5k.com/tag.min.js' &&
+      FW.monetag.config.retiredZone === '303303');
 
     assert('ISO-004: FW.monetag configuration does not contain or reference AdSense keys',
       !('publisherId' in FW.monetag.config) && !('adSensePublisherId' in FW.monetag.config));
@@ -116,15 +126,15 @@ async function runTests() {
       FW.ads.suspended === true && FW.ads.enabled === false);
 
     FW.ads.loadAds();
-    const adSenseScripts = scriptsInHead.filter(s => s.src && s.src.includes('googlesyndication.com'));
+    const adSenseScripts = scriptsInHead.filter(s => (s.src && s.src.includes('googlesyndication.com')) || (s.attrs && s.attrs.src && s.attrs.src.includes('googlesyndication.com')));
     assert('SUSP-002: FW.ads.loadAds() does NOT inject AdSense script while suspended',
       adSenseScripts.length === 0);
 
     assert('SUSP-003: Monetag push service worker registration is disabled (FW.sw.enabled = false)',
       FW.sw.enabled === false);
 
-    assert('SUSP-004: Monetag tag is paused pending dashboard format verification (FW.monetag.enabled = false)',
-      FW.monetag.enabled === false && FW.monetag.status === 'pending_dashboard_format_verification');
+    assert('SUSP-004: Monetag tag is enabled specifically for controlled In-Page Push testing',
+      FW.monetag.enabled === true && FW.monetag.status === 'controlled_testing_in_page_push');
   }
 
   // 3. CONSENT HANDLING TESTS (Essential vs Advertising)
@@ -140,38 +150,39 @@ async function runTests() {
     FW.monetag.load();
     FW.sw.init();
     await new Promise(r => setTimeout(r, 20));
-    const monetagScripts = scriptsInHead.filter(s => s.src && s.src.includes('quge5.com'));
+    const monetagScripts = scriptsInHead.filter(s => (s.src && (s.src.includes('nap5k.com') || s.src.includes('quge5.com'))) ||
+      (s.attrs && s.attrs.src && (s.attrs.src.includes('nap5k.com') || s.attrs.src.includes('quge5.com'))));
     assert('CONSENT-003: Monetag script is blocked when ad consent is declined',
       monetagScripts.length === 0);
     assert('CONSENT-004: Service Worker is NOT registered when ad consent is declined',
       regCalls.length === 0);
 
-    // Test with accepted advertising consent (while Monetag tag is pending verification)
+    // Test with accepted advertising consent (while Monetag tag is explicitly disabled)
     const envAccepted = createMockEnvironment({ consent: 'accepted' });
     assert('CONSENT-005: Accepted consent activates isAdConsentGranted()',
       envAccepted.FW.consent.isAdConsentGranted() === true);
 
+    envAccepted.FW.monetag.enabled = false;
     envAccepted.FW.monetag.load();
-    const activeMonetag = envAccepted.scriptsInHead.filter(s => s.src && s.src.includes('quge5.com'));
-    assert('CONSENT-006: Monetag tag does NOT load while pending format verification (Cautious Guard)',
+    const activeMonetag = envAccepted.scriptsInHead.filter(s => (s.src && s.src.includes('nap5k.com')) || (s.attrs && s.attrs.src && s.attrs.src.includes('nap5k.com')));
+    assert('CONSENT-006: Monetag tag does NOT load when enabled=false',
       activeMonetag.length === 0);
 
-    // Test enabling Monetag tag once format is confirmed
+    // Test enabling Monetag In-Page Push tag
     envAccepted.FW.monetag.enabled = true;
     envAccepted.FW.monetag.load();
-    const verifiedMonetag = envAccepted.scriptsInHead.filter(s => s.src && s.src.includes('quge5.com'));
+    const verifiedMonetag = envAccepted.scriptsInHead.filter(s => (s.src && s.src.includes('nap5k.com')) || (s.attrs && s.attrs.src && s.attrs.src.includes('nap5k.com')));
     assert('CONSENT-007: Monetag tag loads cleanly when both consent is granted AND enabled=true',
-      verifiedMonetag.length === 1 && verifiedMonetag[0].attrs['data-zone'] === '303303');
+      verifiedMonetag.length === 1 && verifiedMonetag[0].attrs['data-zone'] === '12147932');
   }
 
   // 4. DUPLICATE INJECTION PREVENTION
   {
     const { FW, scriptsInHead } = createMockEnvironment({ consent: 'accepted' });
-    FW.monetag.enabled = true; // simulate verified format
     FW.monetag.load();
     FW.monetag.load();
     FW.monetag.load();
-    const monetagScripts = scriptsInHead.filter(s => s.src && s.src.includes('quge5.com'));
+    const monetagScripts = scriptsInHead.filter(s => (s.src && s.src.includes('nap5k.com')) || (s.attrs && s.attrs.src && s.attrs.src.includes('nap5k.com')));
     assert('DUP-001: Multiple Monetag load calls inject at most 1 script element',
       monetagScripts.length === 1);
 

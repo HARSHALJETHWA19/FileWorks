@@ -232,16 +232,18 @@ const FW = {
     loaded: false,
     error: null,
     navigationGuarded: false,
-    // Status flag: Zone 303303 format must be confirmed in Monetag dashboard.
-    // Strictly kept disabled until confirmed as non-intrusive (e.g. In-Page Push or Native Banner).
-    enabled: false,
-    status: 'pending_dashboard_format_verification',
+    // Status flag: Controlled testing enabled for verified In-Page Push zone 12147932.
+    enabled: true,
+    status: 'controlled_testing_in_page_push',
     config: {
-      zone: '303303',
-      src: 'https://quge5.com/88/tag.min.js',
-      // Prohibited formats under AdSense policy: popunders, forced redirects, smartlinks
-      prohibitedFormats: ['popunder', 'directlink', 'forced_redirect'],
-      allowedFormats: ['in-page-push', 'banner'],
+      zone: '12147932',
+      src: 'https://nap5k.com/tag.min.js',
+      format: 'in-page-push',
+      // Old zone 303303 (quge5.com) is retired and strictly disabled
+      retiredZone: '303303',
+      // Prohibited intrusive formats under AdSense & Better Ads policies
+      prohibitedFormats: ['popunder', 'directlink', 'forced_redirect', 'vignette'],
+      allowedFormats: ['in-page-push'],
     },
     // Defensive navigation guard: blocks unprompted popunders and unwanted page hijacking
     installNavigationGuard() {
@@ -267,9 +269,9 @@ const FW = {
       };
     },
     load() {
-      // Must not load until explicitly verified as a non-intrusive format in Monetag dashboard
+      // Must not load until enabled and explicit advertising consent is verified
       if (!this.enabled) {
-        console.info(`[FW.monetag] Monetag tag paused: awaiting dashboard verification that Zone ${this.config.zone} is non-intrusive.`);
+        console.info('[FW.monetag] Monetag tag is currently disabled.');
         return;
       }
       if (this.loaded) return;
@@ -288,7 +290,8 @@ const FW = {
       this.installNavigationGuard();
 
       // Duplicate prevention (DOM check + internal flag)
-      const existing = document.querySelector(`script[data-zone="${this.config.zone}"]`);
+      const existing = document.querySelector(`script[data-zone="${this.config.zone}"]`) ||
+        document.querySelector('script[src*="nap5k.com"]');
       if (existing) {
         this.loaded = true;
         return;

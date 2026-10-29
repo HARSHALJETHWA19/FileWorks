@@ -30,8 +30,8 @@ void main() {
   assertTest('AUDIT-001', 'FW.ads module exists independently in app.js',
     appJs.contains('ads: {') && appJs.contains('publisherId: \'ca-pub-7044469500687742\''));
 
-  assertTest('AUDIT-002', 'FW.monetag module exists independently in app.js',
-    appJs.contains('monetag: {') && appJs.contains('zone: \'303303\''));
+  assertTest('AUDIT-002', 'FW.monetag module exists independently in app.js with In-Page Push zone 12147932',
+    appJs.contains('monetag: {') && appJs.contains("zone: '12147932'") && appJs.contains("src: 'https://nap5k.com/tag.min.js'"));
 
   assertTest('AUDIT-003', 'Monetag module does not reference or modify AdSense objects',
     !appJs.substring(appJs.indexOf('monetag: {'), appJs.indexOf('analytics: {')).contains('adsbygoogle'));
@@ -43,8 +43,9 @@ void main() {
   assertTest('AUDIT-005', 'loadAds() checks suspension status before attempting any script injection',
     appJs.contains('if (this.suspended || !this.enabled)'));
 
-  assertTest('AUDIT-006', 'Monetag tag is disabled pending dashboard format confirmation',
-    appJs.contains("status: 'pending_dashboard_format_verification'") &&
+  assertTest('AUDIT-006', 'Monetag tag is configured for controlled testing with retired zone 303303',
+    appJs.contains("status: 'controlled_testing_in_page_push'") &&
+    appJs.contains("retiredZone: '303303'") &&
     appJs.contains('if (!this.enabled)'));
 
   assertTest('AUDIT-007', 'Push Service Worker is disabled to prevent unprompted notifications',

@@ -57,14 +57,15 @@ console.log('\n--- 2. Auditing Monetag Script & Service Worker Configuration ---
 const appJsPath = path.join(webAppDir, 'js', 'app.js');
 const appJs = fs.readFileSync(appJsPath, 'utf8');
 
-assert('BUILD-003', 'Monetag zone ID 303303 configured in app.js',
-  appJs.includes("zone: '303303'"));
+assert('BUILD-003', 'Monetag zone ID 12147932 configured in app.js',
+  appJs.includes("zone: '12147932'"));
 
-assert('BUILD-004', 'Monetag script URL https://quge5.com/88/tag.min.js configured in app.js',
-  appJs.includes("src: 'https://quge5.com/88/tag.min.js'"));
+assert('BUILD-004', 'Monetag script URL https://nap5k.com/tag.min.js configured in app.js',
+  appJs.includes("src: 'https://nap5k.com/tag.min.js'"));
 
-assert('BUILD-005', 'Monetag tag is disabled pending dashboard format confirmation',
-  appJs.includes("status: 'pending_dashboard_format_verification'"));
+assert('BUILD-005', 'Monetag status is controlled_testing_in_page_push with old zone 303303 retired',
+  appJs.includes("status: 'controlled_testing_in_page_push'") &&
+  appJs.includes("retiredZone: '303303'"));
 
 assert('BUILD-006', 'Monetag push service worker registration is disabled (FW.sw.enabled = false)',
   appJs.includes("enabled: false") && appJs.includes("status: 'disabled'"));
@@ -84,7 +85,7 @@ assert('BUILD-008', 'public/sw.js matches root sw.js exactly',
 console.log('\n--- 3. Browser Network Log Verification (Google Ad Endpoints) ---');
 let networkRequests = [];
 
-function runSimulation(consentValue, monetagVerified = false) {
+function runSimulation(consentValue, monetagExplicitEnabled = true) {
   networkRequests = [];
   let scriptNodes = [];
 
@@ -105,7 +106,8 @@ function runSimulation(consentValue, monetagVerified = false) {
   };
 
   const document = {
-    readyState: 'complete',
+    readyState: 'loading',
+    addEventListener: () => {},
     getElementById: () => null,
     createElement: (tag) => {
       const el = {
@@ -138,8 +140,8 @@ function runSimulation(consentValue, monetagVerified = false) {
 
   const fn = new Function('window', 'navigator', 'document', 'console', 'localStorage', appJs + '; return FW;');
   const FW = fn(window, navigator, document, console, localStorage);
-  if (monetagVerified) {
-    FW.monetag.enabled = true;
+  if (typeof monetagExplicitEnabled === 'boolean') {
+    FW.monetag.enabled = monetagExplicitEnabled;
   }
   return { FW, networkRequests };
 }
@@ -153,13 +155,13 @@ function runSimulation(consentValue, monetagVerified = false) {
   );
   assert('NET-001', 'Zero requests to Google ad-serving endpoints when consent is declined',
     googleAdRequests.length === 0);
-  assert('NET-002', 'Zero requests to Monetag when consent is declined',
-    networkRequests.filter(r => r.url.includes('quge5.com')).length === 0);
+  assert('NET-002', 'Zero requests to Monetag (nap5k.com or quge5.com) when consent is declined',
+    networkRequests.filter(r => r.url.includes('nap5k.com') || r.url.includes('quge5.com')).length === 0);
   assert('NET-003', 'Zero push service worker registrations when consent is declined',
     networkRequests.filter(r => r.type === 'sw').length === 0);
 }
 
-// Simulation B: Consent Accepted (AdSense Suspended, Monetag Pending Verification)
+// Simulation B: Consent Accepted (AdSense Suspended, Monetag Disabled explicitly)
 {
   const { FW, networkRequests } = runSimulation('accepted', false);
   FW.init();
@@ -169,8 +171,8 @@ function runSimulation(consentValue, monetagVerified = false) {
   assert('NET-004', 'Zero requests to Google ad-serving endpoints even when consent is ACCEPTED (Suspension Respected)',
     googleAdRequests.length === 0);
 
-  const monetagRequests = networkRequests.filter(r => r.url.includes('quge5.com'));
-  assert('NET-005', 'Zero requests to Monetag while pending dashboard format verification',
+  const monetagRequests = networkRequests.filter(r => r.url.includes('nap5k.com') || r.url.includes('quge5.com'));
+  assert('NET-005', 'Zero requests to Monetag while tag is disabled',
     monetagRequests.length === 0);
 
   const swRegistrations = networkRequests.filter(r => r.type === 'sw');
@@ -178,13 +180,16 @@ function runSimulation(consentValue, monetagVerified = false) {
     swRegistrations.length === 0);
 }
 
-// Simulation C: Consent Accepted with Monetag Dashboard Verified
+// Simulation C: Consent Accepted with Controlled In-Page Push Enabled
 {
   const { FW, networkRequests } = runSimulation('accepted', true);
   FW.init();
-  const monetagRequests = networkRequests.filter(r => r.url.includes('quge5.com'));
-  assert('NET-007', 'Monetag tag loads cleanly only when consent is granted AND enabled=true',
-    monetagRequests.length === 1);
+  const nap5kRequests = networkRequests.filter(r => r.url.includes('nap5k.com'));
+  const quge5Requests = networkRequests.filter(r => r.url.includes('quge5.com'));
+  assert('NET-007', 'Monetag In-Page Push tag (nap5k.com) loads cleanly when consent is granted AND enabled=true',
+    nap5kRequests.length === 1);
+  assert('NET-008', 'Old Monetag domain quge5.com is never requested',
+    quge5Requests.length === 0);
 }
 
 // 4. VERIFY POPUNDER GUARD & PDF TOOLS PRESERVATION
